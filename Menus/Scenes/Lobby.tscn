@@ -1,0 +1,58 @@
+[gd_scene load_steps=2 format=3 uid="uid://7640xxkbddua"]
+
+[ext_resource type="Script" path="res://Menus/Scripts/Lobby.gd" id="1_cb7ff"]
+
+[node name="Lobby" type="Panel"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_cb7ff")
+
+[node name="SwitchCharacters" type="Button" parent="."]
+visible = false
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -46.0
+offset_top = 37.0
+offset_right = 54.0
+offset_bottom = 137.0
+grow_horizontal = 2
+text = "Switch 
+roles"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 236.0
+offset_bottom = 92.0
+alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 40
+alignment = 1
+
+[node name="LabelPonkotsu" type="Label" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Ponkotsu"
+
+[node name="PlayerPonkotsu" type="Label" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 40
+alignment = 1
+
+[node name="LabelBonkura" type="Label" parent="VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Bonkura"
+
+[node name="PlayerBonkura" type="Label" parent="VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+
+[connection signal="pressed" from="SwitchCharacters" to="." method="_on_switch_characters_pressed"]

@@ -50,7 +50,7 @@ func Host():
 		return
 	peer.get_host().compress(ENetConnection.COMPRESS_RANGE_CODER)
 	multiplayer.set_multiplayer_peer(peer)
-	GameManager.player.id = multiplayer.get_unique_id()
+	GameManager.player.id = 1
 	menuRef.OpenLobby()
 	print("hosting")
 

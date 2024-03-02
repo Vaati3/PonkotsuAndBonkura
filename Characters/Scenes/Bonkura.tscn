@@ -1,0 +1,7 @@
+[gd_scene load_steps=3 format=3 uid="uid://b6pvf0kf4dons"]
+
+[ext_resource type="PackedScene" uid="uid://bykjaghupuxhv" path="res://Characters/Scenes/BaseCharacter.tscn" id="1_4jw15"]
+[ext_resource type="Script" path="res://Characters/Scripts/Bonkura.gd" id="2_ewygk"]
+
+[node name="Bonkura" instance=ExtResource("1_4jw15")]
+script = ExtResource("2_ewygk")

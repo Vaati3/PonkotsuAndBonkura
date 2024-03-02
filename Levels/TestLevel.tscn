@@ -1,0 +1,14 @@
+[gd_scene load_steps=4 format=3 uid="uid://cx1snhk6xins3"]
+
+[ext_resource type="Script" path="res://Levels/TestLevel.gd" id="1_0kaob"]
+[ext_resource type="PackedScene" uid="uid://b6pvf0kf4dons" path="res://Characters/Scenes/Bonkura.tscn" id="1_4pne6"]
+[ext_resource type="PackedScene" uid="uid://clxvk140vhqny" path="res://Characters/Scenes/Ponkotsu.tscn" id="2_2027r"]
+
+[node name="TestLevel" type="Node2D"]
+script = ExtResource("1_0kaob")
+
+[node name="Bonkura" parent="." instance=ExtResource("1_4pne6")]
+position = Vector2(114, 180)
+
+[node name="Ponkotsu" parent="." instance=ExtResource("2_2027r")]
+position = Vector2(443, 182)

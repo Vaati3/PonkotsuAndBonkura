@@ -1,0 +1,7 @@
+[gd_scene load_steps=3 format=3 uid="uid://clxvk140vhqny"]
+
+[ext_resource type="PackedScene" uid="uid://bykjaghupuxhv" path="res://Characters/Scenes/BaseCharacter.tscn" id="1_8rir6"]
+[ext_resource type="Script" path="res://Characters/Scripts/Ponkotsu.gd" id="2_jf787"]
+
+[node name="Ponkotsu" instance=ExtResource("1_8rir6")]
+script = ExtResource("2_jf787")

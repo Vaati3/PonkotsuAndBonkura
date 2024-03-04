@@ -41,8 +41,6 @@ func UpdatePlayers(player:Dictionary):
 		UpdatePlayers.rpc_id(player.id, GameManager.player)
 	else:
 		GameManager.player.isPonkotsu = not player.isPonkotsu
-		print(GameManager.player)
-		print(GameManager.otherPlayer)
 
 func Host():
 	if peer.create_server(port, 2) != OK:

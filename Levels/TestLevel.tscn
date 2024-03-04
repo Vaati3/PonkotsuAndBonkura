@@ -7,8 +7,20 @@
 [node name="TestLevel" type="Node2D"]
 script = ExtResource("1_0kaob")
 
-[node name="Bonkura" parent="." instance=ExtResource("1_4pne6")]
-position = Vector2(114, 180)
-
 [node name="Ponkotsu" parent="." instance=ExtResource("2_2027r")]
-position = Vector2(443, 182)
+position = Vector2(718, 275)
+
+[node name="Bonkura" parent="." instance=ExtResource("1_4pne6")]
+position = Vector2(389, 273)
+
+[node name="PonkotsuPosDebug" type="Label" parent="."]
+offset_right = 372.0
+offset_bottom = 57.0
+theme_override_font_sizes/font_size = 20
+
+[node name="BonkuraPosDebug" type="Label" parent="."]
+offset_left = 1.0
+offset_top = 77.0
+offset_right = 371.0
+offset_bottom = 134.0
+theme_override_font_sizes/font_size = 20

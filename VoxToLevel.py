@@ -13,7 +13,7 @@ parser = argparse.ArgumentParser(description="Process some integers.")
 parser.add_argument("-f", "--files", type=str, nargs="+", help="files to be processed", action="extend")
 parser.add_argument("-s", "--size", type=str, default="7x7x7", help="set level size")
 #parser.add_argument("-s", "--size", type=str, nargs="+", default="7x7x7", help="set level size", action="extend")
-parser.add_argument("-d", "--dest", type=str, default=".\\", help="set file destination folder")
+parser.add_argument("-d", "--dest", type=str, default=".\\Maps\\", help="set file destination folder")
 args = parser.parse_args()
 
 def get_size(s:str):
@@ -29,7 +29,6 @@ def read_file(path):
     size = get_size(args.size)
     half = {"x": math.floor(size["x"]/2), "y": math.floor(size["y"]/2), "z": math.floor(size["z"]/2)}
     data:str = [chr(0)] * (size["x"] * size["y"] * size["z"])
-    index = 0
     for line in file:
         if header:
             if line == "end_header\n":
@@ -42,9 +41,8 @@ def read_file(path):
             value = 0
             for tile in Tiles:
                 if list[3] == tile[0] and list[4] == tile[1] and list[5] == tile[2]:
-                    data[index] = chr(value)
+                    data[list[0] + (list[1] * size["x"]) + (list[2] * size["x"] * size["y"])] = chr(value)
                 value += 1
-            index += 1
     file.close()
     return "".join(data)
 

@@ -1,0 +1,20 @@
+[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://b8v1g2dywrail"]
+
+[ext_resource type="Texture2D" uid="uid://wo6kdrxstnaw" path="res://Level/TestTiles.png" id="1_burho"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_csfrw"]
+texture = ExtResource("1_burho")
+texture_region_size = Vector2i(100, 100)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+
+[resource]
+tile_size = Vector2i(100, 100)
+sources/0 = SubResource("TileSetAtlasSource_csfrw")

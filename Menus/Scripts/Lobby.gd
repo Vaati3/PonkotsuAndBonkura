@@ -22,8 +22,9 @@ func UpdateCharacters():
 			$VBoxContainer/HBoxContainer/PlayerPonkotsu.text = GameManager.otherPlayer.name
 
 @rpc("any_peer", "call_local")
-func StartLevel(levelPath:String):
-	var scene = load(levelPath).instantiate()
+func StartLevel(mapName:String):
+	GameManager.map.OpenMap(mapName)
+	var scene = load("res://Level/Level.tscn").instantiate()
 	get_tree().root.add_child(scene)
 	self.hide()
 
@@ -37,4 +38,4 @@ func _on_switch_characters_pressed():
 	SwitchCharacters.rpc()
 
 func _on_start_level_pressed():
-	StartLevel.rpc("res://Levels/TestLevel.tscn")
+	StartLevel.rpc("testarea")

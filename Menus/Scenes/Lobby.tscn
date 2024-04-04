@@ -37,7 +37,6 @@ offset_top = 30.0
 offset_right = 280.0
 offset_bottom = 130.0
 grow_horizontal = 2
-disabled = true
 text = "Start 
 Level"
 

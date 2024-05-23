@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://ck7k5emht2bck"]
 
-[ext_resource type="Script" path="res://Menus/Scripts/MainMenu.gd" id="1_a6rag"]
+[ext_resource type="Script" path="res://Menus/MainMenu.cs" id="1_5fta4"]
 
 [node name="MainMenu" type="Panel"]
 anchors_preset = 15
@@ -8,7 +8,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_a6rag")
+script = ExtResource("1_5fta4")
 
 [node name="Menu" type="Control" parent="."]
 layout_mode = 1

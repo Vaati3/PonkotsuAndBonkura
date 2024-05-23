@@ -6,11 +6,13 @@ public class Player {
 	public long id;
 	public string name;
 	public int progression;
+	public CharacterType characterType;
 	public Player()
 	{
 		id = 0;
 		name = "";
 		progression = 0;
+		characterType = CharacterType.Ponkotsu;
 	}
     public override string ToString()
     {
@@ -37,10 +39,10 @@ public partial class GameManager : Node
 	{
 		if (player.id != newPlayer.id)
 			otherPlayer = player;
-		// if (isServer)
-		// 		set other player char to not player char
-		// else
-		// 		set player char to not other player char
+		if (isServer)
+			otherPlayer.characterType = player.characterType == CharacterType.Ponkotsu ? CharacterType.Bonkura : CharacterType.Ponkotsu;
+		else
+			player.characterType = otherPlayer.characterType == CharacterType.Ponkotsu ? CharacterType.Bonkura : CharacterType.Ponkotsu;
 	}
 
 	public void Save()

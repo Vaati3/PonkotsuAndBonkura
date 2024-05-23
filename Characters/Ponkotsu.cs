@@ -20,6 +20,11 @@ public partial class Ponkotsu : Character
         Rpc(nameof(UpdatePosition), dir);
         Position = new Vector2(position3D.X, position3D.Z);
     }
+
+    public override CharacterType GetCharacterType()
+    {
+        return CharacterType.Ponkotsu;
+    }
     protected override bool CanSee(Vector3 pos)
     {
         int tilesize = 10;
@@ -31,11 +36,5 @@ public partial class Ponkotsu : Character
             return true;
         }
         return false;
-    }
-
-    protected override void UpdateMap()
-    {
-        // Vector3I tilePos = Vector3I.Zero;
-        throw new NotImplementedException();
     }
 }

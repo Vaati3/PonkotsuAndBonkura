@@ -1,22 +1,29 @@
 using Godot;
 using System;
 
+public enum CharacterType {
+	Ponkotsu,
+	Bonkura
+}
+
 public abstract partial class Character : Node2D
 {
 	protected GameManager gameManager;
 	protected Vector3 position3D = Vector3.Zero;
-	protected int controllerId;
+	protected long controllerId;
 	protected Character other;
 	[Export]public float speed = 100;
 
-	public void Possess(int id, Character other)
+	[Signal]public delegate void UpdateMapEventHandler(Vector3 pos);
+
+	public void Possess(long id, Character other)
 	{
 		gameManager = GetNode<GameManager>("/root/GameManager");
 		controllerId = id;
 		this.other = other;
 
 		UpdateVisibility();
-		UpdateMap();
+		EmitSignal(nameof(UpdateMap), position3D, (int)GetCharacterType());
 	}
 
 	[Rpc(mode:MultiplayerApi.RpcMode.AnyPeer, CallLocal=true)]
@@ -37,6 +44,6 @@ public abstract partial class Character : Node2D
 			other.Visible = false;
 	}
 
+	public abstract CharacterType GetCharacterType();
 	protected abstract bool CanSee(Vector3 pos);
-	protected abstract void UpdateMap();
 }

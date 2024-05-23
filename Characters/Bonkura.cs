@@ -20,6 +20,10 @@ public partial class Bonkura : Character
         Rpc(nameof(UpdatePosition), dir);
         Position = new Vector2(position3D.Z, position3D.Y);
     }
+    public override CharacterType GetCharacterType()
+    {
+        return CharacterType.Bonkura;
+    }
     protected override bool CanSee(Vector3 pos)
     {
         int tilesize = 10;
@@ -31,11 +35,5 @@ public partial class Bonkura : Character
             return true;
         }
         return false;
-    }
-
-    protected override void UpdateMap()
-    {
-        // Vector3I tilePos = Vector3I.Zero;
-        throw new NotImplementedException();
     }
 }

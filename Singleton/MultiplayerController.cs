@@ -7,8 +7,7 @@ public partial class MultiplayerController : Node
 	GameManager gameManager;
 	int port = 9001;
 
-	[Signal]
-	public delegate void HostCreatedEventHandler();
+	[Signal] public delegate void HostCreatedEventHandler();
 
 	public override void _Ready()
 	{

@@ -1,8 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://csmno7m2m8r0r"]
+[gd_scene load_steps=3 format=3 uid="uid://csmno7m2m8r0r"]
 
+[ext_resource type="Script" path="res://Characters/Character.cs" id="1_dk2cq"]
 [ext_resource type="Texture2D" uid="uid://c4gpfg2a7y8b2" path="res://icon.svg" id="1_pnddf"]
 
 [node name="Character" type="Node2D"]
+script = ExtResource("1_dk2cq")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.5, 0.5)

@@ -21,7 +21,7 @@ public partial class MultiplayerController : Node
 		gameManager = GetNode<GameManager>("/root/GameManager");
 	}
 
-	[Rpc(MultiplayerApi.RpcMode.AnyPeer)]
+	[Rpc(mode:MultiplayerApi.RpcMode.AnyPeer)]
 	private void UpdatePlayers(String playerString)
 	{
 		Player player = Player.FromString(playerString);

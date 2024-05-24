@@ -20,11 +20,10 @@ public partial class MultiplayerController : Node
 		gameManager = GetNode<GameManager>("/root/GameManager");
 	}
 
-	[Rpc(mode:MultiplayerApi.RpcMode.AnyPeer)]
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer)]
 	private void UpdatePlayers(String playerString)
 	{
 		Player player = Player.FromString(playerString);
-		GD.Print("Player " + player.id + " updated");	
 		gameManager.PlayerJoined(player, Multiplayer.IsServer());
 		if (Multiplayer.IsServer())
 			RpcId(player.id, nameof(UpdatePlayers), gameManager.player.ToString());
@@ -63,6 +62,7 @@ public partial class MultiplayerController : Node
 	{
 		GD.Print("Player connected to server");
 		RpcId(1, nameof(UpdatePlayers), gameManager.player.ToString());
+		EmitSignal(nameof(HostCreated));
 	}
 	public void ConnectionFailed()
 	{

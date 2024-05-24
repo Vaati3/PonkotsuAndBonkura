@@ -27,7 +27,9 @@ public partial class MainMenu : Panel
 
 	public void OpenLobby()
 	{
-		GD.Print("IT JUST WORKS");
+		Lobby lobby = GD.Load<PackedScene>("res://Menus/Lobby.tscn").Instantiate<Lobby>();
+		GetTree().Root.AddChild(lobby);
+		Visible = false;
 	}
 
 	//main menu
@@ -57,6 +59,7 @@ public partial class MainMenu : Panel
 	}
 	public void _on_confirm_join_pressed()
 	{
+		//string address = GetNode<TextEdit>("JoinMenu/TextEdit").Text;
 		controller.Join("127.0.0.1");
 	}
 	//name popup

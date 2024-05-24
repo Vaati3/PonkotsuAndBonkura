@@ -26,7 +26,7 @@ public abstract partial class Character : Node2D
 		EmitSignal(nameof(UpdateMap), position3D, (int)GetCharacterType());
 	}
 
-	[Rpc(mode:MultiplayerApi.RpcMode.AnyPeer, CallLocal=true)]
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal=true)]
 	protected void UpdatePosition(Vector3 dir)
 	{
 		//check colision

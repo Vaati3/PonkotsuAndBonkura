@@ -21,6 +21,11 @@ public partial class Map : TileMap
 			bonkura.Possess(gameManager.player.id, ponkotsu);
 	}
 
+	public void StartMap(string mapName)
+	{
+		mapGenerator.Read(mapName);
+	}
+
 	public void UpdateTile(Vector3I tilePos, int x, int y)
 	{
 		Tile tile = mapGenerator.GetTile(tilePos);

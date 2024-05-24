@@ -16,3 +16,6 @@ script = ExtResource("3_5yg6x")
 
 [node name="Bonkura" parent="." instance=ExtResource("2_2purt")]
 script = ExtResource("4_40oqy")
+
+[connection signal="UpdateMap" from="Ponkotsu" to="." method="UpdateMapPonkotsu"]
+[connection signal="UpdateMap" from="Bonkura" to="." method="UpdateMapBonkura"]

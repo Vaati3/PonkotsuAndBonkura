@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://7640xxkbddua"]
+[gd_scene load_steps=2 format=3 uid="uid://7640xxkbddua"]
+
+[ext_resource type="Script" path="res://Menus/Lobby.cs" id="1_62gdr"]
 
 [node name="Lobby" type="Panel"]
 anchors_preset = 15
@@ -6,9 +8,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_62gdr")
 
 [node name="SwitchCharacters" type="Button" parent="."]
-visible = false
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 1
 anchors_preset = 5
@@ -22,7 +24,7 @@ grow_horizontal = 2
 text = "Switch 
 roles"
 
-[node name="StartLevel" type="Button" parent="."]
+[node name="StartMap" type="Button" parent="."]
 visible = false
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 1
@@ -37,35 +39,33 @@ grow_horizontal = 2
 text = "Start 
 Level"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBox" type="VBoxContainer" parent="."]
 layout_mode = 0
 offset_right = 236.0
 offset_bottom = 92.0
 alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="Player1" type="HBoxContainer" parent="VBox"]
 layout_mode = 2
 theme_override_constants/separation = 40
 alignment = 1
 
-[node name="LabelPonkotsu" type="Label" parent="VBoxContainer/HBoxContainer"]
-layout_mode = 2
-text = "Ponkotsu"
-
-[node name="PlayerPonkotsu" type="Label" parent="VBoxContainer/HBoxContainer"]
+[node name="Name" type="Label" parent="VBox/Player1"]
 layout_mode = 2
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+[node name="Character" type="Label" parent="VBox/Player1"]
+layout_mode = 2
+
+[node name="Player2" type="HBoxContainer" parent="VBox"]
 layout_mode = 2
 theme_override_constants/separation = 40
 alignment = 1
 
-[node name="LabelBonkura" type="Label" parent="VBoxContainer/HBoxContainer2"]
+[node name="Name" type="Label" parent="VBox/Player2"]
 layout_mode = 2
-text = "Bonkura"
 
-[node name="PlayerBonkura" type="Label" parent="VBoxContainer/HBoxContainer2"]
+[node name="Character" type="Label" parent="VBox/Player2"]
 layout_mode = 2
 
 [connection signal="pressed" from="SwitchCharacters" to="." method="_on_switch_characters_pressed"]
-[connection signal="pressed" from="StartLevel" to="." method="_on_start_level_pressed"]
+[connection signal="pressed" from="StartMap" to="." method="_on_start_map_pressed"]

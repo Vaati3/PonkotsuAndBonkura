@@ -4,63 +4,47 @@ using System;
 public partial class Map : TileMap
 {
 	GameManager gameManager;
-	MapGenerator mapGenerator;
+	public MapGenerator generator {get; private set;}
 	Ponkotsu ponkotsu;
 	Bonkura bonkura;
+
+	Label ponkotsuDebug;
+	Label bonkuraDebug;
+
 	public override void _Ready()
 	{
 		gameManager = GetNode<GameManager>("/root/GameManager");
-		mapGenerator = new MapGenerator();
-		AddChild(mapGenerator);
+		generator = new MapGenerator();
+		AddChild(generator);
 
 		ponkotsu = GetNode<Ponkotsu>("Ponkotsu");
 		bonkura = GetNode<Bonkura>("Bonkura");
-		if (gameManager.player.characterType == CharacterType.Ponkotsu)
-			ponkotsu.Possess(gameManager.player.id, bonkura);
-		else
-			bonkura.Possess(gameManager.player.id, ponkotsu);
+
+		ponkotsuDebug = GetNode<Label>("Debug/Ponkotsu");
+		bonkuraDebug = GetNode<Label>("Debug/Bonkura");
 	}
 
-	public void StartMap(string mapName)
+    public override void _Process(double delta)
+    {
+        ponkotsuDebug.Text = "Ponkotsu X: " + ponkotsu.position3D.X + ", Y: " + ponkotsu.position3D.Y + ", Z: " + ponkotsu.position3D.Z;
+		bonkuraDebug.Text = "Bonkura X: " + bonkura.position3D.X + ", Y: " + bonkura.position3D.Y + ", Z: " + bonkura.position3D.Z;
+    }
+
+    public void StartMap(string mapName)
 	{
-		mapGenerator.Read(mapName);
+		generator.Read(mapName);
+		ponkotsu.position3D = generator.spawns[0];
+		bonkura.position3D = generator.spawns[1];
+		if (gameManager.player.characterType == CharacterType.Ponkotsu)
+			ponkotsu.Possess(gameManager.player.id, bonkura, this);
+		else
+			bonkura.Possess(gameManager.player.id, ponkotsu, this);
 	}
 
 	public void UpdateTile(Vector3I tilePos, int x, int y)
 	{
-		Tile tile = mapGenerator.GetTile(tilePos);
+		Tile tile = generator.GetTile(tilePos);
 		Vector2I tileValue = tile == Tile.Void? Vector2I.Zero : new Vector2I(1, 0);
 		SetCell(0, new Vector2I(x, y), 0, tileValue);
-	}
-
-	public void UpdateMapPonkotsu(Vector3 pos)
-	{
-		Vector3I tilePos = Vector3I.Zero;
-		tilePos.Y = mapGenerator.GetTilePos(pos).Y;
-		for (int z = 0; z < mapGenerator.size.Z; z++)
-		{
-			tilePos.X = 0;
-			for (int x = 0; x < mapGenerator.size.X; x++)
-			{
-				UpdateTile(tilePos, x, z);
-				tilePos.X += 1;
-			}
-			tilePos.Z += 1;
-		}
-	}
-	public void UpdateMapBonkura(Vector3 pos)
-	{
-		Vector3I tilePos = Vector3I.Zero;
-		tilePos.X = mapGenerator.GetTilePos(pos).X;
-		for (int y = 0; y < mapGenerator.size.Y; y++)
-		{
-			tilePos.Y = 0;
-			for (int z = 0; z < mapGenerator.size.Z; z++)
-			{
-				UpdateTile(tilePos, z, y);
-				tilePos.Z += 1;
-			}
-			tilePos.Y += 1;
-		}
 	}
 }

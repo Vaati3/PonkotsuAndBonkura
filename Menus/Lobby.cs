@@ -29,10 +29,6 @@ public partial class Lobby : Panel
 		timer.QueueFree();
 	}
 
-    public override void _Process(double delta)
-    {
-    }
-
     private void UpdatePlayerInfo(Player player)
 	{
 		int playerNumber = player.id == 1 ? 1 : 2;

@@ -24,7 +24,7 @@ public partial class MapGenerator : Node
 	{
 		Vector3I pos = new Vector3I(
 			i / size.X % size.Y,
-			size.Y - 1 - (i / size.Y * size.X),
+			size.Y - 1 - (i / (size.Y * size.X)),
 			i % size.X
 		);
 
@@ -37,7 +37,7 @@ public partial class MapGenerator : Node
 
 	public bool Read(string mapName)
 	{
-		string path = "res:://Map/Maps//" + mapName + ".dat";
+		string path = "res://Map/Maps/" + mapName + ".dat";
 		if (! FileAccess.FileExists(path))
 			return false;
 		FileAccess file = FileAccess.Open(path, FileAccess.ModeFlags.Read);
@@ -47,8 +47,7 @@ public partial class MapGenerator : Node
 		data = new Tile[totalSize];
 		byte[] buffer = file.GetBuffer(totalSize);
 		for (int i = 0; i < totalSize; i++)
-			SetData
-	(buffer[i], i);
+			SetData(buffer[i], i);
 		return true;
 	}
 

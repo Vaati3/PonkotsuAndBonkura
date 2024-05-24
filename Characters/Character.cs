@@ -9,25 +9,29 @@ public enum CharacterType {
 public abstract partial class Character : Node2D
 {
 	protected GameManager gameManager;
-	protected Vector3 position3D = Vector3.Zero;
-	protected long controllerId;
+	protected Map map;
+	protected long controllerId = -1;
 	protected Character other;
+	public Vector3 position3D = Vector3.Zero;
 	[Export]public float speed = 100;
 
-	[Signal]public delegate void UpdateMapEventHandler(Vector3 pos);
+    public override void _Ready()
+    {
+        gameManager = GetNode<GameManager>("/root/GameManager");
+    }
 
-	public void Possess(long id, Character other)
+    public void Possess(long id, Character other, Map map)
 	{
-		gameManager = GetNode<GameManager>("/root/GameManager");
+		this.map = map;
 		controllerId = id;
 		this.other = other;
 
-		UpdateVisibility();
-		EmitSignal(nameof(UpdateMap), position3D, (int)GetCharacterType());
+		UpdateMap();
+		Rpc(nameof(UpdatePosition), Vector3.Zero);
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal=true)]
-	protected void UpdatePosition(Vector3 dir)
+	public virtual void UpdatePosition(Vector3 dir)
 	{
 		//check colision
 		position3D += dir;
@@ -38,12 +42,10 @@ public abstract partial class Character : Node2D
 	{
 		if (gameManager.player.id != controllerId)
 			return;
-		if (CanSee(other.position3D))
-			other.Visible = true;
-		else
-			other.Visible = false;
+		other.Visible = CanSee(other.position3D);
 	}
 
 	public abstract CharacterType GetCharacterType();
 	protected abstract bool CanSee(Vector3 pos);
+	protected abstract void UpdateMap();
 }

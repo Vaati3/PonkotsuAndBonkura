@@ -17,5 +17,14 @@ script = ExtResource("3_5yg6x")
 [node name="Bonkura" parent="." instance=ExtResource("2_2purt")]
 script = ExtResource("4_40oqy")
 
-[connection signal="UpdateMap" from="Ponkotsu" to="." method="UpdateMapPonkotsu"]
-[connection signal="UpdateMap" from="Bonkura" to="." method="UpdateMapBonkura"]
+[node name="Debug" type="VBoxContainer" parent="."]
+offset_right = 274.0
+offset_bottom = 239.0
+
+[node name="Ponkotsu" type="Label" parent="Debug"]
+modulate = Color(0.455164, 0.0995564, 0.631745, 1)
+layout_mode = 2
+
+[node name="Bonkura" type="Label" parent="Debug"]
+modulate = Color(0.455164, 0.0995564, 0.631745, 1)
+layout_mode = 2

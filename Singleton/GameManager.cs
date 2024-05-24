@@ -35,7 +35,6 @@ public partial class GameManager : Node
 
 	public void PlayerJoined(Player newPlayer, bool isServer)
 	{
-		GD.Print(player.id + " " + newPlayer.id);
 		if (player.id != newPlayer.id)
 			otherPlayer = newPlayer;
 		if (isServer)

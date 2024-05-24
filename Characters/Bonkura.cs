@@ -3,7 +3,6 @@ using System;
 
 public partial class Bonkura : Character
 {
-
     public void _physics_process(float delta)
     {
         if (gameManager.player.id != controllerId)
@@ -17,8 +16,16 @@ public partial class Bonkura : Character
             dir.Y += speed * delta;
         if (Input.IsActionPressed("move_up"))
             dir.Y -= speed * delta;
-        Rpc(nameof(UpdatePosition), dir);
-        Position = new Vector2(position3D.Z, position3D.Y);
+        if (dir != Vector3.Zero)
+            Rpc(nameof(UpdatePosition), dir);
+    }
+    public override void UpdatePosition(Vector3 dir)
+    {
+        base.UpdatePosition(dir);
+        if (controllerId == gameManager.player.id)
+            Position = new Vector2(position3D.Z, position3D.Y);
+        else
+            Position = new Vector2(position3D.X, position3D.Z);
     }
     public override CharacterType GetCharacterType()
     {
@@ -26,14 +33,23 @@ public partial class Bonkura : Character
     }
     protected override bool CanSee(Vector3 pos)
     {
-        int tilesize = 10;
-        int xLayer = (int)Math.Floor(position3D.X / tilesize);
+        int xLayer = (int)(position3D.X / MapGenerator.tileSize);
 
-        if (pos.X >= xLayer * tilesize && pos.X <= xLayer * tilesize + tilesize)
-        {
-            other.Position = new Vector2(pos.Z, pos.Y);
-            return true;
-        }
-        return false;
+        return pos.X >= xLayer * MapGenerator.tileSize && pos.X <= xLayer * MapGenerator.tileSize + MapGenerator.tileSize;
     }
+    protected override void UpdateMap()
+	{
+		Vector3I tilePos = Vector3I.Zero;
+		tilePos.X = map.generator.GetTilePos(position3D).X;
+		for (int y = 0; y < map.generator.size.Y; y++)
+		{
+			tilePos.Y = 0;
+			for (int z = 0; z < map.generator.size.Z; z++)
+			{
+				map.UpdateTile(tilePos, z, y);
+				tilePos.Z += 1;
+			}
+			tilePos.Y += 1;
+		}
+	}
 }

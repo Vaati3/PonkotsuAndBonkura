@@ -31,18 +31,24 @@ public abstract partial class Character : Node2D
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal=true)]
-	public virtual void UpdatePosition(Vector3 dir)
+	protected virtual void UpdatePosition(Vector3 dir)
 	{
 		//check colision
 		position3D += dir;
 		UpdateVisibility();
 	}
 
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer)]
 	protected void UpdateVisibility()
 	{
 		if (gameManager.player.id != controllerId)
 			return;
 		other.Visible = CanSee(other.position3D);
+		other.UpdateVisibility(gameManager.otherPlayer.id);
+	}
+	protected void UpdateVisibility(long id)
+	{
+		RpcId(id, nameof(UpdateVisibility));
 	}
 
 	public abstract CharacterType GetCharacterType();

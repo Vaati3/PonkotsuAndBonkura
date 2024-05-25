@@ -19,7 +19,7 @@ public partial class Bonkura : Character
         if (dir != Vector3.Zero)
             Rpc(nameof(UpdatePosition), dir);
     }
-    public override void UpdatePosition(Vector3 dir)
+    protected override void UpdatePosition(Vector3 dir)
     {
         base.UpdatePosition(dir);
         if (controllerId == gameManager.player.id)
@@ -33,9 +33,7 @@ public partial class Bonkura : Character
     }
     protected override bool CanSee(Vector3 pos)
     {
-        int xLayer = (int)(position3D.X / MapGenerator.tileSize);
-
-        return pos.X >= xLayer * MapGenerator.tileSize && pos.X <= xLayer * MapGenerator.tileSize + MapGenerator.tileSize;
+        return (int)(position3D.X / MapGenerator.tileSize) == (int)(pos.X / MapGenerator.tileSize);
     }
     protected override void UpdateMap()
 	{

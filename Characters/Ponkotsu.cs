@@ -21,7 +21,7 @@ public partial class Ponkotsu : Character
             Rpc(nameof(UpdatePosition), dir);
     }
 
-    public override void UpdatePosition(Vector3 dir)
+    protected override void UpdatePosition(Vector3 dir)
     {
         base.UpdatePosition(dir);
         if (controllerId == gameManager.player.id)
@@ -37,9 +37,7 @@ public partial class Ponkotsu : Character
     }
     protected override bool CanSee(Vector3 pos)
     {
-        int yLayer = (int)(position3D.Y / MapGenerator.tileSize);
-
-        return pos.Y >= yLayer * MapGenerator.tileSize && pos.Y <= yLayer * MapGenerator.tileSize + MapGenerator.tileSize;
+        return (int)(position3D.Y / MapGenerator.tileSize) == (int)(pos.Y / MapGenerator.tileSize);
     }
 
     protected override void UpdateMap()

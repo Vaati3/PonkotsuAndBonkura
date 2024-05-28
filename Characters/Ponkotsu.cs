@@ -3,7 +3,6 @@ using System;
 
 public partial class Ponkotsu : Character
 {
-
     public void _physics_process(float delta)
     {
         if (!isControlled)
@@ -17,6 +16,9 @@ public partial class Ponkotsu : Character
             dir.Z += speed * delta;
         if (Input.IsActionPressed("move_up"))
             dir.Z -= speed * delta;
+        float half = sprite.Texture.GetSize().Y * sprite.Scale.Y / 2f;
+        if (map.generator.GetTile(position3D.X, position3D.Y + half, position3D.Z) == Tile.Void)
+            dir.Y += gravity * delta;    
         if (dir != Vector3.Zero)
             Move(dir);
     }

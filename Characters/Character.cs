@@ -15,7 +15,8 @@ public abstract partial class Character : CharacterBody2D
 	public Vector3 position3D = Vector3.Zero;
 	[Export]public float speed = 100;
 
-	private Sprite2D sprite;
+	protected Sprite2D sprite;
+	protected float gravity = 9.8f;
 
     public void init(Map map, Character other)
     {

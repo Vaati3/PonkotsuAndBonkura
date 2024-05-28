@@ -59,6 +59,10 @@ public partial class MapGenerator : Node
 	{
 		return data[pos.X + (pos.Z * size.X) + (pos.Y * size.X * size.Z)];
 	}
+	public Tile GetTile(float x, float y, float z)
+	{
+		return GetTile(GetTilePos(x, y, z));
+	}
 	public Tile GetTile(int x, int y, int z)
 	{
 		return data[x + (z * size.X) + (y * size.X * size.Z)];

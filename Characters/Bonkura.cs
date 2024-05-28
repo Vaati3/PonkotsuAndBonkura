@@ -5,6 +5,7 @@ public partial class Bonkura : Character
 {
     public void _physics_process(float delta)
     {
+        
         if (!isControlled)
             return;
         Vector3 dir = Vector3.Zero;
@@ -12,10 +13,10 @@ public partial class Bonkura : Character
             dir.Z += speed * delta;
         if (Input.IsActionPressed("move_left"))
             dir.Z -= speed * delta;
-        if (Input.IsActionPressed("move_down"))
-            dir.Y += speed * delta;
-        if (Input.IsActionPressed("move_up"))
-            dir.Y -= speed * delta;
+        if (Input.IsActionPressed("move_up"))//jump
+            dir.Y -= speed * 2 * delta;
+        dir.Y += gravity * delta;
+
         if (dir != Vector3.Zero)
             Move(dir);
     }

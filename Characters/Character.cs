@@ -6,42 +6,58 @@ public enum CharacterType {
 	Bonkura
 }
 
-public abstract partial class Character : Node2D
+public abstract partial class Character : CharacterBody2D
 {
 	protected GameManager gameManager;
 	protected Map map;
-	protected long controllerId = -1;
+	protected bool isControlled = false;
 	protected Character other;
 	public Vector3 position3D = Vector3.Zero;
 	[Export]public float speed = 100;
 
-    public override void _Ready()
+	private Sprite2D sprite;
+
+    public void init(Map map, Character other)
     {
+		this.map = map;
+		this.other = other;
         gameManager = GetNode<GameManager>("/root/GameManager");
+		sprite = GetNode<Sprite2D>("Sprite");
     }
 
-    public void Possess(long id, Character other, Map map)
+    public void Possess(Vector3[] spawns)
 	{
-		this.map = map;
-		controllerId = id;
-		this.other = other;
+		isControlled = true;
 
+		position3D = spawns[(int)GetCharacterType()];
+		Position = GetLocalPos(position3D);
+		other.position3D = spawns[(int)other.GetCharacterType()];
+		other.Position = GetLocalPos(other.position3D);
 		UpdateMap();
-		Rpc(nameof(UpdatePosition), Vector3.Zero);
+		UpdateVisibility();
 	}
 
-	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal=true)]
-	protected virtual void UpdatePosition(Vector3 dir)
+	protected void Move(Vector3 dir)
 	{
-		//check colision
-		position3D += dir;
+        MoveAndCollide(GetLocalPos(dir));
+		position3D = GetGlobalPos(Position, dir);
 		UpdateVisibility();
+
+		RpcId(gameManager.otherPlayer.id, nameof(UpdatePosition), position3D);
+	}
+
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer)]
+	protected void UpdatePosition(Vector3 pos)
+	{
+		position3D = pos;
+		Position = other.GetLocalPos(pos);
+		//MoveAndCollide(other.GetLocalPos(dir));
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer)]
 	protected void UpdateVisibility()
 	{
-		if (gameManager.player.id != controllerId)
+		if (!isControlled)
 			return;
 		other.Visible = CanSee(other.position3D);
 		other.UpdateVisibility(gameManager.otherPlayer.id);
@@ -52,6 +68,9 @@ public abstract partial class Character : Node2D
 	}
 
 	public abstract CharacterType GetCharacterType();
+	public abstract Vector2 GetLocalPos(Vector3 pos);
+	public abstract Vector3 GetGlobalPos(float x, float y);
+	public abstract Vector3 GetGlobalPos(Vector2 pos, Vector3 dir);
 	protected abstract bool CanSee(Vector3 pos);
 	protected abstract void UpdateMap();
 }

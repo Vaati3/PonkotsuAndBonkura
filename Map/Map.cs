@@ -19,6 +19,8 @@ public partial class Map : TileMap
 
 		ponkotsu = GetNode<Ponkotsu>("Ponkotsu");
 		bonkura = GetNode<Bonkura>("Bonkura");
+		ponkotsu.init(this, bonkura);
+		bonkura.init(this, ponkotsu);
 
 		ponkotsuDebug = GetNode<Label>("Debug/Ponkotsu");
 		bonkuraDebug = GetNode<Label>("Debug/Bonkura");
@@ -33,12 +35,10 @@ public partial class Map : TileMap
     public void StartMap(string mapName)
 	{
 		generator.Read(mapName);
-		ponkotsu.position3D = generator.spawns[0];
-		bonkura.position3D = generator.spawns[1];
 		if (gameManager.player.characterType == CharacterType.Ponkotsu)
-			ponkotsu.Possess(gameManager.player.id, bonkura, this);
-		else
-			bonkura.Possess(gameManager.player.id, ponkotsu, this);
+			ponkotsu.Possess(generator.spawns);
+		else 
+			bonkura.Possess(generator.spawns);
 	}
 
 	public void UpdateTile(Vector3I tilePos, int x, int y)
@@ -47,4 +47,5 @@ public partial class Map : TileMap
 		Vector2I tileValue = tile == Tile.Void? Vector2I.Zero : new Vector2I(1, 0);
 		SetCell(0, new Vector2I(x, y), 0, tileValue);
 	}
+
 }

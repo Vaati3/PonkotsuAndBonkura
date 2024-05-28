@@ -6,7 +6,7 @@ public partial class Ponkotsu : Character
 
     public void _physics_process(float delta)
     {
-        if (gameManager.player.id != controllerId)
+        if (!isControlled)
             return;
         Vector3 dir = Vector3.Zero;
         if (Input.IsActionPressed("move_right"))
@@ -18,23 +18,26 @@ public partial class Ponkotsu : Character
         if (Input.IsActionPressed("move_up"))
             dir.Z -= speed * delta;
         if (dir != Vector3.Zero)
-            Rpc(nameof(UpdatePosition), dir);
-    }
-
-    protected override void UpdatePosition(Vector3 dir)
-    {
-        base.UpdatePosition(dir);
-        if (controllerId == gameManager.player.id)
-            Position = new Vector2(position3D.X, position3D.Z);
-        else
-            Position = new Vector2(position3D.Z, position3D.Y);
-        
+            Move(dir);
     }
 
     public override CharacterType GetCharacterType()
     {
         return CharacterType.Ponkotsu;
     }
+    public override Vector2 GetLocalPos(Vector3 pos)
+    {
+        return new Vector2(pos.X, pos.Z);
+    }
+    public override Vector3 GetGlobalPos(float x, float y)
+    {
+        return new Vector3(x, position3D.Y, y);
+    }
+    public override Vector3 GetGlobalPos(Vector2 pos, Vector3 dir)
+    {
+        return new Vector3(pos.X, position3D.Y + dir.Y, pos.Y);
+    }
+
     protected override bool CanSee(Vector3 pos)
     {
         return (int)(position3D.Y / MapGenerator.tileSize) == (int)(pos.Y / MapGenerator.tileSize);

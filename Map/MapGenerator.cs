@@ -51,6 +51,10 @@ public partial class MapGenerator : Node
 		return true;
 	}
 
+	public Tile GetTile(Vector3 pos)
+	{
+		return GetTile(GetTilePos(pos));
+	}
 	public Tile GetTile(Vector3I pos)
 	{
 		return data[pos.X + (pos.Z * size.X) + (pos.Y * size.X * size.Z)];
@@ -62,6 +66,10 @@ public partial class MapGenerator : Node
 	public Vector3I GetTilePos(Vector3 pos)
 	{
 		return new Vector3I((int)pos.X / tileSize, (int) pos.Y / tileSize, (int) pos.Z / tileSize);
+	}
+	public Vector3I GetTilePos(float x, float y, float z)
+	{
+		return new Vector3I((int)x / tileSize, (int) y / tileSize, (int) z / tileSize);
 	}
 	public Vector3 GetWorldPos(Vector3I pos)
 	{

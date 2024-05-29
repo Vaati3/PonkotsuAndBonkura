@@ -16,7 +16,6 @@ public abstract partial class Character : CharacterBody2D
 	[Export]public float speed = 100;
 
 	protected Sprite2D sprite;
-	protected float gravity = 9.8f;
 
     public void init(Map map, Character other)
     {
@@ -40,7 +39,8 @@ public abstract partial class Character : CharacterBody2D
 
 	protected void Move(Vector3 dir)
 	{
-        MoveAndCollide(GetLocalPos(dir));
+		Velocity = GetLocalPos(dir);
+		MoveAndSlide();
 		position3D = GetGlobalPos(Position, dir);
 		UpdateVisibility();
 
@@ -52,7 +52,6 @@ public abstract partial class Character : CharacterBody2D
 	{
 		position3D = pos;
 		Position = other.GetLocalPos(pos);
-		//MoveAndCollide(other.GetLocalPos(dir));
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer)]
@@ -66,6 +65,14 @@ public abstract partial class Character : CharacterBody2D
 	protected void UpdateVisibility(long id)
 	{
 		RpcId(id, nameof(UpdateVisibility));
+	}
+
+	protected bool IsFalling()
+	{
+		float half = sprite.Texture.GetSize().Y * sprite.Scale.Y / 2f + 1;
+        if (map.generator.GetTile(position3D.X, position3D.Y + half, position3D.Z) == Tile.Void)
+			return true;
+		return false;
 	}
 
 	public abstract CharacterType GetCharacterType();

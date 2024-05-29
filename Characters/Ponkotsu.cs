@@ -3,21 +3,21 @@ using System;
 
 public partial class Ponkotsu : Character
 {
+    float gravity = 9.8f;
     public void _physics_process(float delta)
     {
         if (!isControlled)
             return;
         Vector3 dir = Vector3.Zero;
         if (Input.IsActionPressed("move_right"))
-            dir.X += speed * delta;
+            dir.X += speed;
         if (Input.IsActionPressed("move_left"))
-            dir.X -= speed * delta;
+            dir.X -= speed;
         if (Input.IsActionPressed("move_down"))
-            dir.Z += speed * delta;
+            dir.Z += speed;
         if (Input.IsActionPressed("move_up"))
-            dir.Z -= speed * delta;
-        float half = sprite.Texture.GetSize().Y * sprite.Scale.Y / 2f;
-        if (map.generator.GetTile(position3D.X, position3D.Y + half, position3D.Z) == Tile.Void)
+            dir.Z -= speed;
+        if (IsFalling())
             dir.Y += gravity * delta;    
         if (dir != Vector3.Zero)
             Move(dir);

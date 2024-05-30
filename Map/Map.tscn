@@ -1,13 +1,13 @@
 [gd_scene load_steps=6 format=3 uid="uid://dxen73ot6hbp"]
 
-[ext_resource type="TileSet" uid="uid://b8v1g2dywrail" path="res://Map/TestTileSet.tres" id="1_f1ogl"]
+[ext_resource type="TileSet" uid="uid://b8v1g2dywrail" path="res://Map/TestTileSet.tres" id="1_p1aeu"]
 [ext_resource type="Script" path="res://Map/Map.cs" id="1_yu23f"]
 [ext_resource type="PackedScene" uid="uid://csmno7m2m8r0r" path="res://Characters/Character.tscn" id="2_2purt"]
 [ext_resource type="Script" path="res://Characters/Ponkotsu.cs" id="3_5yg6x"]
 [ext_resource type="Script" path="res://Characters/Bonkura.cs" id="4_40oqy"]
 
 [node name="Map" type="TileMap"]
-tile_set = ExtResource("1_f1ogl")
+tile_set = ExtResource("1_p1aeu")
 format = 2
 script = ExtResource("1_yu23f")
 

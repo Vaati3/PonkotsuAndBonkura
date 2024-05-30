@@ -62,16 +62,35 @@ public partial class Bonkura : Character
     {
         return (int)(position3D.X / MapGenerator.tileSize) == (int)(pos.X / MapGenerator.tileSize);
     }
+
+    protected override void UpdateTile(Vector3I tilePos, int x, int y)
+    {
+        Vector2I tile = Vector2I.One;
+        if (map.generator.GetTile(tilePos) == Tile.Void)
+        {
+            map.SetTile(x, y, tile);
+            return;
+        }
+        if (map.generator.GetTile(tilePos.X, tilePos.Y, tilePos.Z - 1) == Tile.Void)
+            tile.X -= 1;
+        else if (map.generator.GetTile(tilePos.X, tilePos.Y, tilePos.Z + 1) == Tile.Void)
+            tile.X += 1;
+        if (map.generator.GetTile(tilePos.X, tilePos.Y - 1, tilePos.Z) == Tile.Void)
+            tile.Y -= 1;
+        else if (map.generator.GetTile(tilePos.X, tilePos.Y + 1, tilePos.Z) == Tile.Void)
+            tile.Y += 1;
+        map.SetTile(x, y, tile);
+    }
     protected override void UpdateMap()
 	{
 		Vector3I tilePos = Vector3I.Zero;
 		tilePos.X = map.generator.GetTilePos(position3D).X;
 		for (int y = 0; y < map.generator.size.Y; y++)
 		{
-			tilePos.Y = 0;
+			tilePos.Z = 0;
 			for (int z = 0; z < map.generator.size.Z; z++)
 			{
-				map.UpdateTile(tilePos, z, y);
+				UpdateTile(tilePos, z, y);
 				tilePos.Z += 1;
 			}
 			tilePos.Y += 1;

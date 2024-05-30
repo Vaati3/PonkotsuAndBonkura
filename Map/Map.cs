@@ -41,11 +41,10 @@ public partial class Map : TileMap
 			bonkura.Possess(generator.spawns);
 	}
 
-	public void UpdateTile(Vector3I tilePos, int x, int y)
+	public void SetTile(int x, int y, Vector2I tile)
 	{
-		Tile tile = generator.GetTile(tilePos);
-		Vector2I tileValue = tile == Tile.Void? Vector2I.Zero : new Vector2I(1, 0);
-		SetCell(0, new Vector2I(x, y), 0, tileValue);
+		// Tile tile = generator.GetTile(tilePos);
+		// Vector2I tileValue = tile == Tile.Void? Vector2I.Zero : new Vector2I(1, 0);
+		SetCell(0, new Vector2I(x, y), 0, tile);
 	}
-
 }

@@ -45,6 +45,24 @@ public partial class Ponkotsu : Character
         return (int)(position3D.Y / MapGenerator.tileSize) == (int)(pos.Y / MapGenerator.tileSize);
     }
 
+    protected override void UpdateTile(Vector3I tilePos, int x, int y)
+    {
+        Vector2I tile = Vector2I.One;
+        if (map.generator.GetTile(tilePos) == Tile.Void)
+        {
+            map.SetTile(x, y, tile);
+            return;
+        }
+        if (map.generator.GetTile(tilePos.X - 1, tilePos.Y, tilePos.Z) == Tile.Void)
+            tile.X -= 1;
+        else if (map.generator.GetTile(tilePos.X + 1, tilePos.Y, tilePos.Z) == Tile.Void)
+            tile.X += 1;
+        if (map.generator.GetTile(tilePos.X, tilePos.Y, tilePos.Z - 1) == Tile.Void)
+            tile.Y -= 1;
+        else if (map.generator.GetTile(tilePos.X, tilePos.Y, tilePos.Z + 1) == Tile.Void)
+            tile.Y += 1;
+        map.SetTile(x, y, tile);
+    }
     protected override void UpdateMap()
 	{
 		Vector3I tilePos = Vector3I.Zero;
@@ -54,7 +72,7 @@ public partial class Ponkotsu : Character
 			tilePos.X = 0;
 			for (int x = 0; x < map.generator.size.X; x++)
 			{
-				map.UpdateTile(tilePos, x, z);
+				UpdateTile(tilePos, x, z);
 				tilePos.X += 1;
 			}
 			tilePos.Z += 1;

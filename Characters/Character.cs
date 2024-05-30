@@ -14,7 +14,6 @@ public abstract partial class Character : CharacterBody2D
 	protected Character other;
 	public Vector3 position3D = Vector3.Zero;
 	[Export]public float speed = 100;
-
 	protected Sprite2D sprite;
 
     public void init(Map map, Character other)
@@ -80,5 +79,6 @@ public abstract partial class Character : CharacterBody2D
 	public abstract Vector3 GetGlobalPos(float x, float y);
 	public abstract Vector3 GetGlobalPos(Vector2 pos, Vector3 dir);
 	protected abstract bool CanSee(Vector3 pos);
+	protected abstract void UpdateTile(Vector3I tilePos, int x, int y);
 	protected abstract void UpdateMap();
 }

@@ -57,6 +57,8 @@ public partial class MapGenerator : Node
 	}
 	public Tile GetTile(Vector3I pos)
 	{
+		if (pos.X < 0 || pos.X >= size.X || pos.Y < 0 || pos.Y >= size.Y || pos.Z < 0 || pos.Z >= size.Z)
+			return Tile.Block;
 		return data[pos.X + (pos.Z * size.X) + (pos.Y * size.X * size.Z)];
 	}
 	public Tile GetTile(float x, float y, float z)
@@ -65,6 +67,8 @@ public partial class MapGenerator : Node
 	}
 	public Tile GetTile(int x, int y, int z)
 	{
+		if (x < 0 || x >= size.X || y < 0 || y >= size.Y || z < 0 || z >= size.Z)
+			return Tile.Block;
 		return data[x + (z * size.X) + (y * size.X * size.Z)];
 	}
 	public Vector3I GetTilePos(Vector3 pos)

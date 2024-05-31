@@ -14,9 +14,12 @@ public partial class Bonkura : Character
 
     public override void _Ready()
     {
+        base._Ready();
         jumpVelocity = 2 * jumpHeight / jumpAscendTime * -1;
         jumpGravity = -2 * jumpHeight / (jumpAscendTime * jumpAscendTime) * -1;
         fallGravity = -2 * jumpHeight / (jumpFallTime * jumpFallTime) * -1;
+
+        sprite.Texture = GD.Load<Texture2D>("res://Characters/Bonkura.png");
     }
 
     private float GetGravity()
@@ -63,23 +66,21 @@ public partial class Bonkura : Character
         return (int)(position3D.X / MapGenerator.tileSize) == (int)(pos.X / MapGenerator.tileSize);
     }
 
-    protected override void UpdateTile(Vector3I tilePos, int x, int y)
+    protected override bool UpdateTile(Vector3I tilePos, int x, int y)
     {
         Vector2I tile = Vector2I.One;
-        if (map.generator.GetTile(tilePos) == Tile.Void)
-        {
-            map.SetTile(x, y, tile);
-            return;
-        }
-        if (map.generator.GetTile(tilePos.X, tilePos.Y, tilePos.Z - 1) == Tile.Void)
+        if (base.UpdateTile(tilePos, x, y))
+            return true;
+        if (map.generator.GetTile(tilePos.X, tilePos.Y, tilePos.Z - 1) != Tile.Block)
             tile.X -= 1;
-        else if (map.generator.GetTile(tilePos.X, tilePos.Y, tilePos.Z + 1) == Tile.Void)
+        else if (map.generator.GetTile(tilePos.X, tilePos.Y, tilePos.Z + 1) != Tile.Block)
             tile.X += 1;
-        if (map.generator.GetTile(tilePos.X, tilePos.Y - 1, tilePos.Z) == Tile.Void)
+        if (map.generator.GetTile(tilePos.X, tilePos.Y - 1, tilePos.Z) != Tile.Block)
             tile.Y -= 1;
-        else if (map.generator.GetTile(tilePos.X, tilePos.Y + 1, tilePos.Z) == Tile.Void)
+        else if (map.generator.GetTile(tilePos.X, tilePos.Y + 1, tilePos.Z) != Tile.Block)
             tile.Y += 1;
         map.SetTile(x, y, tile);
+        return true;
     }
     protected override void UpdateMap()
 	{

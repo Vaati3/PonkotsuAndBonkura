@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dpdivhs64rq68"
-path="res://.godot/imported/TestTiles.png-590242cf369ac9e310fd3d1b65acad40.ctex"
+uid="uid://s7aaejqohq5t"
+path="res://.godot/imported/Bonkura.png-828a04bb0fef800f25917c88d18a75c3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Map/TestTiles.png"
-dest_files=["res://.godot/imported/TestTiles.png-590242cf369ac9e310fd3d1b65acad40.ctex"]
+source_file="res://Characters/Bonkura.png"
+dest_files=["res://.godot/imported/Bonkura.png-828a04bb0fef800f25917c88d18a75c3.ctex"]
 
 [params]
 

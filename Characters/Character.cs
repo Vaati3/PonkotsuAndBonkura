@@ -16,12 +16,16 @@ public abstract partial class Character : CharacterBody2D
 	[Export]public float speed = 100;
 	protected Sprite2D sprite;
 
+	public override void _Ready()
+	{
+        gameManager = GetNode<GameManager>("/root/GameManager");
+		sprite = GetNode<Sprite2D>("Sprite");
+	}
+
     public void init(Map map, Character other)
     {
 		this.map = map;
 		this.other = other;
-        gameManager = GetNode<GameManager>("/root/GameManager");
-		sprite = GetNode<Sprite2D>("Sprite");
     }
 
     public void Possess(Vector3[] spawns)
@@ -73,12 +77,25 @@ public abstract partial class Character : CharacterBody2D
 			return true;
 		return false;
 	}
+	protected virtual bool UpdateTile(Vector3I tilePos, int x, int y)
+	{
+		Tile tile = map.generator.GetTile(tilePos);
+		switch (tile)
+		{
+			case Tile.Void:
+				map.SetTile(x, y, Vector2I.One);
+				return true;
+			case Tile.PonkotsuGoal: case Tile.BonkuraGoal: 
+				map.SetTile(x, y, new Vector2I((int)tile - 1, 0));
+				return true;
+		}
+		return false;
+	}
 
 	public abstract CharacterType GetCharacterType();
 	public abstract Vector2 GetLocalPos(Vector3 pos);
 	public abstract Vector3 GetGlobalPos(float x, float y);
 	public abstract Vector3 GetGlobalPos(Vector2 pos, Vector3 dir);
 	protected abstract bool CanSee(Vector3 pos);
-	protected abstract void UpdateTile(Vector3I tilePos, int x, int y);
 	protected abstract void UpdateMap();
 }

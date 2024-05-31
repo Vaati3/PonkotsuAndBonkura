@@ -5,7 +5,11 @@ public enum Tile {
 	Void,
 	Block,
 	PonkotsuSpawn,
-	BonkuraSpawn
+	BonkuraSpawn,
+	PonkotsuGoal,
+	BonkuraGoal,
+	Elevator,
+	ElevatorStop
 }
 
 public partial class MapGenerator : Node

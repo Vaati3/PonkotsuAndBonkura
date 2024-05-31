@@ -3,7 +3,7 @@ using System;
 
 public partial class Ponkotsu : Character
 {
-    float gravity = 9.8f;
+    float gravity = 150;
     public void _physics_process(float delta)
     {
         if (!isControlled)
@@ -18,7 +18,10 @@ public partial class Ponkotsu : Character
         if (Input.IsActionPressed("move_up"))
             dir.Z -= speed;
         if (IsFalling())
+        {
+            UpdateMap();
             dir.Y += gravity * delta;    
+        }
         if (dir != Vector3.Zero)
             Move(dir);
     }
@@ -45,23 +48,27 @@ public partial class Ponkotsu : Character
         return (int)(position3D.Y / MapGenerator.tileSize) == (int)(pos.Y / MapGenerator.tileSize);
     }
 
-    protected override void UpdateTile(Vector3I tilePos, int x, int y)
+    protected override bool UpdateTile(Vector3I tilePos, int x, int y)
     {
-        Vector2I tile = Vector2I.One;
-        if (map.generator.GetTile(tilePos) == Tile.Void)
+        if (map.generator.GetTile(tilePos) == Tile.Void && 
+            map.generator.GetTile(tilePos.X, tilePos.Y + 1, tilePos.Z) == Tile.Void)
         {
-            map.SetTile(x, y, tile);
-            return;
+            map.SetTile(x, y, new Vector2I(3,2));
+            return true;
         }
-        if (map.generator.GetTile(tilePos.X - 1, tilePos.Y, tilePos.Z) == Tile.Void)
+        Vector2I tile = Vector2I.One;
+        if (base.UpdateTile(tilePos, x, y))
+            return true;
+        if (map.generator.GetTile(tilePos.X - 1, tilePos.Y, tilePos.Z) != Tile.Block)
             tile.X -= 1;
-        else if (map.generator.GetTile(tilePos.X + 1, tilePos.Y, tilePos.Z) == Tile.Void)
+        else if (map.generator.GetTile(tilePos.X + 1, tilePos.Y, tilePos.Z) != Tile.Block)
             tile.X += 1;
-        if (map.generator.GetTile(tilePos.X, tilePos.Y, tilePos.Z - 1) == Tile.Void)
+        if (map.generator.GetTile(tilePos.X, tilePos.Y, tilePos.Z - 1) != Tile.Block)
             tile.Y -= 1;
-        else if (map.generator.GetTile(tilePos.X, tilePos.Y, tilePos.Z + 1) == Tile.Void)
+        else if (map.generator.GetTile(tilePos.X, tilePos.Y, tilePos.Z + 1) != Tile.Block)
             tile.Y += 1;
         map.SetTile(x, y, tile);
+        return true;
     }
     protected override void UpdateMap()
 	{

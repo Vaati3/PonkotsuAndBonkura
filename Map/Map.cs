@@ -35,6 +35,7 @@ public partial class Map : TileMap
     public void StartMap(string mapName)
 	{
 		generator.Read(mapName);
+		generator.spawns[0] = new Vector3(550, 250, 40);
 		if (gameManager.player.characterType == CharacterType.Ponkotsu)
 			ponkotsu.Possess(generator.spawns);
 		else 

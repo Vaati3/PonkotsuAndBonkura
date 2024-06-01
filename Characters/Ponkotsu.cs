@@ -43,7 +43,7 @@ public partial class Ponkotsu : Character
         return new Vector3(pos.X, position3D.Y + dir.Y, pos.Y);
     }
 
-    protected override bool CanSee(Vector3 pos)
+    public override bool CanSee(Vector3 pos)
     {
         return (int)(position3D.Y / MapGenerator.tileSize) == (int)(pos.Y / MapGenerator.tileSize);
     }

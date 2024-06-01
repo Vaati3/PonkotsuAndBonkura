@@ -11,6 +11,8 @@ tile_set = ExtResource("1_p1aeu")
 format = 2
 script = ExtResource("1_yu23f")
 
+[node name="Objects" type="Node2D" parent="."]
+
 [node name="Ponkotsu" parent="." instance=ExtResource("2_2purt")]
 script = ExtResource("3_5yg6x")
 

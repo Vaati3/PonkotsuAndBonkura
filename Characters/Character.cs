@@ -46,6 +46,7 @@ public abstract partial class Character : CharacterBody2D
 		MoveAndSlide();
 		position3D = GetGlobalPos(Position, dir);
 		UpdateVisibility();
+		map.UpdateObjects();
 
 		RpcId(gameManager.otherPlayer.id, nameof(UpdatePosition), position3D);
 	}
@@ -96,6 +97,6 @@ public abstract partial class Character : CharacterBody2D
 	public abstract Vector2 GetLocalPos(Vector3 pos);
 	public abstract Vector3 GetGlobalPos(float x, float y);
 	public abstract Vector3 GetGlobalPos(Vector2 pos, Vector3 dir);
-	protected abstract bool CanSee(Vector3 pos);
+	public abstract bool CanSee(Vector3 pos);
 	protected abstract void UpdateMap();
 }

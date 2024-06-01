@@ -61,7 +61,7 @@ public partial class Bonkura : Character
         return new Vector3(position3D.X + dir.X, pos.Y, pos.X);
     }
 
-    protected override bool CanSee(Vector3 pos)
+    public override bool CanSee(Vector3 pos)
     {
         return (int)(position3D.X / MapGenerator.tileSize) == (int)(pos.X / MapGenerator.tileSize);
     }

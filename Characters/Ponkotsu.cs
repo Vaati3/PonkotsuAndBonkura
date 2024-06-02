@@ -73,7 +73,7 @@ public partial class Ponkotsu : Character
     protected override void UpdateMap()
 	{
 		Vector3I tilePos = Vector3I.Zero;
-		tilePos.Y = map.generator.GetTilePos(position3D).Y;
+		tilePos.Y = MapGenerator.GetTilePos(position3D).Y;
 		for (int z = 0; z < map.generator.size.Z; z++)
 		{
 			tilePos.X = 0;

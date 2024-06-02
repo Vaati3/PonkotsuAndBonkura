@@ -74,7 +74,7 @@ public abstract partial class Character : CharacterBody2D
 	protected bool IsFalling()
 	{
 		float half = sprite.Texture.GetSize().Y * sprite.Scale.Y / 2f + 1;
-        if (map.generator.GetTile(position3D.X, position3D.Y + half, position3D.Z) == Tile.Void)
+        if (map.generator.GetTile(position3D.X, position3D.Y + half, position3D.Z) != Tile.Block)
 			return true;
 		return false;
 	}

@@ -41,10 +41,9 @@ public partial class Map : TileMap
     public void StartMap(string mapName)
 	{
 		generator.Read(mapName);
+		GenerateObjects();
 		//Test to be removed
 		//generator.spawns[0] = new Vector3(550, 250, 40);
-		CreateObject<Elevator>(new Vector3I(3,5,3));
-		//Test to be removed
 		if (gameManager.player.characterType == CharacterType.Ponkotsu)
 			ponkotsu.Possess(generator.spawns);
 		else
@@ -60,25 +59,25 @@ public partial class Map : TileMap
 	{
 		foreach(Object obj in objects)
 		{
-			obj.UpdateVisibility();
+			obj.Update();
 		}
 	}
 
-	private void ObjectsFromMap()
+	private void GenerateObjects()
 	{
 		for (int i = 0; i < generator.dataSize; i++)
 		{
-			if (generator.data[i] > Tile.BonkuraGoal)
+			if (generator.data[i] > Tile.BonkuraGoal && generator.data[i] < Tile.ElevatorStop)
 			{
 				switch (generator.data[i])
 				{
 					case Tile.ElevatorX: case Tile.ElevatorY : case Tile.ElevatorZ:
 						Vector3I pos = generator.indexToPos(i);
-						Vector3I? stop = generator.Search(Tile.ElevatorStop, (Axis)((int)generator.data[i]-(int)Tile.ElevatorX), pos);
-						if (stop != null)
+						List<Vector3I> stops = generator.Search(Tile.ElevatorStop, (Axis)((int)generator.data[i]-(int)Tile.ElevatorX), pos);
+						if (stops.Count != 0)
 						{
 							Elevator elevator = CreateObject<Elevator>(pos);
-							elevator.stop = stop.Value;
+							elevator.Setup((Axis)((int)generator.data[i]-(int)Tile.ElevatorX), stops, generator);
 						}
 						break;
 				}
@@ -90,13 +89,22 @@ public partial class Map : TileMap
 	private T CreateObject<T>(Vector3I tilePos) where T : Object, new()
 	{
 		Character character = gameManager.player.characterType == CharacterType.Ponkotsu ? ponkotsu : bonkura;
-		Vector3 pos = generator.GetWorldPos(tilePos);
-		pos.Y += MapGenerator.tileSize - 1;
+		Vector3 pos = AlignPos(tilePos);
 		T obj = new T();
 		obj.InitObject(character, pos);
 
 		objectLayer.AddChild(obj);
 		objects.Add(obj);
 		return obj;
+	}
+
+	static public Vector3 AlignPos(Vector3I tilePos)
+	{
+		Vector3 pos = MapGenerator.GetWorldPos(tilePos);
+		pos.X += MapGenerator.tileSize / 2;
+		pos.Z += MapGenerator.tileSize / 2;
+		pos.Y += MapGenerator.tileSize - 1;
+
+		return pos;
 	}
 }

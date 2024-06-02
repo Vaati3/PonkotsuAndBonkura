@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using System.Dynamic;
 
 public enum Tile {
@@ -34,15 +35,19 @@ public partial class MapGenerator : Node
 	public Vector3I indexToPos(int i)
 	{
 		return new Vector3I(
-			i / size.X % size.Y,
-			size.Y - 1 - (i / (size.Y * size.X)),
-			i % size.X
+			i % size.X,
+			size.Y - 1 - (size.Y - 1 - (i / (size.Y * size.X))),
+			i / size.X % size.Y
 		);
 	}
 
 	private void SetData(byte b, int i)
 	{
-		Vector3I pos = indexToPos(i);
+		Vector3I pos = new Vector3I(
+			i / size.X % size.Y,
+			size.Y - 1 - (i / (size.Y * size.X)),
+			i % size.X
+		);
 
 		if (b == 2 || b == 3){
 			spawns[b-2] = pos * tileSize + new Vector3(tileSize/2, tileSize/2, tileSize/2);
@@ -67,8 +72,9 @@ public partial class MapGenerator : Node
 		return true;
 	}
 
-	public Vector3I? Search(Tile tile, Axis axis, Vector3I pos)
+	public List<Vector3I> Search(Tile tile, Axis axis, Vector3I pos)
 	{
+		List<Vector3I> result = new List<Vector3I>();
 		Vector3I increment = axis == Axis.X ? Vector3I.Right : axis == Axis.Y ? Vector3I.Up : Vector3I.Back;
 		int limit = axis == Axis.X ? size.X : axis == Axis.Y ? size.Y : size.Z;
 		pos.X = axis == Axis.X ? 0 : pos.X;
@@ -78,10 +84,15 @@ public partial class MapGenerator : Node
 		for (int i = 0; i < limit; i++)
 		{
 			if (GetTile(pos) == tile)
-				return pos;
+				result.Add(pos);
 			pos += increment;
 		}
-		return null;
+		return result;
+	}
+
+	public void SetTile(Tile tile, Vector3I pos)
+	{
+		data[pos.X + (pos.Z * size.X) + (pos.Y * size.X * size.Z)] = tile;
 	}
 
 	public Tile GetTile(Vector3 pos)
@@ -104,15 +115,15 @@ public partial class MapGenerator : Node
 			return Tile.Block;
 		return data[x + (z * size.X) + (y * size.X * size.Z)];
 	}
-	public Vector3I GetTilePos(Vector3 pos)
+	static public Vector3I GetTilePos(Vector3 pos)
 	{
 		return new Vector3I((int)pos.X / tileSize, (int) pos.Y / tileSize, (int) pos.Z / tileSize);
 	}
-	public Vector3I GetTilePos(float x, float y, float z)
+	static public Vector3I GetTilePos(float x, float y, float z)
 	{
 		return new Vector3I((int)x / tileSize, (int) y / tileSize, (int) z / tileSize);
 	}
-	public Vector3 GetWorldPos(Vector3I pos)
+	static public Vector3 GetWorldPos(Vector3I pos)
 	{
 		return pos * tileSize;
 	}

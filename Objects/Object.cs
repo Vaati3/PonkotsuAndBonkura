@@ -45,8 +45,14 @@ public partial class Object : Node2D
 		Position = player.GetLocalPos(pos);
 	}
 
-	public void UpdateVisibility()
+	private void UpdateVisibility()
 	{
 		Visible = !hide && player.CanSee(position3D);
+	}
+
+	public void Update()
+	{
+		
+		UpdateVisibility();
 	}
 }

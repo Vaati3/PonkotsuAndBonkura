@@ -3,17 +3,23 @@ import os
 import math
 
 Tiles = [
-    [0, 0, 0],       #nothing
+    [0, 0, 0],       #void
     [255, 255, 255], #block
-    [0, 85, 0],        #ponkotsu spawn
-    [255, 0, 0]         #bonkura spawn
+    [0, 255, 0],    #ponkotsu spawn
+    [255, 0, 0],    #bonkura spawn
+    [0, 150, 0],    #ponkotsu goal
+    [150, 0, 0],    #bonkura goal
+    [255, 255, 0],  #elvator X
+    [200, 200, 0],  #elvator Y
+    [145, 145, 0],  #elvator Z
+    [255, 145, 0]   #elvator stop
 ]
 
 parser = argparse.ArgumentParser(description="Process some integers.")
 parser.add_argument("-f", "--files", type=str, nargs="+", help="files to be processed", action="extend")
 parser.add_argument("-s", "--size", type=str, default="7x7x7", help="set level size")
 #parser.add_argument("-s", "--size", type=str, nargs="+", default="7x7x7", help="set level size", action="extend")
-parser.add_argument("-d", "--dest", type=str, default=".\\Maps\\", help="set file destination folder")
+parser.add_argument("-d", "--dest", type=str, default="./Map/Maps/", help="set file destination folder")
 args = parser.parse_args()
 
 def get_size(s:str):

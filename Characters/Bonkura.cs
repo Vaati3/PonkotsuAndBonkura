@@ -85,7 +85,7 @@ public partial class Bonkura : Character
     protected override void UpdateMap()
 	{
 		Vector3I tilePos = Vector3I.Zero;
-		tilePos.X = map.generator.GetTilePos(position3D).X;
+		tilePos.X = MapGenerator.GetTilePos(position3D).X;
 		for (int y = 0; y < map.generator.size.Y; y++)
 		{
 			tilePos.Z = 0;

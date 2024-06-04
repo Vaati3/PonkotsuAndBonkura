@@ -12,12 +12,15 @@ public abstract partial class Character : CharacterBody2D
 	protected Map map;
 	protected bool isControlled = false;
 	protected Character other;
-	public Vector3 position3D = Vector3.Zero;
+	public Vector3 position3D {get; private set;}
 	[Export]public float speed = 100;
 	protected Sprite2D sprite;
 
+	public bool canFall{get; set;}
+
 	public override void _Ready()
 	{
+		position3D = Vector3.Zero;
         gameManager = GetNode<GameManager>("/root/GameManager");
 		sprite = GetNode<Sprite2D>("Sprite");
 	}
@@ -40,7 +43,7 @@ public abstract partial class Character : CharacterBody2D
 		UpdateVisibility();
 	}
 
-	protected void Move(Vector3 dir)
+	public virtual void Move(Vector3 dir)
 	{
 		Velocity = GetLocalPos(dir);
 		MoveAndSlide();
@@ -73,6 +76,8 @@ public abstract partial class Character : CharacterBody2D
 
 	protected bool IsFalling()
 	{
+		if (!canFall)
+			return false;
 		float half = sprite.Texture.GetSize().Y * sprite.Scale.Y / 2f + 1;
         if (map.generator.GetTile(position3D.X, position3D.Y + half, position3D.Z) != Tile.Block)
 			return true;

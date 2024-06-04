@@ -44,6 +44,13 @@ public partial class Bonkura : Character
             Move(dir);
     }
 
+    public override void Move(Vector3 dir)
+    {
+        base.Move(dir);
+        if (dir.X != 0)
+            UpdateMap();
+    }
+
     public override CharacterType GetCharacterType()
     {
         return CharacterType.Bonkura;

@@ -7,7 +7,7 @@ public partial class Elevator : Object
     const float speed = 25;
     List<Vector3> stops;
     int nextStop = 1;
-    bool isMoving = true;
+    bool isMoving = false;
     bool turnArround = false;
     Vector3 forward;
     int direction;
@@ -23,7 +23,7 @@ public partial class Elevator : Object
         pauseTimer = new Timer
         {
             Autostart = false,
-            WaitTime = 3,
+            WaitTime = 5,
             OneShot = true
         };
         AddChild(pauseTimer);
@@ -39,7 +39,6 @@ public partial class Elevator : Object
             generator.SetTile(Tile.Void, stop);
         }
         this.axis = axis;
-        GD.Print(axis);
         forward = axis == Axis.X ? Vector3.Right : axis == Axis.Y ? Vector3.Up : Vector3.Back;
         direction = GetAxisValue(position3D) > GetAxisValue(this.stops[nextStop]) ? -1 : 1;
     }
@@ -56,12 +55,33 @@ public partial class Elevator : Object
                     direction *= -1;
                 pauseTimer.Start();
             }
+            if (playerOverlap)
+                player.Move(forward * direction * speed * (float)delta);
             position3D += forward * direction * speed * (float)delta;
+            Update();
         }
     }
 
     private float GetAxisValue(Vector3 pos)
     {
         return axis == Axis.X ? pos.X : axis == Axis.Y ? pos.Y : pos.Z;
+    }
+    private float SetAxisValue(Vector3 pos)
+    {
+        return axis == Axis.X ? pos.X : axis == Axis.Y ? pos.Y : pos.Z;
+    }
+
+    protected override void OverlapStarted()
+    {
+        base.OverlapStarted();
+        player.canFall = false;
+
+        isMoving = true;//pressure plate(button) to switch on and off
+    }
+
+    protected override void OverlapEnded()
+    {
+        base.OverlapEnded();
+        player.canFall = true;
     }
 }

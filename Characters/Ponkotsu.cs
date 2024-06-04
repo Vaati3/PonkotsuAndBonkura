@@ -18,12 +18,16 @@ public partial class Ponkotsu : Character
         if (Input.IsActionPressed("move_up"))
             dir.Z -= speed;
         if (IsFalling())
-        {
-            UpdateMap();
             dir.Y += gravity * delta;    
-        }
         if (dir != Vector3.Zero)
             Move(dir);
+    }
+
+    public override void Move(Vector3 dir)
+    {
+        base.Move(dir);
+        if (dir.Y != 0)
+            UpdateMap();
     }
 
     public override CharacterType GetCharacterType()

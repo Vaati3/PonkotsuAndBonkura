@@ -76,12 +76,17 @@ public partial class Elevator : Object
         base.OverlapStarted();
         player.canFall = false;
 
-        isMoving = true;//pressure plate(button) to switch on and off
     }
 
     protected override void OverlapEnded()
     {
         base.OverlapEnded();
         player.canFall = true;
+    }
+
+    public override void Trigger(bool state)
+    {
+        GD.Print("trigger elevator");
+        isMoving = state;
     }
 }

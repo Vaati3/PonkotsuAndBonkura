@@ -21,6 +21,7 @@ public abstract partial class Character : CharacterBody2D
 	public override void _Ready()
 	{
 		position3D = Vector3.Zero;
+		canFall = true;
         gameManager = GetNode<GameManager>("/root/GameManager");
 		sprite = GetNode<Sprite2D>("Sprite");
 	}

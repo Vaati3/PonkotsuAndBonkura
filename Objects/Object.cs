@@ -1,13 +1,13 @@
 using Godot;
 using System;
 
-public partial class Object : Node2D
+public abstract partial class Object : Node2D
 {
 	protected Character player;
-	protected Vector3 position3D;
+	public Vector3 position3D {get; protected set;}
 
-	bool hide = false;
-	Sprite2D sprite;
+	private bool hide = false;
+	private Sprite2D sprite;
 
 	protected bool playerOverlap = false;
 	protected bool detectOverlap = true;
@@ -92,4 +92,6 @@ public partial class Object : Node2D
 
 		UpdateVisibility();
 	}
+
+	public abstract void Trigger(bool state);
 }

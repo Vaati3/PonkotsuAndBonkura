@@ -65,9 +65,10 @@ public partial class Map : TileMap
 
 	private void GenerateObjects()
 	{
+		Dictionary<Vector3I, Tile> buttons = new Dictionary<Vector3I, Tile>();
 		for (int i = 0; i < generator.dataSize; i++)
 		{
-			if (generator.data[i] > Tile.BonkuraGoal && generator.data[i] < Tile.ElevatorStop)
+			if (generator.data[i] > Tile.BonkuraGoal && generator.data[i] != Tile.ElevatorStop)
 			{
 				switch (generator.data[i])
 				{
@@ -80,10 +81,31 @@ public partial class Map : TileMap
 							elevator.Setup((Axis)((int)generator.data[i]-(int)Tile.ElevatorX), stops, generator);
 						}
 						break;
+					case Tile.ButtonX: case Tile.ButtonY: case Tile.ButtonZ:
+						buttons.Add(generator.indexToPos(i), generator.data[i]);
+						break;
 				}
 				generator.data[i] = Tile.Void;
 			}
 		}
+		foreach(KeyValuePair<Vector3I, Tile> button in buttons)
+		{
+			PressurePlate buttonObj = CreateObject<PressurePlate>(button.Key);
+			foreach(Object obj in objects)
+			{
+				if (obj.GetType() == typeof(PressurePlate))
+					continue;
+				Vector3I pos = MapGenerator.GetTilePos(obj.position3D);
+				if ((button.Value == Tile.ButtonX && button.Key.X == pos.X) ||
+					(button.Value == Tile.ButtonY && button.Key.Y == pos.Y) ||
+					(button.Value == Tile.ButtonZ && button.Key.Z == pos.Z) )
+				{
+					GD.Print(obj.GetType());
+					buttonObj.ButtonPressed += obj.Trigger;
+				}
+			}
+		}
+		UpdateObjects();
 	}
 
 	private T CreateObject<T>(Vector3I tilePos) where T : Object, new()
@@ -103,7 +125,7 @@ public partial class Map : TileMap
 		Vector3 pos = MapGenerator.GetWorldPos(tilePos);
 		pos.X += MapGenerator.tileSize / 2;
 		pos.Z += MapGenerator.tileSize / 2;
-		pos.Y += MapGenerator.tileSize - 1;
+		pos.Y += MapGenerator.tileSize / 2;//MapGenerator.tileSize - 1;
 
 		return pos;
 	}

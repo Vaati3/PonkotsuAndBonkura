@@ -8,7 +8,8 @@ public enum Tile {
 	Block,
 	PonkotsuSpawn, BonkuraSpawn,
 	PonkotsuGoal, BonkuraGoal,
-	ElevatorX, ElevatorY, ElevatorZ, ElevatorStop
+	ElevatorX, ElevatorY, ElevatorZ, ElevatorStop,
+	ButtonX, ButtonY, ButtonZ
 }
 
 public enum Axis {

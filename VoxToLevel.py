@@ -12,7 +12,10 @@ Tiles = [
     [255, 255, 0],  #elvator X
     [200, 200, 0],  #elvator Y
     [145, 145, 0],  #elvator Z
-    [255, 145, 0]   #elvator stop
+    [255, 145, 0],  #elvator stop
+    [255, 0, 255],  #button XY
+    [200, 0, 200],  #button XZ
+    [145, 0, 145],  #button YZ
 ]
 
 parser = argparse.ArgumentParser(description="Process some integers.")

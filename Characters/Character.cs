@@ -53,6 +53,10 @@ public abstract partial class Character : CharacterBody2D
 		map.UpdateObjects();
 
 		RpcId(gameManager.otherPlayer.id, nameof(UpdatePosition), position3D);
+		
+		if (map.generator.GetTile(position3D) == (Tile)((int)Tile.PonkotsuGoal + GetCharacterType()) &&
+			map.generator.GetTile(other.position3D) == (Tile)((int)Tile.PonkotsuGoal + other.GetCharacterType()))
+			map.MapCompleted();
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer)]

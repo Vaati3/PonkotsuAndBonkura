@@ -57,9 +57,8 @@ public abstract partial class Object : Node2D
 
 	private bool CheckOverlap()
 	{
-		Vector3 min = new Vector3(position3D.X - overlapSize.X/2, position3D.Y - overlapSize.Y, position3D.Z - overlapSize.Z/2);
-		Vector3 max = new Vector3(position3D.X + overlapSize.X/2, position3D.Y, position3D.Z + overlapSize.Z/2);
-		// GD.Print("min : " + min + " max: " + max + " player: " + player.position3D);
+		Vector3 min = position3D - overlapSize / 2;
+		Vector3 max = position3D + overlapSize / 2;
 		if (player.position3D.X >= min.X && player.position3D.X <= max.X &&
 			player.position3D.Y >= min.Y && player.position3D.Y <= max.Y &&
 			player.position3D.Z >= min.Z && player.position3D.Z <= max.Z)
@@ -74,7 +73,7 @@ public abstract partial class Object : Node2D
 
 	protected virtual void OverlapEnded()
 	{
-		playerOverlap = false;;
+		playerOverlap = false;
 	}
 
 	public void Update()

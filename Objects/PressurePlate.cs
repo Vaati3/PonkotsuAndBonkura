@@ -14,6 +14,7 @@ public partial class PressurePlate : Object
 
     protected override void OverlapStarted()
     {
+        base.OverlapStarted();
         if (pressed)
             return;
         Rpc(nameof(UpdatePressed), true);
@@ -21,6 +22,7 @@ public partial class PressurePlate : Object
 
     protected override void OverlapEnded()
     {
+        base.OverlapEnded();
         if (!pressed)
             return;
         Rpc(nameof(UpdatePressed), false);

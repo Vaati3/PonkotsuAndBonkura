@@ -86,7 +86,6 @@ public partial class Elevator : Object
 
     public override void Trigger(bool state)
     {
-        GD.Print("trigger elevator");
         isMoving = state;
     }
 }

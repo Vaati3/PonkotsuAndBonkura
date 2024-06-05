@@ -100,7 +100,6 @@ public partial class Map : TileMap
 					(button.Value == Tile.ButtonY && button.Key.Y == pos.Y) ||
 					(button.Value == Tile.ButtonZ && button.Key.Z == pos.Z) )
 				{
-					GD.Print(obj.GetType());
 					buttonObj.ButtonPressed += obj.Trigger;
 				}
 			}
@@ -128,5 +127,16 @@ public partial class Map : TileMap
 		pos.Y += MapGenerator.tileSize / 2;//MapGenerator.tileSize - 1;
 
 		return pos;
+	}
+
+	public void MapCompleted()
+	{
+		Rpc(nameof(BacktoLobby));
+	}
+
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
+	private void BacktoLobby()
+	{
+
 	}
 }

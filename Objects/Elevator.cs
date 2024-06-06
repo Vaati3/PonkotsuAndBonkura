@@ -23,7 +23,7 @@ public partial class Elevator : Object
         pauseTimer = new Timer
         {
             Autostart = false,
-            WaitTime = 5,
+            WaitTime = 3,
             OneShot = true
         };
         AddChild(pauseTimer);

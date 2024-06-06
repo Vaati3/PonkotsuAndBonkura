@@ -42,6 +42,14 @@ public abstract partial class Character : CharacterBody2D
 		other.Position = GetLocalPos(other.position3D);
 		UpdateMap();
 		UpdateVisibility();
+
+		GetNode<Camera2D>("Camera").Enabled = true;
+	}
+
+	public void UnPossess()
+	{
+		isControlled = false;
+		GetNode<Camera2D>("Camera").Enabled = false;
 	}
 
 	public virtual void Move(Vector3 dir)
@@ -54,7 +62,7 @@ public abstract partial class Character : CharacterBody2D
 
 		RpcId(gameManager.otherPlayer.id, nameof(UpdatePosition), position3D);
 		
-		if (map.generator.GetTile(position3D) == (Tile)((int)Tile.PonkotsuGoal + GetCharacterType()) &&
+		if (isControlled && map.generator.GetTile(position3D) == (Tile)((int)Tile.PonkotsuGoal + GetCharacterType()) &&
 			map.generator.GetTile(other.position3D) == (Tile)((int)Tile.PonkotsuGoal + other.GetCharacterType()))
 			map.MapCompleted();
 	}

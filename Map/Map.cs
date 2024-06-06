@@ -134,13 +134,19 @@ public partial class Map : TileMap
 
 	public void MapCompleted()
 	{
-		Rpc(nameof(ShowPopup), true);
+		Rpc(nameof(ShowPopup), true, true);
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
-	private void ShowPopup(bool state)
+	private void ShowPopup(bool state, bool UnPossess = false)
 	{
-		GetNode<Control>("Popup").Visible = state;
+		GD.Print("okbitch");
+		if (UnPossess)
+		{
+			bonkura.UnPossess();
+			ponkotsu.UnPossess();
+		}
+		GetNode<CanvasLayer>("Popup").Visible = state;
 	}
 
 	public void _on_button_pressed()

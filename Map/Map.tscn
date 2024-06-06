@@ -22,6 +22,7 @@ script = ExtResource("4_40oqy")
 [node name="Debug" type="VBoxContainer" parent="."]
 offset_right = 274.0
 offset_bottom = 239.0
+size_flags_horizontal = 4
 
 [node name="Ponkotsu" type="Label" parent="Debug"]
 modulate = Color(0.455164, 0.0995564, 0.631745, 1)
@@ -30,3 +31,60 @@ layout_mode = 2
 [node name="Bonkura" type="Label" parent="Debug"]
 modulate = Color(0.455164, 0.0995564, 0.631745, 1)
 layout_mode = 2
+
+[node name="Popup" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1153.0
+offset_bottom = 648.0
+
+[node name="Panel" type="Panel" parent="Popup"]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -100.0
+offset_right = 100.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="Popup/Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -55.0
+offset_top = -47.5
+offset_right = 55.0
+offset_bottom = -24.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Map Completed"
+
+[node name="Button" type="Button" parent="Popup/Panel"]
+visible = false
+custom_minimum_size = Vector2(30, 15)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -58.5
+offset_top = -58.78
+offset_right = 58.5
+offset_bottom = -27.78
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 0
+text = "Back to Lobby"
+
+[connection signal="pressed" from="Popup/Panel/Button" to="." method="_on_button_pressed"]

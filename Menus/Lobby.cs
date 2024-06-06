@@ -4,6 +4,7 @@ using System;
 public partial class Lobby : Panel
 {
 	GameManager gameManager;
+	Map map;
 
 	Timer timer;
 	public override void _Ready()
@@ -21,6 +22,11 @@ public partial class Lobby : Panel
         };
 		timer.Timeout += JoinUpdate;
 		AddChild(timer);
+
+		map = GD.Load<PackedScene>("res://Map/Map.tscn").Instantiate<Map>();
+		GetTree().Root.AddChild(map);
+		map.Visible = false;
+		map.UnloadMap += ReloadLobby;
 	}
 
 	private void JoinUpdate()
@@ -48,10 +54,9 @@ public partial class Lobby : Panel
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal=true)]
 	private void StartMap(string mapName)
 	{
-		Map map = GD.Load<PackedScene>("res://Map/Map.tscn").Instantiate<Map>();
-		GetTree().Root.AddChild(map);
 		map.StartMap(mapName);
 		Visible = false;
+		map.Visible = true;
 	} 
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal=true)]
@@ -63,6 +68,11 @@ public partial class Lobby : Panel
 		UpdateMenu();
 	}
 
+	public void ReloadLobby()
+	{
+		map.Visible = false;
+		Visible = true;
+	}
 	public void _on_switch_characters_pressed()
 	{
 		Rpc(nameof(SwitchCharacter));

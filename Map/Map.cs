@@ -14,6 +14,8 @@ public partial class Map : TileMap
 	Label ponkotsuDebug;
 	Label bonkuraDebug;
 
+	[Signal]public delegate void UnloadMapEventHandler();
+
 	public override void _Ready()
 	{
 		gameManager = GetNode<GameManager>("/root/GameManager");
@@ -30,6 +32,8 @@ public partial class Map : TileMap
 		ponkotsuDebug = GetNode<Label>("Debug/Ponkotsu");
 		bonkuraDebug = GetNode<Label>("Debug/Bonkura");
 
+		if (gameManager.player.id == 1)
+			GetNode<Button>("Popup/Panel/Button").Visible = true;
 	}
 
     public override void _Process(double delta)
@@ -40,10 +44,9 @@ public partial class Map : TileMap
 
     public void StartMap(string mapName)
 	{
+
 		generator.Read(mapName);
 		GenerateObjects();
-		//Test to be removed
-		//generator.spawns[0] = new Vector3(550, 250, 40);
 		if (gameManager.player.characterType == CharacterType.Ponkotsu)
 			ponkotsu.Possess(generator.spawns);
 		else
@@ -131,12 +134,29 @@ public partial class Map : TileMap
 
 	public void MapCompleted()
 	{
+		Rpc(nameof(ShowPopup), true);
+	}
+
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
+	private void ShowPopup(bool state)
+	{
+		GetNode<Control>("Popup").Visible = state;
+	}
+
+	public void _on_button_pressed()
+	{
 		Rpc(nameof(BacktoLobby));
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
 	private void BacktoLobby()
 	{
-
+		foreach(Object obj in objects)
+		{
+			obj.QueueFree();
+		}
+		objects.Clear();
+		ShowPopup(false);
+		EmitSignal(nameof(UnloadMap));
 	}
 }

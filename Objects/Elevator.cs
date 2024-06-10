@@ -28,7 +28,7 @@ public partial class Elevator : Object
         };
         AddChild(pauseTimer);
 
-        UpdateSprite("res://Objects/Textures/Elevator.png", "");
+        SetTexture("res://Objects/Textures/ElevatorTop.png", "res://Objects/Textures/ElevatorSide.png");
     }
 
     public void Setup(Axis axis, List<Vector3I> stops, MapGenerator generator)

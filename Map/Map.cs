@@ -44,13 +44,13 @@ public partial class Map : TileMap
 
     public void StartMap(string mapName)
 	{
-
 		generator.Read(mapName);
 		GenerateObjects();
 		if (gameManager.player.characterType == CharacterType.Ponkotsu)
 			ponkotsu.Possess(generator.spawns);
 		else
 			bonkura.Possess(generator.spawns);
+		GetNode<CanvasLayer>("Shader").Show();
 	}
 
 	public void SetTile(int x, int y, Vector2I tile)
@@ -163,6 +163,7 @@ public partial class Map : TileMap
 		}
 		objects.Clear();
 		ShowPopup(false);
+		GetNode<CanvasLayer>("Shader").Hide();
 		EmitSignal(nameof(UnloadMap));
 	}
 }

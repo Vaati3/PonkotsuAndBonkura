@@ -7,7 +7,7 @@ public abstract partial class Object : Node2D
 	public Vector3 position3D {get; protected set;}
 
 	private bool hide = false;
-	private Sprite2D sprite;
+	protected Sprite2D sprite;
 
 	protected bool playerOverlap = false;
 	protected bool detectOverlap = true;
@@ -24,9 +24,10 @@ public abstract partial class Object : Node2D
 	{
 		this.player = player;
 		SetPosition(pos);
+		UpdateVisibility();
 	}
 	
-	protected void UpdateSprite(string topTexturePath, string sideTexturePath)
+	protected void SetTexture(string topTexturePath, string sideTexturePath)
 	{
 		
 		if (player.GetCharacterType() == CharacterType.Ponkotsu)
@@ -41,7 +42,6 @@ public abstract partial class Object : Node2D
 			else
 				sprite.Texture = GD.Load<Texture2D>(sideTexturePath);
 		}
-		UpdateVisibility();
 	}
 
 	private void SetPosition(Vector3 pos)

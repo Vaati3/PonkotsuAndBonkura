@@ -57,7 +57,7 @@ public partial class Ponkotsu : Character
         if (map.generator.GetTile(tilePos) == Tile.Void && 
             map.generator.GetTile(tilePos.X, tilePos.Y + 1, tilePos.Z) == Tile.Void)
         {
-            map.SetTile(x, y, new Vector2I(3,2));
+            map.SetTile(x, y, new Vector2I(4,2));
             return true;
         }
         Vector2I tile = Vector2I.One;
@@ -65,12 +65,12 @@ public partial class Ponkotsu : Character
             return true;
         if (map.generator.GetTile(tilePos.X - 1, tilePos.Y, tilePos.Z) != Tile.Block)
             tile.X -= 1;
-        else if (map.generator.GetTile(tilePos.X + 1, tilePos.Y, tilePos.Z) != Tile.Block)
-            tile.X += 1;
+        if (map.generator.GetTile(tilePos.X + 1, tilePos.Y, tilePos.Z) != Tile.Block)
+            tile.X += tile.X < 1 ? 3 : 1;;
         if (map.generator.GetTile(tilePos.X, tilePos.Y, tilePos.Z - 1) != Tile.Block)
             tile.Y -= 1;
-        else if (map.generator.GetTile(tilePos.X, tilePos.Y, tilePos.Z + 1) != Tile.Block)
-            tile.Y += 1;
+        if (map.generator.GetTile(tilePos.X, tilePos.Y, tilePos.Z + 1) != Tile.Block)
+            tile.Y += tile.Y < 1 ? 3 : 1;
         map.SetTile(x, y, tile);
         return true;
     }
@@ -81,7 +81,7 @@ public partial class Ponkotsu : Character
 		for (int z = 0; z < map.generator.size.Z; z++)
 		{
 			tilePos.X = 0;
-			for (int x = 0; x < map.generator.size.X; x++)
+			for (int x = -1; x <= map.generator.size.X; x++)
 			{
 				UpdateTile(tilePos, x, z);
 				tilePos.X += 1;

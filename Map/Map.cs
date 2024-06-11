@@ -96,7 +96,7 @@ public partial class Map : TileMap
 			PressurePlate buttonObj = CreateObject<PressurePlate>(button.Key);
 			foreach(Object obj in objects)
 			{
-				if (obj.GetType() == typeof(PressurePlate))
+				if (!obj.activatable)
 					continue;
 				Vector3I pos = MapGenerator.GetTilePos(obj.position3D);
 				if ((button.Value == Tile.ButtonX && button.Key.X == pos.X) ||
@@ -127,7 +127,7 @@ public partial class Map : TileMap
 		Vector3 pos = MapGenerator.GetWorldPos(tilePos);
 		pos.X += MapGenerator.tileSize / 2;
 		pos.Z += MapGenerator.tileSize / 2;
-		pos.Y += MapGenerator.tileSize / 2;//MapGenerator.tileSize - 1;
+		pos.Y += MapGenerator.tileSize / 2;
 
 		return pos;
 	}
@@ -140,7 +140,6 @@ public partial class Map : TileMap
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
 	private void ShowPopup(bool state, bool UnPossess = false)
 	{
-		GD.Print("okbitch");
 		if (UnPossess)
 		{
 			bonkura.UnPossess();

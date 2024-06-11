@@ -80,12 +80,12 @@ public partial class Bonkura : Character
             return true;
         if (map.generator.GetTile(tilePos.X, tilePos.Y, tilePos.Z - 1) != Tile.Block)
             tile.X -= 1;
-        else if (map.generator.GetTile(tilePos.X, tilePos.Y, tilePos.Z + 1) != Tile.Block)
-            tile.X += 1;
+        if (map.generator.GetTile(tilePos.X, tilePos.Y, tilePos.Z + 1) != Tile.Block)
+            tile.X += tile.X < 1 ? 3 : 1;
         if (map.generator.GetTile(tilePos.X, tilePos.Y - 1, tilePos.Z) != Tile.Block)
             tile.Y -= 1;
-        else if (map.generator.GetTile(tilePos.X, tilePos.Y + 1, tilePos.Z) != Tile.Block)
-            tile.Y += 1;
+        if (map.generator.GetTile(tilePos.X, tilePos.Y + 1, tilePos.Z) != Tile.Block)
+            tile.Y += tile.Y < 1 ? 3 : 1;
         map.SetTile(x, y, tile);
         return true;
     }

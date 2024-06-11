@@ -3,7 +3,8 @@ using System;
 
 public enum CharacterType {
 	Ponkotsu,
-	Bonkura
+	Bonkura,
+	Both
 }
 
 public abstract partial class Character : CharacterBody2D
@@ -17,6 +18,7 @@ public abstract partial class Character : CharacterBody2D
 	protected Sprite2D sprite;
 
 	public bool canFall{get; set;}
+	private Item item = null;
 
 	public override void _Ready()
 	{
@@ -67,6 +69,16 @@ public abstract partial class Character : CharacterBody2D
 			map.MapCompleted();
 	}
 
+	public Item SwitchItem(Item newItem)
+	{
+		if (item != null)
+			RemoveChild(item);
+		Item oldItem = item;
+		item = newItem;
+		AddChild(item);
+		return oldItem;
+	}
+
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer)]
 	protected void UpdatePosition(Vector3 pos)
 	{
@@ -105,7 +117,7 @@ public abstract partial class Character : CharacterBody2D
 				map.SetTile(x, y, Vector2I.One);
 				return true;
 			case Tile.PonkotsuGoal: case Tile.BonkuraGoal: 
-				map.SetTile(x, y, new Vector2I((int)tile - 1, 0));
+				map.SetTile(x, y, new Vector2I(4, (int)tile - 4));
 				return true;
 		}
 		return false;

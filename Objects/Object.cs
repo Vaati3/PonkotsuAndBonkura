@@ -5,19 +5,21 @@ public abstract partial class Object : Node2D
 {
 	protected Character player;
 	public Vector3 position3D {get; protected set;}
+	public bool activatable {get; protected set;}
 
 	private bool hide = false;
 	protected Sprite2D sprite;
 
 	protected bool playerOverlap = false;
 	protected bool detectOverlap = true;
-	protected Vector3 overlapSize; 
+	protected Vector3 overlapSize;
 
 	public Object()
 	{
 		sprite = new Sprite2D();
 		AddChild(sprite);
 		overlapSize = new Vector3(MapGenerator.tileSize, MapGenerator.tileSize, MapGenerator.tileSize);
+		activatable = false;
 	}
 
 	virtual public void InitObject(Character player, Vector3 pos)
@@ -92,5 +94,8 @@ public abstract partial class Object : Node2D
 		UpdateVisibility();
 	}
 
-	public abstract void Trigger(bool state);
+	public virtual void Trigger(bool state)
+	{
+		throw new System.NotImplementedException();
+	}
 }

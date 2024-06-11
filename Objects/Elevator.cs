@@ -29,6 +29,7 @@ public partial class Elevator : Object
         AddChild(pauseTimer);
 
         SetTexture("res://Objects/Textures/ElevatorTop.png", "res://Objects/Textures/ElevatorSide.png");
+        activatable = true;
     }
 
     public void Setup(Axis axis, List<Vector3I> stops, MapGenerator generator)

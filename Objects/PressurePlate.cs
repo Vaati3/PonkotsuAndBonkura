@@ -34,11 +34,6 @@ public partial class PressurePlate : Object
         Rpc(nameof(UpdatePressed), false);
     }
 
-    public override void Trigger(bool state)
-    {
-        throw new System.NotImplementedException();
-    }
-
     [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
     private void UpdatePressed(bool state)
     {

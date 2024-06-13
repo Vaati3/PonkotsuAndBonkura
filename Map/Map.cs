@@ -10,6 +10,7 @@ public partial class Map : TileMap
 	Bonkura bonkura;
 	Node objectLayer;
 	List<Object> objects;
+	Queue<Object> freeQueue;
 
 	Label ponkotsuDebug;
 	Label bonkuraDebug;
@@ -29,6 +30,7 @@ public partial class Map : TileMap
 
 		objectLayer = GetNode<Node>("Objects");
 		objects = new List<Object>();
+		freeQueue =  new Queue<Object>();
 		ponkotsuDebug = GetNode<Label>("Debug/Ponkotsu");
 		bonkuraDebug = GetNode<Label>("Debug/Bonkura");
 
@@ -46,6 +48,8 @@ public partial class Map : TileMap
 	{
 		generator.Read(mapName);
 		GenerateObjects();
+		ItemPickup itemPickup = CreateObject<ItemPickup>(MapGenerator.GetTilePos(new Vector3(550, 560, 474)));
+		itemPickup.CreateItem(ItemType.Hookshot);
 		if (gameManager.player.characterType == CharacterType.Ponkotsu)
 			ponkotsu.Possess(generator.spawns);
 		else
@@ -63,6 +67,12 @@ public partial class Map : TileMap
 		foreach(Object obj in objects)
 		{
 			obj.Update();
+		}
+		while (freeQueue.Count > 0)
+		{
+			Object obj = freeQueue.Dequeue();
+			objects.Remove(obj);
+			obj.QueueFree();//object stays lingering and cause 2 "node" not found errors on server
 		}
 	}
 
@@ -116,10 +126,16 @@ public partial class Map : TileMap
 		Vector3 pos = AlignPos(tilePos);
 		T obj = new T();
 		obj.InitObject(character, pos);
+		obj.FreeObject += FreeObject;
 
 		objectLayer.AddChild(obj);
 		objects.Add(obj);
 		return obj;
+	}
+
+	private void FreeObject(Object obj)
+	{
+		freeQueue.Enqueue(obj);
 	}
 
 	static public Vector3 AlignPos(Vector3I tilePos)
@@ -134,17 +150,12 @@ public partial class Map : TileMap
 
 	public void MapCompleted()
 	{
-		Rpc(nameof(ShowPopup), true, true);
+		Rpc(nameof(ShowPopup), true);
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
-	private void ShowPopup(bool state, bool UnPossess = false)
+	private void ShowPopup(bool state)
 	{
-		if (UnPossess)
-		{
-			bonkura.UnPossess();
-			ponkotsu.UnPossess();
-		}
 		GetNode<CanvasLayer>("Popup").Visible = state;
 	}
 
@@ -162,6 +173,10 @@ public partial class Map : TileMap
 		}
 		objects.Clear();
 		ShowPopup(false);
+		if (gameManager.player.characterType == CharacterType.Ponkotsu)
+			ponkotsu.UnPossess();
+		else
+			bonkura.UnPossess();
 		GetNode<CanvasLayer>("Shader").Hide();
 		EmitSignal(nameof(UnloadMap));
 	}

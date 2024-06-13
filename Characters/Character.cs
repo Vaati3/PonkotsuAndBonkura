@@ -12,7 +12,7 @@ public abstract partial class Character : CharacterBody2D
 	protected GameManager gameManager;
 	protected Map map;
 	protected bool isControlled = false;
-	protected Character other;
+	public Character other {get; private set;}
 	public Vector3 position3D {get; private set;}
 	[Export]public float speed = 100;
 	protected Sprite2D sprite;

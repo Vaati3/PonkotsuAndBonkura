@@ -7,7 +7,7 @@ public partial class ItemPickup : Object
 
     public void CreateItem(ItemType itemType)
     {
-        Type type = Type.GetType(nameof(itemType));
+        Type type = Type.GetType(itemType.ToString());
         item = (Item)Activator.CreateInstance(type);
         AddChild(item);
     }
@@ -16,23 +16,33 @@ public partial class ItemPickup : Object
     protected override void OverlapStarted()
     {
         base.OverlapStarted();
-        PickedUp();
+        PickedUp(player);
+        Rpc(nameof(UpdatePickup));
     }
 
-
-    private void PickedUp()
+    private void PickedUp(Character character)
     {
-        if (player.GetCharacterType() != item.GetUserType())
+        if (character.GetCharacterType() != item.GetUserType())
             return;
-
+        
         RemoveChild(item);
-        Item playerItem = player.SwitchItem(item);
+        Item playerItem = character.SwitchItem(item);
+        item.Equip();
 
         if (playerItem == null)
-            QueueFree();
-        
-        item = playerItem;
-        AddChild(item);
+        {
+            EmitSignal(nameof(FreeObject), this);
+        } else {
+            item = playerItem;
+            AddChild(item);
+            item.Unequip();
+        }
+    }
+
+    [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
+    private void UpdatePickup()
+    {
+        PickedUp(player.other);
     }
 
 }

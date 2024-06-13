@@ -81,7 +81,7 @@ public partial class Ponkotsu : Character
 		for (int z = 0; z < map.generator.size.Z; z++)
 		{
 			tilePos.X = 0;
-			for (int x = -1; x <= map.generator.size.X; x++)
+			for (int x = 0; x < map.generator.size.X; x++)
 			{
 				UpdateTile(tilePos, x, z);
 				tilePos.X += 1;

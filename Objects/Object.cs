@@ -14,6 +14,8 @@ public abstract partial class Object : Node2D
 	protected bool detectOverlap = true;
 	protected Vector3 overlapSize;
 
+	[Signal]public delegate void FreeObjectEventHandler(Object obj);
+
 	public Object()
 	{
 		sprite = new Sprite2D();

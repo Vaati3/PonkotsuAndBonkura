@@ -4,21 +4,27 @@ using System;
 public partial class Ponkotsu : Character
 {
     float gravity = 150;
-    public void _physics_process(float delta)
+    public override void _PhysicsProcess(double delta)
     {
         if (!isControlled)
             return;
         Vector3 dir = Vector3.Zero;
         if (Input.IsActionPressed("move_right"))
+        {
             dir.X += speed;
+            Flip(false);
+        }
         if (Input.IsActionPressed("move_left"))
+        {
             dir.X -= speed;
+            Flip(true);
+        }
         if (Input.IsActionPressed("move_down"))
             dir.Z += speed;
         if (Input.IsActionPressed("move_up"))
             dir.Z -= speed;
         if (IsFalling())
-            dir.Y += gravity * delta;    
+            dir.Y += gravity * (float)delta;    
         if (dir != Vector3.Zero)
             Move(dir);
     }

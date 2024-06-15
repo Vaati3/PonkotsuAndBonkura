@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 public class Player {
-	public long id;
-	public string name;
-	public int progression;
-	public CharacterType characterType;
+	public long id {get; set;}
+	public string name {get; set;}
+	public int progression {get; private set;}
+	public CharacterType characterType {get; set;}
 	public Player(long id = 0, string name = "", int progression = 0, CharacterType characterType = CharacterType.Ponkotsu)
 	{
 		this.id = id;

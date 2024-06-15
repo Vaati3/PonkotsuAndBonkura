@@ -5,7 +5,6 @@ public partial class Lobby : Panel
 {
 	GameManager gameManager;
 	Map map;
-
 	Timer timer;
 	public override void _Ready()
 	{

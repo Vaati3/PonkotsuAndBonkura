@@ -27,7 +27,7 @@ public partial class ItemPickup : Object
         
         RemoveChild(item);
         Item playerItem = character.SwitchItem(item);
-        item.Equip();
+        item.Equip(character);
 
         if (playerItem == null)
         {

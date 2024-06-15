@@ -7,8 +7,7 @@ public enum ItemType {
 public abstract partial class Item : Node2D
 {
     Sprite2D sprite;
-    Character owner = null;
-    Node2D parent;
+    protected Character owner = null;
 
     public Item()
     {
@@ -26,10 +25,16 @@ public abstract partial class Item : Node2D
         Scale = new Vector2(2, 2);
     }
 
-    public void Equip()
+    public void Equip(Character character)
     {
+        owner = character;
         Position = new Vector2(0, 24);
         Scale = Vector2.One;
+    }
+
+    public void Flip(bool state)
+    {
+        sprite.FlipH = state;
     }
 
     public abstract ItemType GetItemType();//replace with getType

@@ -27,16 +27,22 @@ public partial class Bonkura : Character
         return Velocity.Y < 0 ? jumpGravity : fallGravity;
     }
 
-    public void _physics_process(float delta)
+    public override void _PhysicsProcess(double delta)
     {
         if (!isControlled)
             return;
         Vector3 dir = Vector3.Zero;
-        dir.Y = Velocity.Y + (GetGravity() * delta);
+        dir.Y = Velocity.Y + (GetGravity() * (float)delta);
         if (Input.IsActionPressed("move_right"))
+        {
             dir.Z += speed;
+            Flip(false);
+        }
         if (Input.IsActionPressed("move_left"))
+        {
             dir.Z -= speed;
+            Flip(true);
+        }
         if (Input.IsActionPressed("move_up") && !IsFalling())
             dir.Y = jumpVelocity;
         

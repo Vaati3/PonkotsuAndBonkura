@@ -14,6 +14,7 @@ public abstract partial class Character : CharacterBody2D
 	protected bool isControlled = false;
 	public Character other {get; private set;}
 	public Vector3 position3D {get; private set;}
+	public Vector3 direction {get; private set;}
 	[Export]public float speed = 100;
 	protected Sprite2D sprite;
 
@@ -23,13 +24,24 @@ public abstract partial class Character : CharacterBody2D
 	public override void _Ready()
 	{
 		position3D = Vector3.Zero;
+		direction = Vector3.Zero;
 		canFall = true;
-        gameManager = GetNode<GameManager>("/root/GameManager");
+		gameManager = GetNode<GameManager>("/root/GameManager");
 		sprite = GetNode<Sprite2D>("Sprite");
 	}
 
-    public void init(Map map, Character other)
-    {
+	public override void _Input(InputEvent @event)
+	{
+		if (!isControlled)
+			return;
+		if (@event.IsActionPressed("use_item") && !@event.IsEcho())
+		{
+			item?.Use();
+		}
+    }
+
+	public void init(Map map, Character other)
+	{
 		this.map = map;
 		this.other = other;
     }
@@ -56,6 +68,7 @@ public abstract partial class Character : CharacterBody2D
 
 	public virtual void Move(Vector3 dir)
 	{
+		direction = dir;
 		Velocity = GetLocalPos(dir);
 		MoveAndSlide();
 		position3D = GetGlobalPos(Position, dir);
@@ -121,6 +134,12 @@ public abstract partial class Character : CharacterBody2D
 				return true;
 		}
 		return false;
+	}
+
+	protected void Flip(bool state)
+	{
+		sprite.FlipH = state;
+		item?.Flip(state);
 	}
 
 	public abstract CharacterType GetCharacterType();

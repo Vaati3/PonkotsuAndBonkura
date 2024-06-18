@@ -9,7 +9,7 @@ public partial class Lobby : Panel
 	public override void _Ready()
 	{
 		gameManager = GetNode<GameManager>("/root/GameManager");
-		if (gameManager.player.id == 1)
+		if ( gameManager.isAlone || gameManager.player.id == 1)
 			GetNode<Button>("StartMap").Visible = true;
 
 		//delay to wait for serverplayer to update on other
@@ -47,7 +47,7 @@ public partial class Lobby : Panel
 		UpdatePlayerInfo(gameManager.player);
 		if (gameManager.otherPlayer != null)
 			UpdatePlayerInfo(gameManager.otherPlayer);
-		GetNode<Button>("StartMap").Disabled = gameManager.player.id != 1 || gameManager.otherPlayer == null;
+		GetNode<Button>("StartMap").Disabled = gameManager.isAlone && gameManager.otherPlayer != null;
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal=true)]
@@ -79,5 +79,11 @@ public partial class Lobby : Panel
 	public void _on_start_map_pressed()
 	{
 		Rpc(nameof(StartMap), "testarea");
+	}
+
+	public void _on_leave_pressed()
+	{
+		gameManager.isAlone = false;
+		//to be completed button is not visible
 	}
 }

@@ -47,15 +47,15 @@ grow_vertical = 2
 theme_override_constants/separation = 15
 alignment = 1
 
-[node name="Host" type="Button" parent="Menu/VBoxContainer"]
+[node name="Play" type="Button" parent="Menu/VBoxContainer"]
 custom_minimum_size = Vector2(100, 50)
 layout_mode = 2
-text = "Host"
+text = "Multiplayer"
 
-[node name="Join" type="Button" parent="Menu/VBoxContainer"]
+[node name="SinglePlayer" type="Button" parent="Menu/VBoxContainer"]
 custom_minimum_size = Vector2(100, 50)
 layout_mode = 2
-text = "Join"
+text = "Singleplayer"
 
 [node name="Options" type="Button" parent="Menu/VBoxContainer"]
 custom_minimum_size = Vector2(100, 50)
@@ -66,6 +66,46 @@ text = "Options"
 custom_minimum_size = Vector2(100, 50)
 layout_mode = 2
 text = "Quit"
+
+[node name="Play" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Play"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -49.0
+offset_top = -76.5
+offset_right = 49.0
+offset_bottom = 76.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="Host" type="Button" parent="Play/VBoxContainer"]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+text = "Host"
+
+[node name="Join" type="Button" parent="Play/VBoxContainer"]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+text = "Join"
+
+[node name="Back" type="Button" parent="Play/VBoxContainer"]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+text = "Go back"
 
 [node name="JoinMenu" type="Control" parent="."]
 visible = false
@@ -175,10 +215,13 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "Confirm"
 
-[connection signal="pressed" from="Menu/VBoxContainer/Host" to="." method="_on_host_pressed"]
-[connection signal="pressed" from="Menu/VBoxContainer/Join" to="." method="_on_join_pressed"]
+[connection signal="pressed" from="Menu/VBoxContainer/Play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="Menu/VBoxContainer/SinglePlayer" to="." method="_on_play_solo_pressed"]
 [connection signal="pressed" from="Menu/VBoxContainer/Options" to="." method="_on_options_pressed"]
 [connection signal="pressed" from="Menu/VBoxContainer/Quit" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="Play/VBoxContainer/Host" to="." method="_on_host_pressed"]
+[connection signal="pressed" from="Play/VBoxContainer/Join" to="." method="_on_join_pressed"]
+[connection signal="pressed" from="Play/VBoxContainer/Back" to="." method="_on_back_pressed"]
 [connection signal="pressed" from="JoinMenu/HBoxContainer/Back" to="." method="_on_back_pressed"]
 [connection signal="pressed" from="JoinMenu/HBoxContainer/ConfirmJoin" to="." method="_on_confirm_join_pressed"]
 [connection signal="pressed" from="NamePopup/ConfirmName" to="." method="_on_confirm_name_pressed"]

@@ -30,6 +30,7 @@ public class Player {
 public partial class GameManager : Node
 {
 	string savePath = "user://save.save";
+	public bool isAlone {get; set;} = false;
 	public Player player {get; private set;}
 	public Player otherPlayer {get; private set;}
 

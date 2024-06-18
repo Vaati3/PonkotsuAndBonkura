@@ -15,6 +15,8 @@ public partial class Map : TileMap
 	Label ponkotsuDebug;
 	Label bonkuraDebug;
 
+	public Timer switchCooldown {get; private set;}
+
 	[Signal]public delegate void UnloadMapEventHandler();
 
 	public override void _Ready()
@@ -36,6 +38,14 @@ public partial class Map : TileMap
 
 		if (gameManager.player.id == 1)
 			GetNode<Button>("Popup/Panel/Button").Visible = true;
+
+		switchCooldown = new Timer()
+		{
+			WaitTime = 5,
+			Autostart = true,
+			OneShot = true			
+		};
+		AddChild(switchCooldown);
 	}
 
     public override void _Process(double delta)
@@ -48,8 +58,6 @@ public partial class Map : TileMap
 	{
 		generator.Read(mapName);
 		GenerateObjects();
-		ItemPickup itemPickup = CreateObject<ItemPickup>(MapGenerator.GetTilePos(new Vector3(550, 560, 474)));
-		itemPickup.CreateItem(ItemType.Hookshot);
 		if (gameManager.player.characterType == CharacterType.Ponkotsu)
 			ponkotsu.Possess(generator.spawns);
 		else

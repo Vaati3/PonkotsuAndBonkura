@@ -28,6 +28,8 @@ public abstract partial class Character : CharacterBody2D
 		canFall = true;
 		gameManager = GetNode<GameManager>("/root/GameManager");
 		sprite = GetNode<Sprite2D>("Sprite");
+
+		
 	}
 
 	public override void _Input(InputEvent @event)
@@ -37,6 +39,13 @@ public abstract partial class Character : CharacterBody2D
 		if (@event.IsActionPressed("use_item") && !@event.IsEcho())
 		{
 			item?.Use();
+		}
+		GD.Print(map.switchCooldown.TimeLeft);
+		if (map.switchCooldown.IsStopped() && gameManager.isAlone && @event.IsActionPressed("switch") && !@event.IsEcho())
+		{
+			map.switchCooldown.Start();
+			UnPossess();
+			other.Possess();
 		}
     }
 
@@ -60,8 +69,20 @@ public abstract partial class Character : CharacterBody2D
 		GetNode<Camera2D>("Camera").Enabled = true;
 	}
 
+	public void Possess()
+	{
+		isControlled = true;
+		Position = GetLocalPos(position3D);
+		other.Position = GetLocalPos(other.position3D);
+		UpdateMap();
+		UpdateVisibility();
+
+		GetNode<Camera2D>("Camera").Enabled = true;
+	}
+
 	public void UnPossess()
 	{
+		GD.Print(GetCharacterType());
 		isControlled = false;
 		GetNode<Camera2D>("Camera").Enabled = false;
 	}
@@ -75,7 +96,7 @@ public abstract partial class Character : CharacterBody2D
 		UpdateVisibility();
 		map.UpdateObjects();
 
-		RpcId(gameManager.otherPlayer.id, nameof(UpdatePosition), position3D);
+		Rpc(nameof(UpdatePosition), position3D);
 		
 		if (isControlled && map.generator.GetTile(position3D) == (Tile)((int)Tile.PonkotsuGoal + GetCharacterType()) &&
 			map.generator.GetTile(other.position3D) == (Tile)((int)Tile.PonkotsuGoal + other.GetCharacterType()))
@@ -102,10 +123,12 @@ public abstract partial class Character : CharacterBody2D
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer)]
 	protected void UpdateVisibility()
 	{
+		Visible = true;
 		if (!isControlled)
 			return;
 		other.Visible = CanSee(other.position3D);
-		other.UpdateVisibility(gameManager.otherPlayer.id);
+		if (!gameManager.isAlone)
+			other.UpdateVisibility(gameManager.otherPlayer.id);
 	}
 	protected void UpdateVisibility(long id)
 	{

@@ -24,6 +24,19 @@ grow_horizontal = 2
 text = "Switch 
 roles"
 
+[node name="Leave" type="Button" parent="."]
+visible = false
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -100.0
+offset_right = 100.0
+grow_vertical = 0
+text = "Leave
+lobby"
+
 [node name="StartMap" type="Button" parent="."]
 visible = false
 custom_minimum_size = Vector2(100, 100)
@@ -68,4 +81,5 @@ layout_mode = 2
 layout_mode = 2
 
 [connection signal="pressed" from="SwitchCharacters" to="." method="_on_switch_characters_pressed"]
+[connection signal="pressed" from="Leave" to="." method="_on_leave_pressed"]
 [connection signal="pressed" from="StartMap" to="." method="_on_start_map_pressed"]

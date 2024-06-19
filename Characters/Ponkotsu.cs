@@ -32,7 +32,7 @@ public partial class Ponkotsu : Character
     public override void Move(Vector3 dir)
     {
         base.Move(dir);
-        if (dir.Y != 0)
+        if (isControlled && dir.Y != 0)
             UpdateMap();
     }
 

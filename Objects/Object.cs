@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public abstract partial class Object : Node2D
 {
@@ -10,9 +11,12 @@ public abstract partial class Object : Node2D
 	private bool hide = false;
 	protected Sprite2D sprite;
 
-	protected bool playerOverlap = false;
+	protected Character[] overlappingPlayers;
 	protected bool detectOverlap = true;
 	protected Vector3 overlapSize;
+
+	private Texture2D topTexture;
+	private Texture2D sideTexture;
 
 	[Signal]public delegate void FreeObjectEventHandler(Object obj);
 
@@ -22,6 +26,7 @@ public abstract partial class Object : Node2D
 		AddChild(sprite);
 		overlapSize = new Vector3(MapGenerator.tileSize, MapGenerator.tileSize, MapGenerator.tileSize);
 		activatable = false;
+		overlappingPlayers = new Character[2];
 	}
 
 	virtual public void InitObject(Character player, Vector3 pos)
@@ -30,33 +35,47 @@ public abstract partial class Object : Node2D
 		SetPosition(pos);
 		UpdateVisibility();
 	}
-	
-	protected void SetTexture(string topTexturePath, string sideTexturePath)
+
+	protected void UpdateTexture(Texture2D topTexture, Texture2D sideTexture)
 	{
-		
+		Visible = true;
 		if (player.GetCharacterType() == CharacterType.Ponkotsu)
 		{
-			if (topTexturePath == "")
-				hide = true;
+			if (topTexture != null)
+				sprite.Texture = topTexture;
 			else
-				sprite.Texture = GD.Load<Texture2D>(topTexturePath);
+				Visible = false;
 		} else {
-			if (sideTexturePath == "")
-				hide = true;
+			if (sideTexture != null)
+				sprite.Texture = sideTexture;
 			else
-				sprite.Texture = GD.Load<Texture2D>(sideTexturePath);
+				Visible = false;
 		}
 	}
 
-	private void SetPosition(Vector3 pos)
+	protected virtual void UpdateTexture()
 	{
-		position3D = pos;
-		Position = player.GetLocalPos(pos);
+		UpdateTexture(topTexture, sideTexture);
+	}
+	
+	protected void SetTexture(string topTexturePath, string sideTexturePath)
+	{
+
+		if (FileAccess.FileExists(topTexturePath))
+			topTexture = GD.Load<Texture2D>(topTexturePath);
+		else
+			topTexture = null;
+		if (FileAccess.FileExists(sideTexturePath))
+			sideTexture = GD.Load<Texture2D>(sideTexturePath);
+		else
+			sideTexture = null;
+
+		UpdateTexture();
 	}
 
-	private void UpdateVisibility()
+	public bool IsOverlapping()
 	{
-		Visible = playerOverlap || (!hide && player.CanSee(position3D));
+		return overlappingPlayers[0] != null || overlappingPlayers[1] != null;
 	}
 
 	private bool CheckOverlap()
@@ -72,12 +91,31 @@ public abstract partial class Object : Node2D
 
 	protected virtual void OverlapStarted()
 	{
-		playerOverlap = true;
+		overlappingPlayers[(int)player.GetCharacterType()] = player;
 	}
 
 	protected virtual void OverlapEnded()
 	{
-		playerOverlap = false;
+		overlappingPlayers[(int)player.GetCharacterType()] = null;
+	}
+
+	public void Switch(Character character)
+	{
+		player = character;
+
+		UpdateTexture();
+		Update();
+	}
+
+	private void SetPosition(Vector3 pos)
+	{
+		position3D = pos;
+		Position = player.GetLocalPos(pos);
+	}
+
+	private void UpdateVisibility()
+	{
+		Visible = overlappingPlayers[(int)player.GetCharacterType()] != null || (!hide && player.CanSee(position3D));
 	}
 
 	public void Update()
@@ -86,10 +124,10 @@ public abstract partial class Object : Node2D
 
 		if (detectOverlap && CheckOverlap())
 		{
-			if (!playerOverlap)
+			if (overlappingPlayers[(int)player.GetCharacterType()] == null)
 				OverlapStarted();
 		} else {
-			if (playerOverlap)
+			if (overlappingPlayers[(int)player.GetCharacterType()] != null)
 				OverlapEnded();
 		}
 

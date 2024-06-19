@@ -33,8 +33,8 @@ public partial class Map : TileMap
 		objectLayer = GetNode<Node>("Objects");
 		objects = new List<Object>();
 		freeQueue =  new Queue<Object>();
-		ponkotsuDebug = GetNode<Label>("Debug/Ponkotsu");
-		bonkuraDebug = GetNode<Label>("Debug/Bonkura");
+		ponkotsuDebug = GetNode<Label>("Shader/Debug/Ponkotsu");
+		bonkuraDebug = GetNode<Label>("Shader/Debug/Bonkura");
 
 		if (gameManager.player.id == 1)
 			GetNode<Button>("Popup/Panel/Button").Visible = true;
@@ -81,6 +81,14 @@ public partial class Map : TileMap
 			Object obj = freeQueue.Dequeue();
 			objects.Remove(obj);
 			obj.QueueFree();//object stays lingering and cause 2 "node" not found errors on server
+		}
+	}
+
+	public void SwitchObject(Character character)
+	{
+		foreach(Object obj in objects)
+		{
+			obj.Switch(character);
 		}
 	}
 

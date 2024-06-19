@@ -46,7 +46,7 @@ public partial class Elevator : Object
 
     public override void _PhysicsProcess(double delta)
     {
-        if (isMoving && pauseTimer.TimeLeft == 0)
+        if (isMoving && pauseTimer.IsStopped())
         {
             if ((direction > 0 && GetAxisValue(position3D) >= GetAxisValue(stops[nextStop])) ||
                 (direction < 0 && GetAxisValue(position3D) <= GetAxisValue(stops[nextStop])))
@@ -56,8 +56,8 @@ public partial class Elevator : Object
                     direction *= -1;
                 pauseTimer.Start();
             }
-            if (playerOverlap)
-                player.Move(forward * direction * speed * (float)delta);
+            overlappingPlayers[0]?.Move(forward * direction * speed * (float)delta);
+            overlappingPlayers[1]?.Move(forward * direction * speed * (float)delta);
             position3D += forward * direction * speed * (float)delta;
             Update();
         }
@@ -76,7 +76,6 @@ public partial class Elevator : Object
     {
         base.OverlapStarted();
         player.canFall = false;
-
     }
 
     protected override void OverlapEnded()

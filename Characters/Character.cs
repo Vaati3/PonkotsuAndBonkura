@@ -31,7 +31,6 @@ public abstract partial class Character : CharacterBody2D
 
 		
 	}
-
 	public override void _Input(InputEvent @event)
 	{
 		if (!isControlled)
@@ -40,12 +39,12 @@ public abstract partial class Character : CharacterBody2D
 		{
 			item?.Use();
 		}
-		GD.Print(map.switchCooldown.TimeLeft);
 		if (map.switchCooldown.IsStopped() && gameManager.isAlone && @event.IsActionPressed("switch") && !@event.IsEcho())
 		{
 			map.switchCooldown.Start();
 			UnPossess();
 			other.Possess();
+			map.SwitchObject(other);
 		}
     }
 
@@ -82,13 +81,26 @@ public abstract partial class Character : CharacterBody2D
 
 	public void UnPossess()
 	{
-		GD.Print(GetCharacterType());
 		isControlled = false;
 		GetNode<Camera2D>("Camera").Enabled = false;
 	}
 
+	public void HiddenMove(Vector3 dir)
+	{
+		if (!gameManager.isAlone || isControlled)
+		{
+			Move(dir);
+			return;
+		}
+		position3D += dir;
+	}
 	public virtual void Move(Vector3 dir)
 	{
+		if (gameManager.isAlone && !isControlled)
+		{
+			HiddenMove(dir);
+			return;
+		}
 		direction = dir;
 		Velocity = GetLocalPos(dir);
 		MoveAndSlide();

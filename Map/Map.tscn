@@ -20,19 +20,6 @@ script = ExtResource("3_5yg6x")
 [node name="Bonkura" parent="." instance=ExtResource("2_2purt")]
 script = ExtResource("4_40oqy")
 
-[node name="Debug" type="VBoxContainer" parent="."]
-offset_right = 274.0
-offset_bottom = 239.0
-size_flags_horizontal = 4
-
-[node name="Ponkotsu" type="Label" parent="Debug"]
-modulate = Color(0.455164, 0.0995564, 0.631745, 1)
-layout_mode = 2
-
-[node name="Bonkura" type="Label" parent="Debug"]
-modulate = Color(0.455164, 0.0995564, 0.631745, 1)
-layout_mode = 2
-
 [node name="Popup" type="CanvasLayer" parent="."]
 visible = false
 
@@ -84,9 +71,22 @@ theme_override_font_sizes/font_size = 0
 text = "Back to Lobby"
 
 [node name="Shader" type="CanvasLayer" parent="."]
-visible = false
+
+[node name="Debug" type="VBoxContainer" parent="Shader"]
+offset_right = 274.0
+offset_bottom = 239.0
+size_flags_horizontal = 4
+
+[node name="Ponkotsu" type="Label" parent="Shader/Debug"]
+modulate = Color(0.455164, 0.0995564, 0.631745, 1)
+layout_mode = 2
+
+[node name="Bonkura" type="Label" parent="Shader/Debug"]
+modulate = Color(0.455164, 0.0995564, 0.631745, 1)
+layout_mode = 2
 
 [node name="ColorRect" type="ColorRect" parent="Shader"]
+visible = false
 material = ExtResource("6_84da2")
 anchors_preset = 15
 anchor_right = 1.0

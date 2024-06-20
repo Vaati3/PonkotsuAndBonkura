@@ -78,8 +78,8 @@ public partial class Lobby : Panel
 	}
 	public void _on_start_map_pressed()
 	{
-		//Rpc(nameof(StartMap), "testarea");
-		Rpc(nameof(StartMap), "level-1");
+		Rpc(nameof(StartMap), "testarea");
+		//Rpc(nameof(StartMap), "level-1");
 	}
 
 	public void _on_leave_pressed()

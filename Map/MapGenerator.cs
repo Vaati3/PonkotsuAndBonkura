@@ -23,8 +23,7 @@ public partial class MapGenerator : Node
 {
 	public const int tileSize = 100;
 	public Vector3I size {get; private set;}
-	public int dataSize {get; private set;}
-	public Tile[] data {get; private set;}
+	public Tile[,,] data {get; private set;}
 	public Vector3[] spawns {get; private set;}
 
 	[Signal] public delegate void CreateObjectEventHandler(Vector3I pos); 
@@ -34,20 +33,9 @@ public partial class MapGenerator : Node
 		spawns = new Vector3[2];
     }
 
-	public Vector3I indexToPos(int i)
+	private void SetData(byte b, int x, int y, int z)
 	{
-		return new Vector3I(
-			i % size.X,
-			size.Y - 1 - (size.Y - 1 - (i / (size.Y * size.X))),
-			i / size.X % size.Y
-		);
-	}
-
-	private void SetData(byte b, int i)
-	{
-		Vector3I pos = indexToPos(i);
-		pos.Y = size.Y - 1 - pos.Y;
-
+		Vector3I pos = new Vector3I(x, y, z);
 		if (b == 2 || b == 3){
 			spawns[b-2] = pos * tileSize + new Vector3(tileSize/2, tileSize/2, tileSize/2);
 			b = 0;
@@ -64,13 +52,37 @@ public partial class MapGenerator : Node
 		FileAccess file = FileAccess.Open(path, FileAccess.ModeFlags.Read);
 		string[] sizeStr = file.GetLine().Split("x");
 		size = new Vector3I(sizeStr[0].ToInt(), sizeStr[2].ToInt(), sizeStr[1].ToInt());
-		GD.Print(size);
-		dataSize = size.X * size.Y * size.Z;
-		data = new Tile[dataSize];
-		byte[] buffer = file.GetBuffer(dataSize);
-		for (int i = 0; i < dataSize; i++)
-			SetData(buffer[i], i);
+		data = new Tile[size.X, size.Y, size.Z];
+		byte[] buffer = file.GetBuffer(size.X * size.Y * size.Z);
+		int i = 0;
+		for (int y = size.Y - 1; y >= 0; y--)
+		{
+			for(int z = 0; z < size.Z; z++)
+			{
+				for (int x = 0; x < size.X; x++)
+				{
+					SetData(buffer[i], x, y, z);
+					i++;
+				}
+			}
+		}
 		return true;
+	}
+
+	public delegate void Action(Tile tile, Vector3I pos);
+	public void LoopAction(Action action)
+	{
+		Vector3I pos = Vector3I.Zero;
+		for (pos.Y = 0; pos.Y < size.Y; pos.Y++)
+		{
+			for(pos.Z = 0; pos.Z < size.Z; pos.Z++)
+			{
+				for (pos.X = 0; pos.X < size.X; pos.X++)
+				{
+					action(GetTile(pos), pos);
+				}
+			}
+		}
 	}
 
 	public List<Vector3I> Search(Tile tile, Axis axis, Vector3I pos)
@@ -93,7 +105,7 @@ public partial class MapGenerator : Node
 
 	public void SetTile(Tile tile, Vector3I pos)
 	{
-		data[pos.X + (pos.Z * size.X) + (pos.Y * size.X * size.Z)] = tile;
+		data[pos.X, pos.Y, pos.Z] = tile;
 	}
 
 	public Tile GetTile(Vector3 pos)
@@ -104,7 +116,7 @@ public partial class MapGenerator : Node
 	{
 		if (pos.X < 0 || pos.X >= size.X || pos.Y < 0 || pos.Y >= size.Y || pos.Z < 0 || pos.Z >= size.Z)
 			return Tile.Block;
-		return data[pos.X + (pos.Z * size.X) + (pos.Y * size.X * size.Z)];
+		return data[pos.X, pos.Y, pos.Z];
 	}
 	public Tile GetTile(float x, float y, float z)
 	{
@@ -114,7 +126,7 @@ public partial class MapGenerator : Node
 	{
 		if (x < 0 || x >= size.X || y < 0 || y >= size.Y || z < 0 || z >= size.Z)
 			return Tile.Block;
-		return data[x + (z * size.X) + (y * size.X * size.Z)];
+		return data[x, y, z];
 	}
 	static public Vector3I GetTilePos(Vector3 pos)
 	{

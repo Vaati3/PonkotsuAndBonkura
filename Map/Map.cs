@@ -94,29 +94,29 @@ public partial class Map : TileMap
 
 	private void GenerateObjects()
 	{
+
 		Dictionary<Vector3I, Tile> buttons = new Dictionary<Vector3I, Tile>();
-		for (int i = 0; i < generator.dataSize; i++)
-		{
-			if (generator.data[i] > Tile.BonkuraGoal && generator.data[i] != Tile.ElevatorStop)
+		MapGenerator.Action action = (tile, pos) => {
+			if (tile > Tile.BonkuraGoal && tile != Tile.ElevatorStop)
 			{
-				switch (generator.data[i])
+				switch (tile)
 				{
 					case Tile.ElevatorX: case Tile.ElevatorY : case Tile.ElevatorZ:
-						Vector3I pos = generator.indexToPos(i);
-						List<Vector3I> stops = generator.Search(Tile.ElevatorStop, (Axis)((int)generator.data[i]-(int)Tile.ElevatorX), pos);
+						List<Vector3I> stops = generator.Search(Tile.ElevatorStop, (Axis)((int)tile-(int)Tile.ElevatorX), pos);
 						if (stops.Count != 0)
 						{
 							Elevator elevator = CreateObject<Elevator>(pos);
-							elevator.Setup((Axis)((int)generator.data[i]-(int)Tile.ElevatorX), stops, generator);
+							elevator.Setup((Axis)((int)tile-(int)Tile.ElevatorX), stops, generator);
 						}
 						break;
 					case Tile.ButtonX: case Tile.ButtonY: case Tile.ButtonZ:
-						buttons.Add(generator.indexToPos(i), generator.data[i]);
+						buttons.Add(pos, tile);
 						break;
 				}
-				generator.data[i] = Tile.Void;
+				generator.SetTile(Tile.Void, pos);
 			}
-		}
+		};
+		generator.LoopAction(action);
 		foreach(KeyValuePair<Vector3I, Tile> button in buttons)
 		{
 			PressurePlate buttonObj = CreateObject<PressurePlate>(button.Key);

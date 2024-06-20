@@ -35,12 +35,12 @@ public partial class Bonkura : Character
         dir.Y = Velocity.Y + (GetGravity() * (float)delta);
         if (Input.IsActionPressed("move_right"))
         {
-            dir.Z += speed;
+            dir.X += speed;
             Flip(false);
         }
         if (Input.IsActionPressed("move_left"))
         {
-            dir.Z -= speed;
+            dir.X -= speed;
             Flip(true);
         }
         if (Input.IsActionPressed("move_up") && !IsFalling())
@@ -63,20 +63,20 @@ public partial class Bonkura : Character
     }
     public override Vector2 GetLocalPos(Vector3 pos)
     {
-        return new Vector2(pos.Z, pos.Y);
+        return new Vector2(pos.X, pos.Y);
     }
     public override Vector3 GetGlobalPos(float x, float y)
     {
-        return new Vector3(position3D.X, y, x);
+        return new Vector3(x, y, position3D.Z);
     }
     public override Vector3 GetGlobalPos(Vector2 pos, Vector3 dir)
     {
-        return new Vector3(position3D.X + dir.X, pos.Y, pos.X);
+        return new Vector3(pos.X, pos.Y, position3D.Z + dir.Z);
     }
 
     public override bool CanSee(Vector3 pos)
     {
-        return (int)(position3D.X / MapGenerator.tileSize) == (int)(pos.X / MapGenerator.tileSize);
+        return (int)(position3D.Z / MapGenerator.tileSize) == (int)(pos.Z / MapGenerator.tileSize);
     }
 
     protected override bool UpdateTile(Vector3I tilePos, int x, int y)
@@ -84,9 +84,9 @@ public partial class Bonkura : Character
         Vector2I tile = Vector2I.One;
         if (base.UpdateTile(tilePos, x, y))
             return true;
-        if (map.generator.GetTile(tilePos.X, tilePos.Y, tilePos.Z - 1) != Tile.Block)
+        if (map.generator.GetTile(tilePos.X - 1, tilePos.Y, tilePos.Z) != Tile.Block)
             tile.X -= 1;
-        if (map.generator.GetTile(tilePos.X, tilePos.Y, tilePos.Z + 1) != Tile.Block)
+        if (map.generator.GetTile(tilePos.X + 1, tilePos.Y, tilePos.Z) != Tile.Block)
             tile.X += tile.X < 1 ? 3 : 1;
         if (map.generator.GetTile(tilePos.X, tilePos.Y - 1, tilePos.Z) != Tile.Block)
             tile.Y -= 1;
@@ -98,14 +98,14 @@ public partial class Bonkura : Character
     protected override void UpdateMap()
 	{
 		Vector3I tilePos = Vector3I.Zero;
-		tilePos.X = MapGenerator.GetTilePos(position3D).X;
+		tilePos.Z = MapGenerator.GetTilePos(position3D).Z;
 		for (int y = 0; y < map.generator.size.Y; y++)
 		{
-			tilePos.Z = 0;
-			for (int z = 0; z < map.generator.size.Z; z++)
+			tilePos.X = 0;
+			for (int x = 0; x < map.generator.size.X; x++)
 			{
-				UpdateTile(tilePos, z, y);
-				tilePos.Z += 1;
+				UpdateTile(tilePos, x, y);
+				tilePos.X += 1;
 			}
 			tilePos.Y += 1;
 		}

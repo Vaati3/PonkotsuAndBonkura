@@ -9,18 +9,18 @@ Tiles = [
     [255, 0, 0],    #bonkura spawn
     [0, 150, 0],    #ponkotsu goal
     [150, 0, 0],    #bonkura goal
-    [255, 255, 0],  #elvator X
-    [200, 200, 0],  #elvator Y
-    [145, 145, 0],  #elvator Z
+    [255, 255, 0],  #elevator X
+    [200, 200, 0],  #elevator Y
+    [145, 145, 0],  #elevator Z
     [255, 145, 0],  #elvator stop
-    [255, 0, 255],  #button XY
-    [200, 0, 200],  #button XZ
-    [145, 0, 145],  #button YZ
+    [255, 0, 255],  #button X
+    [200, 0, 200],  #button Y
+    [145, 0, 145]   #button Z
 ]
 
 parser = argparse.ArgumentParser(description="Process some integers.")
 parser.add_argument("-f", "--files", type=str, nargs="+", help="files to be processed", action="extend")
-parser.add_argument("-s", "--size", type=str, default="7x7x7", help="set level size")
+parser.add_argument("-s", "--size", type=str, default="7x7x7", help="set level size, default:7x7x7")
 #parser.add_argument("-s", "--size", type=str, nargs="+", default="7x7x7", help="set level size", action="extend")
 parser.add_argument("-d", "--dest", type=str, default="./Map/Maps/", help="set file destination folder")
 args = parser.parse_args()

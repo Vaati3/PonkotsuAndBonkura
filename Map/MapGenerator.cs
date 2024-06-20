@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Dynamic;
 
 public enum Tile {
@@ -44,17 +45,15 @@ public partial class MapGenerator : Node
 
 	private void SetData(byte b, int i)
 	{
-		Vector3I pos = new Vector3I(
-			i / size.X % size.Y,
-			size.Y - 1 - (i / (size.Y * size.X)),
-			i % size.X
-		);
+		Vector3I pos = indexToPos(i);
+		pos.Y = size.Y - 1 - pos.Y;
 
 		if (b == 2 || b == 3){
 			spawns[b-2] = pos * tileSize + new Vector3(tileSize/2, tileSize/2, tileSize/2);
 			b = 0;
 		}
-		data[pos.X + (pos.Z * size.X) + (pos.Y * size.X * size.Z)] = (Tile)b;
+		//Check and create items
+		SetTile((Tile)b, pos);
 	}
 
 	public bool Read(string mapName)
@@ -64,7 +63,8 @@ public partial class MapGenerator : Node
 			return false;
 		FileAccess file = FileAccess.Open(path, FileAccess.ModeFlags.Read);
 		string[] sizeStr = file.GetLine().Split("x");
-		size = new Vector3I(sizeStr[0].ToInt(), sizeStr[1].ToInt(), sizeStr[2].ToInt());
+		size = new Vector3I(sizeStr[0].ToInt(), sizeStr[2].ToInt(), sizeStr[1].ToInt());
+		GD.Print(size);
 		dataSize = size.X * size.Y * size.Z;
 		data = new Tile[dataSize];
 		byte[] buffer = file.GetBuffer(dataSize);

@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://ck7k5emht2bck"]
+[gd_scene load_steps=5 format=3 uid="uid://ck7k5emht2bck"]
 
 [ext_resource type="Script" path="res://Menus/MainMenu.cs" id="1_5fta4"]
+[ext_resource type="Theme" uid="uid://dundbkyo1dqnu" path="res://Menus/Themes/Panel.tres" id="1_ck0oc"]
+[ext_resource type="Theme" uid="uid://c7wnqipmhvxh0" path="res://Menus/Themes/Button.tres" id="3_5sobe"]
+[ext_resource type="FontFile" uid="uid://dbv2ovpyr0js6" path="res://Menus/Themes/PlaywriteFRTrad-Regular.ttf" id="3_wmdyp"]
 
 [node name="MainMenu" type="Panel"]
 anchors_preset = 15
@@ -8,6 +11,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_ck0oc")
 script = ExtResource("1_5fta4")
 
 [node name="Menu" type="Control" parent="."]
@@ -26,6 +30,7 @@ offset_right = 809.0
 offset_bottom = 130.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_wmdyp")
 theme_override_font_sizes/font_size = 42
 text = "Ponkotsu and Bonkura"
 horizontal_alignment = 1
@@ -38,33 +43,37 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -49.0
-offset_top = -76.5
-offset_right = 49.0
-offset_bottom = 76.5
+offset_left = -101.5
+offset_top = -124.0
+offset_right = 101.5
+offset_bottom = 201.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 15
+theme_override_constants/separation = 17
 alignment = 1
 
 [node name="Play" type="Button" parent="Menu/VBoxContainer"]
-custom_minimum_size = Vector2(100, 50)
+custom_minimum_size = Vector2(100, 70)
 layout_mode = 2
+theme = ExtResource("3_5sobe")
 text = "Multiplayer"
 
 [node name="SinglePlayer" type="Button" parent="Menu/VBoxContainer"]
-custom_minimum_size = Vector2(100, 50)
+custom_minimum_size = Vector2(100, 70)
 layout_mode = 2
+theme = ExtResource("3_5sobe")
 text = "Singleplayer"
 
 [node name="Options" type="Button" parent="Menu/VBoxContainer"]
-custom_minimum_size = Vector2(100, 50)
+custom_minimum_size = Vector2(100, 70)
 layout_mode = 2
+theme = ExtResource("3_5sobe")
 text = "Options"
 
 [node name="Quit" type="Button" parent="Menu/VBoxContainer"]
-custom_minimum_size = Vector2(100, 50)
+custom_minimum_size = Vector2(100, 70)
 layout_mode = 2
+theme = ExtResource("3_5sobe")
 text = "Quit"
 
 [node name="Play" type="Control" parent="."]
@@ -95,16 +104,19 @@ alignment = 1
 [node name="Host" type="Button" parent="Play/VBoxContainer"]
 custom_minimum_size = Vector2(100, 50)
 layout_mode = 2
+theme = ExtResource("3_5sobe")
 text = "Host"
 
 [node name="Join" type="Button" parent="Play/VBoxContainer"]
 custom_minimum_size = Vector2(100, 50)
 layout_mode = 2
+theme = ExtResource("3_5sobe")
 text = "Join"
 
 [node name="Back" type="Button" parent="Play/VBoxContainer"]
 custom_minimum_size = Vector2(100, 50)
 layout_mode = 2
+theme = ExtResource("3_5sobe")
 text = "Go back"
 
 [node name="JoinMenu" type="Control" parent="."]
@@ -124,12 +136,18 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -4.0
-offset_top = -4.0
-offset_right = 4.0
-offset_bottom = 4.0
+offset_left = -87.0
+offset_top = -25.0
+offset_right = 87.0
+offset_bottom = 30.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_colors/background_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_selected_color = Color(1, 1, 1, 1)
+theme_override_colors/font_readonly_color = Color(1, 1, 1, 1)
+theme_override_colors/font_placeholder_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("3_wmdyp")
 theme_override_font_sizes/font_size = 20
 placeholder_text = "Enter host"
 
@@ -166,11 +184,13 @@ theme_override_constants/separation = 35
 [node name="Back" type="Button" parent="JoinMenu/HBoxContainer"]
 custom_minimum_size = Vector2(100, 50)
 layout_mode = 2
+theme = ExtResource("3_5sobe")
 text = "Back"
 
 [node name="ConfirmJoin" type="Button" parent="JoinMenu/HBoxContainer"]
 custom_minimum_size = Vector2(100, 50)
 layout_mode = 2
+theme = ExtResource("3_5sobe")
 text = "Join"
 
 [node name="NamePopup" type="Control" parent="."]
@@ -193,9 +213,15 @@ anchor_bottom = 0.5
 offset_left = -150.0
 offset_top = -69.0
 offset_right = 150.0
-offset_bottom = -29.0
+offset_bottom = -14.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_colors/background_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_selected_color = Color(1, 1, 1, 1)
+theme_override_colors/font_readonly_color = Color(1, 1, 1, 1)
+theme_override_colors/font_placeholder_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("3_wmdyp")
 theme_override_font_sizes/font_size = 20
 placeholder_text = "Enter username"
 
@@ -213,6 +239,7 @@ offset_right = 50.0
 offset_bottom = 56.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("3_5sobe")
 text = "Confirm"
 
 [connection signal="pressed" from="Menu/VBoxContainer/Play" to="." method="_on_play_pressed"]

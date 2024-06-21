@@ -73,6 +73,7 @@ text = "Back to Lobby"
 [node name="Shader" type="CanvasLayer" parent="."]
 
 [node name="Debug" type="VBoxContainer" parent="Shader"]
+visible = false
 offset_right = 274.0
 offset_bottom = 239.0
 size_flags_horizontal = 4

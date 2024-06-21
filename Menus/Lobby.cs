@@ -48,7 +48,7 @@ public partial class Lobby : Panel
 				LevelButton levelButton = new LevelButton(fileName, LevelPressed);
 				grid.AddChild(levelButton);
 			} else {
-				GD.Print(fileName);
+				GD.Print("folder " + fileName);
 				//CreateLevelButtons(fileName);//recursive folder open
 			}
 			fileName = dir.GetNext();
@@ -60,7 +60,6 @@ public partial class Lobby : Panel
 		if (selectedLevel != null)
 			selectedLevel.Disabled = false;
 		selectedLevel = levelButton;
-		GD.Print(levelButton.levelName + " clicked");
 	}
 
 	private void JoinUpdate()

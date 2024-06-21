@@ -13,6 +13,8 @@ public partial class LevelButton : Button
 
 		Pressed += _on_button_pressed;
 		LevelPressed += levelPressed;
+
+		Theme = GD.Load<Theme>("res://Menus/Themes/Button.tres");
 	}
 
 	[Signal]public delegate void LevelPressedEventHandler(LevelButton levelButton);

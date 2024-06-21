@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://7640xxkbddua"]
+[gd_scene load_steps=4 format=3 uid="uid://7640xxkbddua"]
 
 [ext_resource type="Script" path="res://Menus/Lobby.cs" id="1_62gdr"]
+[ext_resource type="Theme" uid="uid://dundbkyo1dqnu" path="res://Menus/Themes/Panel.tres" id="1_w2lth"]
+[ext_resource type="Theme" uid="uid://c7wnqipmhvxh0" path="res://Menus/Themes/Button.tres" id="3_o5ijt"]
 
 [node name="Lobby" type="Panel"]
 anchors_preset = 15
@@ -8,6 +10,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_w2lth")
 script = ExtResource("1_62gdr")
 
 [node name="SwitchCharacters" type="Button" parent="."]
@@ -21,6 +24,7 @@ offset_top = 37.0
 offset_right = 54.0
 offset_bottom = 137.0
 grow_horizontal = 2
+theme = ExtResource("3_o5ijt")
 text = "Switch 
 roles"
 
@@ -34,6 +38,7 @@ anchor_bottom = 1.0
 offset_top = -100.0
 offset_right = 100.0
 grow_vertical = 0
+theme = ExtResource("3_o5ijt")
 text = "Leave
 lobby"
 
@@ -49,6 +54,7 @@ offset_top = 30.0
 offset_right = 280.0
 offset_bottom = 130.0
 grow_horizontal = 2
+theme = ExtResource("3_o5ijt")
 text = "Start 
 Level"
 
@@ -93,7 +99,7 @@ offset_right = 474.0
 offset_bottom = 243.0
 grow_horizontal = 2
 grow_vertical = 2
-columns = 5
+columns = 10
 
 [connection signal="pressed" from="SwitchCharacters" to="." method="_on_switch_characters_pressed"]
 [connection signal="pressed" from="Leave" to="." method="_on_leave_pressed"]

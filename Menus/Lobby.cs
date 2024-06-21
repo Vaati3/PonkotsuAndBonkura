@@ -6,6 +6,8 @@ public partial class Lobby : Panel
 	GameManager gameManager;
 	Map map;
 	Timer timer;
+	GridContainer grid;
+	LevelButton selectedLevel = null;
 	public override void _Ready()
 	{
 		gameManager = GetNode<GameManager>("/root/GameManager");
@@ -21,11 +23,44 @@ public partial class Lobby : Panel
         };
 		timer.Timeout += JoinUpdate;
 		AddChild(timer);
+		grid = GetNode<GridContainer>("GridContainer");
+		CreateLevelButtons("res://Map/Maps/");
 
 		map = GD.Load<PackedScene>("res://Map/Map.tscn").Instantiate<Map>();
 		GetTree().Root.AddChild(map);
 		map.Visible = false;
 		map.UnloadMap += ReloadLobby;
+	}
+
+	private void CreateLevelButtons(string path)
+	{
+		DirAccess dir = DirAccess.Open(path);
+
+		if (dir == null)
+			return;
+
+		dir.ListDirBegin();
+		string fileName = dir.GetNext();
+		while (fileName != "")
+		{
+			if (!dir.CurrentIsDir())
+			{
+				LevelButton levelButton = new LevelButton(fileName, LevelPressed);
+				grid.AddChild(levelButton);
+			} else {
+				GD.Print(fileName);
+				//CreateLevelButtons(fileName);//recursive folder open
+			}
+			fileName = dir.GetNext();
+		}
+	}
+
+	private void LevelPressed(LevelButton levelButton)
+	{
+		if (selectedLevel != null)
+			selectedLevel.Disabled = false;
+		selectedLevel = levelButton;
+		GD.Print(levelButton.levelName + " clicked");
 	}
 
 	private void JoinUpdate()
@@ -78,7 +113,8 @@ public partial class Lobby : Panel
 	}
 	public void _on_start_map_pressed()
 	{
-		Rpc(nameof(StartMap), "testarea");
+		if (selectedLevel != null)
+			Rpc(nameof(StartMap), selectedLevel.levelName);
 		//Rpc(nameof(StartMap), "level-1");
 	}
 

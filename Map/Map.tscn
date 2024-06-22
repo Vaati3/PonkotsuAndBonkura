@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://dxen73ot6hbp"]
+[gd_scene load_steps=8 format=3 uid="uid://dxen73ot6hbp"]
 
 [ext_resource type="TileSet" uid="uid://b8v1g2dywrail" path="res://Map/TileSet.tres" id="1_p1aeu"]
 [ext_resource type="Script" path="res://Map/Map.cs" id="1_yu23f"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://Characters/Ponkotsu.cs" id="3_5yg6x"]
 [ext_resource type="Script" path="res://Characters/Bonkura.cs" id="4_40oqy"]
 [ext_resource type="Material" uid="uid://dhfaf1ffdghe7" path="res://Shaders/ShaderMaterial.tres" id="6_84da2"]
+[ext_resource type="PackedScene" uid="uid://dypu0aioxn2ln" path="res://Menus/GameMenu.tscn" id="6_v4ehb"]
 
 [node name="Map" type="TileMap"]
 tile_set = ExtResource("1_p1aeu")
@@ -20,57 +21,10 @@ script = ExtResource("3_5yg6x")
 [node name="Bonkura" parent="." instance=ExtResource("2_2purt")]
 script = ExtResource("4_40oqy")
 
-[node name="Popup" type="CanvasLayer" parent="."]
-visible = false
-
-[node name="Panel" type="Panel" parent="Popup"]
-custom_minimum_size = Vector2(200, 200)
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -100.0
-offset_top = -100.0
-offset_right = 100.0
-offset_bottom = 100.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Label" type="Label" parent="Popup/Panel"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -55.0
-offset_top = -47.5
-offset_right = 55.0
-offset_bottom = -24.5
-grow_horizontal = 2
-grow_vertical = 2
-text = "Map Completed"
-
-[node name="Button" type="Button" parent="Popup/Panel"]
-visible = false
-custom_minimum_size = Vector2(30, 15)
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -58.5
-offset_top = -58.78
-offset_right = 58.5
-offset_bottom = -27.78
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_font_sizes/font_size = 0
-text = "Back to Lobby"
+[node name="GameMenu" parent="." instance=ExtResource("6_v4ehb")]
 
 [node name="Shader" type="CanvasLayer" parent="."]
+visible = false
 
 [node name="Debug" type="VBoxContainer" parent="Shader"]
 visible = false
@@ -96,5 +50,3 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 color = Color(1, 1, 1, 0)
-
-[connection signal="pressed" from="Popup/Panel/Button" to="." method="_on_button_pressed"]

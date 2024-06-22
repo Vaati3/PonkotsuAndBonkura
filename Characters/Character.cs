@@ -35,6 +35,8 @@ public abstract partial class Character : CharacterBody2D
 	{
 		if (!isControlled)
 			return;
+		if (!map.gameMenu.Visible && @event.IsActionPressed("pause") && !@event.IsEcho())
+			map.gameMenu.Pause();
 		if (@event.IsActionPressed("use_item") && !@event.IsEcho())
 		{
 			item?.Use();
@@ -112,7 +114,7 @@ public abstract partial class Character : CharacterBody2D
 		
 		if (isControlled && map.generator.GetTile(position3D) == (Tile)((int)Tile.PonkotsuGoal + GetCharacterType()) &&
 			map.generator.GetTile(other.position3D) == (Tile)((int)Tile.PonkotsuGoal + other.GetCharacterType()))
-			map.MapCompleted();
+			map.gameMenu.MapCompleted();
 	}
 
 	public Item SwitchItem(Item newItem)

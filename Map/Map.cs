@@ -5,7 +5,9 @@ using System.Collections.Generic;
 public partial class Map : TileMap
 {
 	GameManager gameManager;
+	public GameMenu gameMenu {get; private set;}
 	public MapGenerator generator {get; private set;}
+	public string currentMap {get; private set;}
 	Ponkotsu ponkotsu;
 	Bonkura bonkura;
 	Node objectLayer;
@@ -22,6 +24,7 @@ public partial class Map : TileMap
 	public override void _Ready()
 	{
 		gameManager = GetNode<GameManager>("/root/GameManager");
+		gameMenu = GetNode<GameMenu>("GameMenu");
 		generator = new MapGenerator();
 		AddChild(generator);
 
@@ -33,16 +36,14 @@ public partial class Map : TileMap
 		objectLayer = GetNode<Node>("Objects");
 		objects = new List<Object>();
 		freeQueue =  new Queue<Object>();
+
 		ponkotsuDebug = GetNode<Label>("Shader/Debug/Ponkotsu");
 		bonkuraDebug = GetNode<Label>("Shader/Debug/Bonkura");
-
-		if (gameManager.player.id == 1)
-			GetNode<Button>("Popup/Panel/Button").Visible = true;
 
 		switchCooldown = new Timer()
 		{
 			WaitTime = 5,
-			Autostart = true,
+			Autostart = false,
 			OneShot = true			
 		};
 		AddChild(switchCooldown);
@@ -56,6 +57,7 @@ public partial class Map : TileMap
 
     public void StartMap(string mapName)
 	{
+		currentMap = mapName;
 		generator.Read(mapName);
 		GenerateObjects();
 		if (gameManager.player.characterType == CharacterType.Ponkotsu)
@@ -164,35 +166,20 @@ public partial class Map : TileMap
 		return pos;
 	}
 
-	public void MapCompleted()
-	{
-		Rpc(nameof(ShowPopup), true);
-	}
-
-	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
-	private void ShowPopup(bool state)
-	{
-		GetNode<CanvasLayer>("Popup").Visible = state;
-	}
-
-	public void _on_button_pressed()
-	{
-		Rpc(nameof(BacktoLobby));
-	}
-
-	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
-	private void BacktoLobby()
+	public void ClearMap()
 	{
 		foreach(Object obj in objects)
 		{
 			obj.QueueFree();
 		}
 		objects.Clear();
-		ShowPopup(false);
-		if (gameManager.player.characterType == CharacterType.Ponkotsu)
-			ponkotsu.UnPossess();
-		else
-			bonkura.UnPossess();
+	}
+
+	public void BacktoLobby()
+	{
+		ponkotsu.UnPossess();
+		bonkura.UnPossess();
+		ClearMap();
 		GetNode<CanvasLayer>("Shader").Hide();
 		EmitSignal(nameof(UnloadMap));
 	}

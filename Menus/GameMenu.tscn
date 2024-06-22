@@ -1,0 +1,129 @@
+[gd_scene load_steps=5 format=3 uid="uid://dypu0aioxn2ln"]
+
+[ext_resource type="Theme" uid="uid://dundbkyo1dqnu" path="res://Menus/Themes/Panel.tres" id="1_fg6so"]
+[ext_resource type="Script" path="res://Menus/GameMenu.cs" id="1_pfg35"]
+[ext_resource type="FontFile" uid="uid://dbv2ovpyr0js6" path="res://Menus/Themes/PlaywriteFRTrad-Regular.ttf" id="3_5g7go"]
+[ext_resource type="Theme" uid="uid://c7wnqipmhvxh0" path="res://Menus/Themes/Button.tres" id="4_a4t2n"]
+
+[node name="GameMenu" type="CanvasLayer"]
+visible = false
+script = ExtResource("1_pfg35")
+
+[node name="Panel" type="Panel" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_fg6so")
+
+[node name="LevelCompleted" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="LevelCompleted"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -137.0
+offset_top = -120.0
+offset_right = 139.0
+offset_bottom = -34.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_5g7go")
+theme_override_font_sizes/font_size = 30
+text = "Level Completed"
+
+[node name="BackButton" type="Button" parent="LevelCompleted"]
+custom_minimum_size = Vector2(30, 15)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -97.0
+offset_top = 25.0
+offset_right = 101.0
+offset_bottom = 115.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("4_a4t2n")
+theme_override_font_sizes/font_size = 0
+text = "Back to Lobby"
+
+[node name="Pause" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="Pause"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -137.0
+offset_top = -166.0
+offset_right = 139.0
+offset_bottom = -80.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_5g7go")
+theme_override_font_sizes/font_size = 30
+text = "Game Paused"
+horizontal_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Pause"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -85.5
+offset_top = -29.0
+offset_right = 85.5
+offset_bottom = 147.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Resume" type="Button" parent="Pause/VBoxContainer"]
+custom_minimum_size = Vector2(30, 15)
+layout_mode = 2
+theme = ExtResource("4_a4t2n")
+theme_override_font_sizes/font_size = 0
+text = "Resume"
+
+[node name="Reset" type="Button" parent="Pause/VBoxContainer"]
+custom_minimum_size = Vector2(30, 15)
+layout_mode = 2
+theme = ExtResource("4_a4t2n")
+theme_override_font_sizes/font_size = 0
+text = "Reset"
+
+[node name="BackButton" type="Button" parent="Pause/VBoxContainer"]
+custom_minimum_size = Vector2(30, 15)
+layout_mode = 2
+theme = ExtResource("4_a4t2n")
+theme_override_font_sizes/font_size = 0
+text = "Back to Lobby"
+
+[connection signal="pressed" from="LevelCompleted/BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="pressed" from="Pause/VBoxContainer/Resume" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="Pause/VBoxContainer/Reset" to="." method="_on_reset_pressed"]
+[connection signal="pressed" from="Pause/VBoxContainer/BackButton" to="." method="_on_back_button_pressed"]

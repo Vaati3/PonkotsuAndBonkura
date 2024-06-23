@@ -28,9 +28,8 @@ public abstract partial class Character : CharacterBody2D
 		canFall = true;
 		gameManager = GetNode<GameManager>("/root/GameManager");
 		sprite = GetNode<Sprite2D>("Sprite");
-
-		
 	}
+
 	public override void _Input(InputEvent @event)
 	{
 		if (!isControlled)
@@ -39,6 +38,7 @@ public abstract partial class Character : CharacterBody2D
 			map.gameMenu.Pause();
 		if (@event.IsActionPressed("use_item") && !@event.IsEcho())
 		{
+			map.gameMenu.MapCompleted();
 			item?.Use();
 		}
 		if (map.switchCooldown.IsStopped() && gameManager.isAlone && @event.IsActionPressed("switch") && !@event.IsEcho())
@@ -46,6 +46,7 @@ public abstract partial class Character : CharacterBody2D
 			map.switchCooldown.Start();
 			UnPossess();
 			other.Possess();
+			gameManager.player.characterType = other.GetCharacterType();
 			map.SwitchObject(other);
 		}
     }

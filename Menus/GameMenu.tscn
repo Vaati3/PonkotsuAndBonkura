@@ -34,29 +34,40 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -137.0
-offset_top = -120.0
+offset_top = -168.0
 offset_right = 139.0
-offset_bottom = -34.0
+offset_bottom = -82.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_fonts/font = ExtResource("3_5g7go")
 theme_override_font_sizes/font_size = 30
 text = "Level Completed"
 
-[node name="BackButton" type="Button" parent="LevelCompleted"]
-custom_minimum_size = Vector2(30, 15)
+[node name="VBoxContainer" type="VBoxContainer" parent="LevelCompleted"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -97.0
-offset_top = 25.0
-offset_right = 101.0
-offset_bottom = 115.0
+offset_left = -85.0
+offset_top = -7.0
+offset_right = 86.0
+offset_bottom = 125.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="NextLevel" type="Button" parent="LevelCompleted/VBoxContainer"]
+custom_minimum_size = Vector2(30, 15)
+layout_mode = 2
+theme = ExtResource("4_a4t2n")
+theme_override_font_sizes/font_size = 0
+text = "Next Level"
+
+[node name="BackButton" type="Button" parent="LevelCompleted/VBoxContainer"]
+custom_minimum_size = Vector2(30, 15)
+layout_mode = 2
 theme = ExtResource("4_a4t2n")
 theme_override_font_sizes/font_size = 0
 text = "Back to Lobby"
@@ -101,6 +112,7 @@ offset_right = 85.5
 offset_bottom = 147.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 20
 
 [node name="Resume" type="Button" parent="Pause/VBoxContainer"]
 custom_minimum_size = Vector2(30, 15)
@@ -123,7 +135,8 @@ theme = ExtResource("4_a4t2n")
 theme_override_font_sizes/font_size = 0
 text = "Back to Lobby"
 
-[connection signal="pressed" from="LevelCompleted/BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="pressed" from="LevelCompleted/VBoxContainer/NextLevel" to="." method="_on_next_level_pressed"]
+[connection signal="pressed" from="LevelCompleted/VBoxContainer/BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="pressed" from="Pause/VBoxContainer/Resume" to="." method="_on_resume_pressed"]
 [connection signal="pressed" from="Pause/VBoxContainer/Reset" to="." method="_on_reset_pressed"]
 [connection signal="pressed" from="Pause/VBoxContainer/BackButton" to="." method="_on_back_button_pressed"]

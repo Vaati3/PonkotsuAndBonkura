@@ -30,6 +30,7 @@ public partial class Lobby : Panel
 		GetTree().Root.AddChild(map);
 		map.Visible = false;
 		map.UnloadMap += ReloadLobby;
+		map.gameMenu.GetMap += GetMap;
 	}
 
 	private void CreateLevelButtons(string path)
@@ -41,17 +42,20 @@ public partial class Lobby : Panel
 
 		dir.ListDirBegin();
 		string fileName = dir.GetNext();
+		int n = 0;
 		while (fileName != "")
 		{
 			if (!dir.CurrentIsDir())
 			{
-				LevelButton levelButton = new LevelButton(fileName, LevelPressed);
+				LevelButton levelButton = new LevelButton(fileName, n, LevelPressed);
 				grid.AddChild(levelButton);
 			} else {
 				GD.Print("folder " + fileName);
+				n--;
 				//CreateLevelButtons(fileName);//recursive folder open
 			}
 			fileName = dir.GetNext();
+			n++;
 		}
 	}
 
@@ -85,9 +89,9 @@ public partial class Lobby : Panel
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal=true)]
-	private void StartMap(string mapName)
+	private void StartMap(string mapName, int mapNumber)
 	{
-		map.StartMap(mapName);
+		map.StartMap(mapName, mapNumber);
 		Visible = false;
 		map.Visible = true;
 	} 
@@ -100,12 +104,20 @@ public partial class Lobby : Panel
 			gameManager.otherPlayer.characterType = gameManager.otherPlayer.characterType == CharacterType.Ponkotsu ? CharacterType.Bonkura : CharacterType.Ponkotsu;
 		UpdateMenu();
 	}
-
 	public void ReloadLobby()
 	{
 		map.Visible = false;
 		Visible = true;
 	}
+	public string GetMap(int number)
+	{
+		if (number >= grid.GetChildCount())
+			return null;
+		if (grid.GetChild(number) is LevelButton button)
+			return button.levelName;
+		return null;
+	}
+
 	public void _on_switch_characters_pressed()
 	{
 		Rpc(nameof(SwitchCharacter));
@@ -113,7 +125,7 @@ public partial class Lobby : Panel
 	public void _on_start_map_pressed()
 	{
 		if (selectedLevel != null)
-			Rpc(nameof(StartMap), selectedLevel.levelName);
+			Rpc(nameof(StartMap), selectedLevel.levelName, selectedLevel.levelNumber);
 		//Rpc(nameof(StartMap), "level-1");
 	}
 

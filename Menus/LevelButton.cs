@@ -4,7 +4,9 @@ using System;
 public partial class LevelButton : Button
 {
 	public string levelName {get; private set;}
-	public LevelButton(string levelName, LevelPressedEventHandler levelPressed)
+	public int levelNumber {get; private set;}
+
+	public LevelButton(string levelName, int number, LevelPressedEventHandler levelPressed)
 	{
 		this.levelName = levelName.GetBaseName();
 

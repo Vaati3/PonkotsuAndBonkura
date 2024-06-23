@@ -7,7 +7,6 @@ public partial class Map : TileMap
 	GameManager gameManager;
 	public GameMenu gameMenu {get; private set;}
 	public MapGenerator generator {get; private set;}
-	public string currentMap {get; private set;}
 	Ponkotsu ponkotsu;
 	Bonkura bonkura;
 	Node objectLayer;
@@ -55,9 +54,9 @@ public partial class Map : TileMap
 		bonkuraDebug.Text = "Bonkura X: " + bonkura.position3D.X + ", Y: " + bonkura.position3D.Y + ", Z: " + bonkura.position3D.Z;
     }
 
-    public void StartMap(string mapName)
+    public void StartMap(string mapName, int mapNumber)
 	{
-		currentMap = mapName;
+		gameMenu.Init(mapName, mapNumber);
 		generator.Read(mapName);
 		GenerateObjects();
 		if (gameManager.player.characterType == CharacterType.Ponkotsu)
@@ -173,6 +172,8 @@ public partial class Map : TileMap
 			obj.QueueFree();
 		}
 		objects.Clear();
+
+		Clear();
 	}
 
 	public void BacktoLobby()

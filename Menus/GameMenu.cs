@@ -7,6 +7,14 @@ public partial class GameMenu : CanvasLayer
 
 	Control levelCompleted;
 	Control pause;
+
+	public string currentMap {get; private set;}
+	public int curentMapNumber {get; private set;}
+
+	public delegate string GetMapCallback(int number);
+	public GetMapCallback GetMap;
+
+	string nextMap;
 	public override void _Ready()
 	{
 		if (GetParent() is Map map)
@@ -16,13 +24,23 @@ public partial class GameMenu : CanvasLayer
 		pause = GetNode<Control>("Pause");
 	}
 
+	public void Init(string curentMap, int number)
+	{
+		this.currentMap = curentMap;
+		curentMapNumber = number; 
+	}
+
 	public void MapCompleted()
 	{
+		if (Visible)
+			return;
 		Rpc(nameof(ShowLevelCompletedMenu));
 	}
 
 	public void Pause()
 	{
+		if (Visible)
+			return;
 		Rpc(nameof(ShowPauseMenu));
 	}
 
@@ -38,6 +56,9 @@ public partial class GameMenu : CanvasLayer
 	{
 		levelCompleted.Visible = true;
 		Visible = true;
+
+		nextMap = GetMap(curentMapNumber + 1);
+		levelCompleted.GetNode<Button>("VBoxContainer/NextLevel").Visible = nextMap != null;
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
@@ -57,10 +78,10 @@ public partial class GameMenu : CanvasLayer
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
-	public void ResetMap()
+	public void LoadMap(string mapName, int mapNumber)
 	{
 		map.ClearMap();
-		map.StartMap(map.currentMap);
+		map.StartMap(mapName, mapNumber);
 		Resume();
 	}
 
@@ -76,6 +97,11 @@ public partial class GameMenu : CanvasLayer
 
 	public void _on_reset_pressed()
 	{
-		Rpc(nameof(ResetMap));
+		Rpc(nameof(LoadMap), currentMap, curentMapNumber);
+	}
+
+	public void _on_next_level_pressed()
+	{
+		Rpc(nameof(LoadMap), nextMap, curentMapNumber + 1);
 	}
 }

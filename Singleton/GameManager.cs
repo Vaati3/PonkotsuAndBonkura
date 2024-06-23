@@ -8,12 +8,14 @@ public class Player {
 	public string name {get; set;}
 	public int progression {get; private set;}
 	public CharacterType characterType {get; set;}
+	public bool isReady {get; set;}
 	public Player(long id = 0, string name = "", int progression = 0, CharacterType characterType = CharacterType.Ponkotsu)
 	{
 		this.id = id;
 		this.name = name;
 		this.progression = progression;
 		this.characterType = characterType;
+		isReady = false;
 	}
     public override string ToString()
     {
@@ -34,6 +36,8 @@ public partial class GameManager : Node
 	public Player player {get; private set;}
 	public Player otherPlayer {get; private set;}
 
+	[Signal]public delegate void UpdateServerEventHandler();
+
 	public void PlayerJoined(Player newPlayer, bool isServer)
 	{
 		if (player.id != newPlayer.id)
@@ -42,6 +46,8 @@ public partial class GameManager : Node
 			otherPlayer.characterType = player.characterType == CharacterType.Ponkotsu ? CharacterType.Bonkura : CharacterType.Ponkotsu;
 		else
 			player.characterType = otherPlayer.characterType == CharacterType.Ponkotsu ? CharacterType.Bonkura : CharacterType.Ponkotsu;
+		if (isServer)
+			EmitSignal(nameof(UpdateServer));
 	}
 
 	public void Save()

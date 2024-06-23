@@ -20,9 +20,9 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -46.0
-offset_top = 37.0
+offset_top = 40.0
 offset_right = 54.0
-offset_bottom = 137.0
+offset_bottom = 142.0
 grow_horizontal = 2
 theme = ExtResource("3_o5ijt")
 text = "Switch 
@@ -42,21 +42,20 @@ theme = ExtResource("3_o5ijt")
 text = "Leave
 lobby"
 
-[node name="StartMap" type="Button" parent="."]
-visible = false
+[node name="Ready" type="Button" parent="."]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = 180.0
-offset_top = 30.0
+offset_top = 40.0
 offset_right = 280.0
-offset_bottom = 130.0
+offset_bottom = 140.0
 grow_horizontal = 2
 theme = ExtResource("3_o5ijt")
-text = "Start 
-Level"
+disabled = true
+text = "Ready"
 
 [node name="VBox" type="VBoxContainer" parent="."]
 layout_mode = 0
@@ -75,6 +74,9 @@ layout_mode = 2
 [node name="Character" type="Label" parent="VBox/Player1"]
 layout_mode = 2
 
+[node name="Ready" type="Label" parent="VBox/Player1"]
+layout_mode = 2
+
 [node name="Player2" type="HBoxContainer" parent="VBox"]
 layout_mode = 2
 theme_override_constants/separation = 40
@@ -84,6 +86,9 @@ alignment = 1
 layout_mode = 2
 
 [node name="Character" type="Label" parent="VBox/Player2"]
+layout_mode = 2
+
+[node name="Ready" type="Label" parent="VBox/Player2"]
 layout_mode = 2
 
 [node name="GridContainer" type="GridContainer" parent="."]
@@ -103,4 +108,4 @@ columns = 10
 
 [connection signal="pressed" from="SwitchCharacters" to="." method="_on_switch_characters_pressed"]
 [connection signal="pressed" from="Leave" to="." method="_on_leave_pressed"]
-[connection signal="pressed" from="StartMap" to="." method="_on_start_map_pressed"]
+[connection signal="pressed" from="Ready" to="." method="_on_ready_pressed"]

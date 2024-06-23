@@ -7,12 +7,11 @@ public partial class Lobby : Panel
 	Map map;
 	Timer timer;
 	GridContainer grid;
-	LevelButton selectedLevel = null;
+	string selectedMap = null;
+	int selectedMapNumber = -1;
 	public override void _Ready()
 	{
 		gameManager = GetNode<GameManager>("/root/GameManager");
-		if ( gameManager.isAlone || gameManager.player.id == 1)
-			GetNode<Button>("StartMap").Visible = true;
 
 		//delay to wait for serverplayer to update on other
         timer = new Timer
@@ -24,7 +23,7 @@ public partial class Lobby : Panel
 		timer.Timeout += JoinUpdate;
 		AddChild(timer);
 		grid = GetNode<GridContainer>("GridContainer");
-		CreateLevelButtons("res://Map/Maps/");
+		CreateMapButtons("res://Map/Maps/");
 
 		map = GD.Load<PackedScene>("res://Map/Map.tscn").Instantiate<Map>();
 		GetTree().Root.AddChild(map);
@@ -33,7 +32,7 @@ public partial class Lobby : Panel
 		map.gameMenu.GetMap += GetMap;
 	}
 
-	private void CreateLevelButtons(string path)
+	private void CreateMapButtons(string path)
 	{
 		DirAccess dir = DirAccess.Open(path);
 
@@ -47,29 +46,51 @@ public partial class Lobby : Panel
 		{
 			if (!dir.CurrentIsDir())
 			{
-				LevelButton levelButton = new LevelButton(fileName, n, LevelPressed);
-				grid.AddChild(levelButton);
+				MapButton mapButton = new MapButton(fileName, n, LevelPressed);
+				grid.AddChild(mapButton);
 			} else {
 				GD.Print("folder " + fileName);
 				n--;
-				//CreateLevelButtons(fileName);//recursive folder open
+				//CreateMapButtons(fileName);//recursive folder open
 			}
 			fileName = dir.GetNext();
 			n++;
 		}
 	}
 
-	private void LevelPressed(LevelButton levelButton)
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal=true)]
+	private void UpdateSelectedLevel(string name, int number)
 	{
-		if (selectedLevel != null)
-			selectedLevel.Disabled = false;
-		selectedLevel = levelButton;
+		if (selectedMapNumber >= 0)
+		{
+			if (grid.GetChild(selectedMapNumber) is MapButton oldButton)
+				oldButton.Disabled = false;
+		}
+		if (gameManager.isAlone || gameManager.otherPlayer != null || gameManager.player.id != 1) {
+			GetNode<Button>("Ready").Disabled = false;
+		}
+		if (grid.GetChild(number) is MapButton button)
+			button.Disabled = true;
+		selectedMap = name;
+		selectedMapNumber = number;
+	}
+
+	private void LevelPressed(MapButton mapButton)
+	{
+		Rpc(nameof(UpdateSelectedLevel), mapButton.mapName, mapButton.mapNumber);
 	}
 
 	private void JoinUpdate()
 	{
 		Rpc(nameof(UpdateMenu));
-		timer.QueueFree();
+		gameManager.UpdateServer += UpdateServer;
+		timer.QueueFree();//use for start timer, free to be removed
+	}
+
+	private void UpdateServer()
+	{
+		if (selectedMapNumber >= 0)
+			Rpc(nameof(UpdateSelectedLevel), selectedMap, selectedMapNumber);
 	}
 
     private void UpdatePlayerInfo(Player player)
@@ -77,6 +98,7 @@ public partial class Lobby : Panel
 		int playerNumber = player.id == 1 ? 1 : 2;
 		GetNode<Label>("VBox/Player" + playerNumber + "/Name").Text = player.name;
 		GetNode<Label>("VBox/Player" + playerNumber + "/Character").Text = player.characterType.ToString();
+		GetNode<Label>("VBox/Player" + playerNumber + "/Ready").Text = player.isReady ? "Ready" : "Not Ready";
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal=true)]
@@ -85,7 +107,6 @@ public partial class Lobby : Panel
 		UpdatePlayerInfo(gameManager.player);
 		if (gameManager.otherPlayer != null)
 			UpdatePlayerInfo(gameManager.otherPlayer);
-		GetNode<Button>("StartMap").Disabled = gameManager.isAlone && gameManager.otherPlayer != null;
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal=true)]
@@ -94,7 +115,13 @@ public partial class Lobby : Panel
 		map.StartMap(mapName, mapNumber);
 		Visible = false;
 		map.Visible = true;
-	} 
+	}
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer)]
+	private void UpdateReady(bool isReady)
+	{
+		gameManager.otherPlayer.isReady = isReady;
+		UpdatePlayerInfo(gameManager.otherPlayer);
+	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal=true)]
 	private void SwitchCharacter()
@@ -104,17 +131,31 @@ public partial class Lobby : Panel
 			gameManager.otherPlayer.characterType = gameManager.otherPlayer.characterType == CharacterType.Ponkotsu ? CharacterType.Bonkura : CharacterType.Ponkotsu;
 		UpdateMenu();
 	}
+
 	public void ReloadLobby()
 	{
 		map.Visible = false;
 		Visible = true;
+		GetNode<Button>("Ready").Text = "Ready";
+		gameManager.player.isReady = false;
+		UpdatePlayerInfo(gameManager.player);
+		if (gameManager.otherPlayer != null)
+		{
+			gameManager.otherPlayer.isReady = false;
+			UpdatePlayerInfo(gameManager.otherPlayer);
+		}
+		if (grid.GetChild(selectedMapNumber) is MapButton button)
+				button.Disabled = false;
+		selectedMap = null;
+		selectedMapNumber = -1;
 	}
+
 	public string GetMap(int number)
 	{
 		if (number >= grid.GetChildCount())
 			return null;
-		if (grid.GetChild(number) is LevelButton button)
-			return button.levelName;
+		if (grid.GetChild(number) is MapButton button)
+			return button.mapName;
 		return null;
 	}
 
@@ -122,11 +163,18 @@ public partial class Lobby : Panel
 	{
 		Rpc(nameof(SwitchCharacter));
 	}
-	public void _on_start_map_pressed()
+
+	public void _on_ready_pressed()
 	{
-		if (selectedLevel != null)
-			Rpc(nameof(StartMap), selectedLevel.levelName, selectedLevel.levelNumber);
-		//Rpc(nameof(StartMap), "level-1");
+		gameManager.player.isReady = !gameManager.player.isReady;
+		
+		GetNode<Button>("Ready").Text = gameManager.player.isReady ? "Not\nReady" : "Ready";
+		UpdatePlayerInfo(gameManager.player);
+		Rpc(nameof(UpdateReady), gameManager.player.isReady);
+		if (gameManager.isAlone || (gameManager.otherPlayer != null && gameManager.otherPlayer.isReady))
+		{
+			Rpc(nameof(StartMap), selectedMap, selectedMapNumber);
+		}
 	}
 
 	public void _on_leave_pressed()

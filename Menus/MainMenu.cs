@@ -58,6 +58,8 @@ public partial class MainMenu : Panel
 	{
 		if (!controller.Host())
 			GD.Print("host failed");
+		playMenu.Visible = false;
+		menu.Visible = true;
 	}
 	public void _on_join_pressed()
 	{
@@ -74,6 +76,8 @@ public partial class MainMenu : Panel
 	{
 		//string address = GetNode<TextEdit>("JoinMenu/TextEdit").Text;
 		controller.Join("127.0.0.1");
+		joinMenu.Visible = false;
+		menu.Visible = true;
 	}
 	//name popup
 	public void _on_confirm_name_pressed()

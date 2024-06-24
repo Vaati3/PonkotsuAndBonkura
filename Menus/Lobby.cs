@@ -179,7 +179,14 @@ public partial class Lobby : Panel
 
 	public void _on_leave_pressed()
 	{
-		gameManager.isAlone = false;
+		AddChild(Popup.Open("Are you sure you want to leave ?", ConfirmLeave));
 		//to be completed button is not visible
+	}
+
+	public void ConfirmLeave()
+	{
+		gameManager.isAlone = false;
+		GetNode<MainMenu>("/root/MainMenu").Visible = true;
+		QueueFree();
 	}
 }

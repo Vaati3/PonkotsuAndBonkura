@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://7640xxkbddua"]
+[gd_scene load_steps=5 format=3 uid="uid://7640xxkbddua"]
 
 [ext_resource type="Script" path="res://Menus/Lobby.cs" id="1_62gdr"]
 [ext_resource type="Theme" uid="uid://dundbkyo1dqnu" path="res://Menus/Themes/Panel.tres" id="1_w2lth"]
 [ext_resource type="Theme" uid="uid://c7wnqipmhvxh0" path="res://Menus/Themes/Button.tres" id="3_o5ijt"]
+[ext_resource type="FontFile" uid="uid://dbv2ovpyr0js6" path="res://Menus/Themes/PlaywriteFRTrad-Regular.ttf" id="4_ls8ml"]
 
 [node name="Lobby" type="Panel"]
 anchors_preset = 15
@@ -29,14 +30,15 @@ text = "Switch
 roles"
 
 [node name="Leave" type="Button" parent="."]
-visible = false
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_top = -100.0
-offset_right = 100.0
+offset_left = 17.0
+offset_top = -118.0
+offset_right = 117.0
+offset_bottom = -16.0
 grow_vertical = 0
 theme = ExtResource("3_o5ijt")
 text = "Leave
@@ -59,8 +61,10 @@ text = "Ready"
 
 [node name="VBox" type="VBoxContainer" parent="."]
 layout_mode = 0
-offset_right = 236.0
-offset_bottom = 92.0
+offset_left = 45.0
+offset_top = 46.0
+offset_right = 479.0
+offset_bottom = 138.0
 alignment = 1
 
 [node name="Player1" type="HBoxContainer" parent="VBox"]
@@ -70,12 +74,21 @@ alignment = 1
 
 [node name="Name" type="Label" parent="VBox/Player1"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("4_ls8ml")
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Character" type="Label" parent="VBox/Player1"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("4_ls8ml")
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Ready" type="Label" parent="VBox/Player1"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("4_ls8ml")
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Player2" type="HBoxContainer" parent="VBox"]
 layout_mode = 2
@@ -84,12 +97,21 @@ alignment = 1
 
 [node name="Name" type="Label" parent="VBox/Player2"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("4_ls8ml")
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Character" type="Label" parent="VBox/Player2"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("4_ls8ml")
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Ready" type="Label" parent="VBox/Player2"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("4_ls8ml")
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="GridContainer" type="GridContainer" parent="."]
 layout_mode = 1
@@ -99,9 +121,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -473.0
-offset_top = -86.0
+offset_top = -154.0
 offset_right = 474.0
-offset_bottom = 243.0
+offset_bottom = 178.0
 grow_horizontal = 2
 grow_vertical = 2
 columns = 10

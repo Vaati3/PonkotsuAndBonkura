@@ -29,8 +29,8 @@ public partial class MainMenu : Panel
 
 	public void OpenLobby()
 	{
-		Lobby lobby = GD.Load<PackedScene>("res://Menus/Lobby.tscn").Instantiate<Lobby>();
-		GetTree().Root.AddChild(lobby);
+		controller.lobby = GD.Load<PackedScene>("res://Menus/Lobby.tscn").Instantiate<Lobby>();
+		GetTree().Root.AddChild(controller.lobby);
 		Visible = false;
 	}
 

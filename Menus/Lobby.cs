@@ -164,6 +164,32 @@ public partial class Lobby : Panel
 		Rpc(nameof(SwitchCharacter));
 	}
 
+
+	public void ConfirmLeave()
+	{
+		GetNode<MainMenu>("/root/MainMenu").Visible = true;
+		GetNode<MultiplayerController>("/root/MultiplayerController").Quit();
+		HideGame();
+	}
+
+	public void HideGame()
+	{
+		map.BacktoLobby();
+		Visible = false;
+	}
+
+	public void PlayerDisconnected()
+	{
+		GetNode<Label>("VBox/Player2/Name").Text = "";
+		GetNode<Label>("VBox/Player2/Character").Text = "";
+		GetNode<Label>("VBox/Player2/Ready").Text = "";
+		Button button = GetNode<Button>("Ready");
+		button.Text = "Ready";
+		button.Disabled = true;
+		gameManager.player.isReady = false;
+		UpdatePlayerInfo(gameManager.player);
+	}
+
 	public void _on_ready_pressed()
 	{
 		gameManager.player.isReady = !gameManager.player.isReady;
@@ -181,12 +207,5 @@ public partial class Lobby : Panel
 	{
 		AddChild(Popup.Open("Are you sure you want to leave ?", ConfirmLeave));
 		//to be completed button is not visible
-	}
-
-	public void ConfirmLeave()
-	{
-		gameManager.isAlone = false;
-		GetNode<MainMenu>("/root/MainMenu").Visible = true;
-		QueueFree();
 	}
 }

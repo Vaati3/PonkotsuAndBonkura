@@ -68,4 +68,10 @@ public partial class GameManager : Node
 		player = Player.FromString(file.GetAsText());
 		return true;
 	}
+
+	public void Clear()
+	{
+		otherPlayer = null;
+		isAlone = false;
+	}
 }

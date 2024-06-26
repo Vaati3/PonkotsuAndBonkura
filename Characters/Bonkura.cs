@@ -3,11 +3,9 @@ using System;
 
 public partial class Bonkura : Character
 {
-    [Export]float jumpHeight = 100;
-    [Export]float jumpAscendTime = 0.5f;
-    [Export]float jumpFallTime = 0.4f;
-
-    
+    float jumpHeight = 100;
+    float jumpAscendTime = 0.5f;
+    float jumpFallTime = 0.4f;
     float jumpVelocity;
     float jumpGravity;
     float fallGravity;
@@ -95,6 +93,7 @@ public partial class Bonkura : Character
         map.SetTile(x, y, tile);
         return true;
     }
+
     protected override void UpdateMap()
 	{
 		Vector3I tilePos = Vector3I.Zero;

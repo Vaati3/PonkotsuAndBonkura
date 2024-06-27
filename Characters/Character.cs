@@ -64,7 +64,7 @@ public abstract partial class Character : CharacterBody2D
 		pos.globalPos = spawns[(int)GetCharacterType()];
 		Position = pos.GetLocalPos();
 		other.pos.globalPos = spawns[(int)other.GetCharacterType()];
-		other.Position = other.pos.GetLocalPos();
+		other.Position = pos.GlobalToLocal(other.pos.globalPos);
 		UpdateMap();
 		UpdateVisibility();
 
@@ -75,7 +75,7 @@ public abstract partial class Character : CharacterBody2D
 	{
 		isControlled = true;
 		Position = pos.GetLocalPos();
-		other.Position = other.pos.GetLocalPos();
+		other.Position = pos.GlobalToLocal(other.pos.globalPos);
 		UpdateMap();
 		UpdateVisibility();
 
@@ -88,20 +88,11 @@ public abstract partial class Character : CharacterBody2D
 		GetNode<Camera2D>("Camera").Enabled = false;
 	}
 
-	public void HiddenMove(Vector3 dir)
-	{
-		if (!gameManager.isAlone || isControlled)
-		{
-			Move(dir);
-			return;
-		}
-		pos.globalPos += dir;
-	}
 	public virtual void Move(Vector3 dir)
 	{
 		if (gameManager.isAlone && !isControlled)
 		{
-			HiddenMove(dir);
+			pos.globalPos += dir;
 			return;
 		}
 		direction = dir;
@@ -132,7 +123,7 @@ public abstract partial class Character : CharacterBody2D
 	protected void UpdatePosition(Vector3 newPos)
 	{
 		pos.globalPos = newPos;
-		Position = other.pos.GetLocalPos();
+		Position = other.pos.GlobalToLocal(newPos);
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer)]

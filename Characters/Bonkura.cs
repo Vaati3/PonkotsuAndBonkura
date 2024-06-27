@@ -59,22 +59,10 @@ public partial class Bonkura : Character
     {
         return CharacterType.Bonkura;
     }
-    public override Vector2 GetLocalPos(Vector3 pos)
-    {
-        return new Vector2(pos.X, pos.Y);
-    }
-    public override Vector3 GetGlobalPos(float x, float y)
-    {
-        return new Vector3(x, y, position3D.Z);
-    }
-    public override Vector3 GetGlobalPos(Vector2 pos, Vector3 dir)
-    {
-        return new Vector3(pos.X, pos.Y, position3D.Z + dir.Z);
-    }
 
-    public override bool CanSee(Vector3 pos)
+    public override bool CanSee(Vector3 otherPos)
     {
-        return (int)(position3D.Z / MapGenerator.tileSize) == (int)(pos.Z / MapGenerator.tileSize);
+        return (int)(pos.globalPos.Z / MapGenerator.tileSize) == (int)(otherPos.Z / MapGenerator.tileSize);
     }
 
     protected override bool UpdateTile(Vector3I tilePos, int x, int y)
@@ -97,7 +85,7 @@ public partial class Bonkura : Character
     protected override void UpdateMap()
 	{
 		Vector3I tilePos = Vector3I.Zero;
-		tilePos.Z = MapGenerator.GetTilePos(position3D).Z;
+		tilePos.Z = MapGenerator.GetTilePos(pos.globalPos).Z;
 		for (int y = 0; y < map.generator.size.Y; y++)
 		{
 			tilePos.X = 0;

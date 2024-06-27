@@ -5,7 +5,6 @@ public partial class Ponkotsu : Character
 {
     float gravity = 150;
 
-
     public override void _PhysicsProcess(double delta)
     {
         if (!isControlled)
@@ -43,22 +42,10 @@ public partial class Ponkotsu : Character
     {
         return CharacterType.Ponkotsu;
     }
-    public override Vector2 GetLocalPos(Vector3 pos)
-    {
-        return new Vector2(pos.X, pos.Z);
-    }
-    public override Vector3 GetGlobalPos(float x, float y)
-    {
-        return new Vector3(x, position3D.Y, y);
-    }
-    public override Vector3 GetGlobalPos(Vector2 pos, Vector3 dir)
-    {
-        return new Vector3(pos.X, position3D.Y + dir.Y, pos.Y);
-    }
 
-    public override bool CanSee(Vector3 pos)
+    public override bool CanSee(Vector3 otherPos)
     {
-        return (int)(position3D.Y / MapGenerator.tileSize) == (int)(pos.Y / MapGenerator.tileSize);
+        return (int)(pos.globalPos.Y / MapGenerator.tileSize) == (int)(otherPos.Y / MapGenerator.tileSize);
     }
 
     protected override bool UpdateTile(Vector3I tilePos, int x, int y)
@@ -86,7 +73,7 @@ public partial class Ponkotsu : Character
     protected override void UpdateMap()
 	{
 		Vector3I tilePos = Vector3I.Zero;
-		tilePos.Y = MapGenerator.GetTilePos(position3D).Y;
+		tilePos.Y = MapGenerator.GetTilePos(pos.globalPos).Y;
 		for (int z = 0; z < map.generator.size.Z; z++)
 		{
 			tilePos.X = 0;

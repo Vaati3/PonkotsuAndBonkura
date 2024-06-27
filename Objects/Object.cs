@@ -82,9 +82,9 @@ public abstract partial class Object : Node2D
 	{
 		Vector3 min = position3D - overlapSize / 2;
 		Vector3 max = position3D + overlapSize / 2;
-		if (player.position3D.X >= min.X && player.position3D.X <= max.X &&
-			player.position3D.Y >= min.Y && player.position3D.Y <= max.Y &&
-			player.position3D.Z >= min.Z && player.position3D.Z <= max.Z)
+		if (player.pos.globalPos.X >= min.X && player.pos.globalPos.X <= max.X &&
+			player.pos.globalPos.Y >= min.Y && player.pos.globalPos.Y <= max.Y &&
+			player.pos.globalPos.Z >= min.Z && player.pos.globalPos.Z <= max.Z)
 			return true;
 		return false;
 	}
@@ -110,7 +110,7 @@ public abstract partial class Object : Node2D
 	private void SetPosition(Vector3 pos)
 	{
 		position3D = pos;
-		Position = player.GetLocalPos(pos);
+		Position = player.pos.GlobalToLocal(pos);
 	}
 
 	private void UpdateVisibility()
@@ -120,7 +120,7 @@ public abstract partial class Object : Node2D
 
 	public void Update()
 	{	
-		Position = player.GetLocalPos(position3D);
+		Position = player.pos.GlobalToLocal(position3D);
 
 		if (detectOverlap && CheckOverlap())
 		{

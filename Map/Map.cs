@@ -50,8 +50,8 @@ public partial class Map : TileMap
 
     public override void _Process(double delta)
     {
-        ponkotsuDebug.Text = "Ponkotsu X: " + ponkotsu.position3D.X + ", Y: " + ponkotsu.position3D.Y + ", Z: " + ponkotsu.position3D.Z;
-		bonkuraDebug.Text = "Bonkura X: " + bonkura.position3D.X + ", Y: " + bonkura.position3D.Y + ", Z: " + bonkura.position3D.Z;
+        ponkotsuDebug.Text = "Ponkotsu X: " + ponkotsu.pos.globalPos.X + ", Y: " + ponkotsu.pos.globalPos.Y + ", Z: " + ponkotsu.pos.globalPos.Z;
+		bonkuraDebug.Text = "Bonkura X: " + bonkura.pos.globalPos.X + ", Y: " + bonkura.pos.globalPos.Y + ", Z: " + bonkura.pos.globalPos.Z;
     }
 
     public void StartMap(string mapName, int mapNumber)

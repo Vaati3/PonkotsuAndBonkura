@@ -24,10 +24,8 @@ script = ExtResource("4_40oqy")
 [node name="GameMenu" parent="." instance=ExtResource("6_v4ehb")]
 
 [node name="Shader" type="CanvasLayer" parent="."]
-visible = false
 
 [node name="Debug" type="VBoxContainer" parent="Shader"]
-visible = false
 offset_right = 274.0
 offset_bottom = 239.0
 size_flags_horizontal = 4

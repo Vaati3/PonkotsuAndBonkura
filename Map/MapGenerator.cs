@@ -13,12 +13,6 @@ public enum Tile {
 	ButtonX, ButtonY, ButtonZ
 }
 
-public enum Axis {
-	X,
-	Y,
-	Z
-}
-
 public partial class MapGenerator : Node
 {
 	public const int tileSize = 100;

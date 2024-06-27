@@ -13,7 +13,7 @@ public abstract partial class Character : CharacterBody2D
 	protected Map map;
 	protected bool isControlled = false;
 	public Character other {get; private set;}
-	public Vector3 position3D {get; private set;}
+	public Position pos {get; protected set;}
 	public Vector3 direction {get; private set;}
 	[Export]public float speed = 100;
 	protected Sprite2D sprite;
@@ -23,7 +23,7 @@ public abstract partial class Character : CharacterBody2D
 
 	public override void _Ready()
 	{
-		position3D = Vector3.Zero;
+		pos = new Position(GetCharacterType());
 		direction = Vector3.Zero;
 		canFall = true;
 		gameManager = GetNode<GameManager>("/root/GameManager");
@@ -61,10 +61,10 @@ public abstract partial class Character : CharacterBody2D
 	{
 		isControlled = true;
 
-		position3D = spawns[(int)GetCharacterType()];
-		Position = GetLocalPos(position3D);
-		other.position3D = spawns[(int)other.GetCharacterType()];
-		other.Position = GetLocalPos(other.position3D);
+		pos.globalPos = spawns[(int)GetCharacterType()];
+		Position = pos.GetLocalPos();
+		other.pos.globalPos = spawns[(int)other.GetCharacterType()];
+		other.Position = other.pos.GetLocalPos();
 		UpdateMap();
 		UpdateVisibility();
 
@@ -74,8 +74,8 @@ public abstract partial class Character : CharacterBody2D
 	public void Possess()
 	{
 		isControlled = true;
-		Position = GetLocalPos(position3D);
-		other.Position = GetLocalPos(other.position3D);
+		Position = pos.GetLocalPos();
+		other.Position = other.pos.GetLocalPos();
 		UpdateMap();
 		UpdateVisibility();
 
@@ -95,7 +95,7 @@ public abstract partial class Character : CharacterBody2D
 			Move(dir);
 			return;
 		}
-		position3D += dir;
+		pos.globalPos += dir;
 	}
 	public virtual void Move(Vector3 dir)
 	{
@@ -105,16 +105,16 @@ public abstract partial class Character : CharacterBody2D
 			return;
 		}
 		direction = dir;
-		Velocity = GetLocalPos(dir);
+		Velocity = pos.GlobalToLocal(dir);
 		MoveAndSlide();
-		position3D = GetGlobalPos(Position, dir);
+		pos.Move(Position, dir);
 		UpdateVisibility();
 		map.UpdateObjects();
 
-		Rpc(nameof(UpdatePosition), position3D);
+		Rpc(nameof(UpdatePosition), pos.globalPos);
 		
-		if (isControlled && map.generator.GetTile(position3D) == (Tile)((int)Tile.PonkotsuGoal + GetCharacterType()) &&
-			map.generator.GetTile(other.position3D) == (Tile)((int)Tile.PonkotsuGoal + other.GetCharacterType()))
+		if (isControlled && map.generator.GetTile(pos.globalPos) == (Tile)((int)Tile.PonkotsuGoal + GetCharacterType()) &&
+			map.generator.GetTile(other.pos.globalPos) == (Tile)((int)Tile.PonkotsuGoal + other.GetCharacterType()))
 			map.gameMenu.MapCompleted();
 	}
 
@@ -129,10 +129,10 @@ public abstract partial class Character : CharacterBody2D
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer)]
-	protected void UpdatePosition(Vector3 pos)
+	protected void UpdatePosition(Vector3 newPos)
 	{
-		position3D = pos;
-		Position = other.GetLocalPos(pos);
+		pos.globalPos = newPos;
+		Position = other.pos.GetLocalPos();
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer)]
@@ -141,7 +141,7 @@ public abstract partial class Character : CharacterBody2D
 		Visible = true;
 		if (!isControlled)
 			return;
-		other.Visible = CanSee(other.position3D);
+		other.Visible = CanSee(other.pos.globalPos);
 		if (!gameManager.isAlone)
 			other.UpdateVisibility(gameManager.otherPlayer.id);
 	}
@@ -155,7 +155,7 @@ public abstract partial class Character : CharacterBody2D
 		if (!canFall)
 			return false;
 		float half = sprite.Texture.GetSize().Y * sprite.Scale.Y / 2f + 1;
-        if (map.generator.GetTile(position3D.X, position3D.Y + half, position3D.Z) != Tile.Block)
+        if (map.generator.GetTile(pos.globalPos.X, pos.globalPos.Y + half, pos.globalPos.Z) != Tile.Block)
 			return true;
 		return false;
 	}
@@ -181,9 +181,6 @@ public abstract partial class Character : CharacterBody2D
 	}
 
 	public abstract CharacterType GetCharacterType();
-	public abstract Vector2 GetLocalPos(Vector3 pos);
-	public abstract Vector3 GetGlobalPos(float x, float y);
-	public abstract Vector3 GetGlobalPos(Vector2 pos, Vector3 dir);
-	public abstract bool CanSee(Vector3 pos);
+	public abstract bool CanSee(Vector3 otherPos);
 	protected abstract void UpdateMap();
 }

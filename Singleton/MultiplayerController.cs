@@ -74,6 +74,8 @@ public partial class MultiplayerController : Node
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer)]
 	public void KickPlayer(string reason)
 	{
+		if (Multiplayer.MultiplayerPeer is OfflineMultiplayerPeer)
+			return;
 		lobby.HideGame();
 		GetNode<MainMenu>("/root/MainMenu").Visible = true;
 		peer.Close();
@@ -82,7 +84,7 @@ public partial class MultiplayerController : Node
 		AddChild(Popup.Open(reason));
 	}
 
-//multiplayer signals
+	//multiplayer signals
 	public void PlayerConnected(long id)
 	{
 		GD.Print("Player " + id + " connected");

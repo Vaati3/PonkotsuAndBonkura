@@ -136,6 +136,7 @@ public abstract partial class Character : CharacterBody2D
 		if (!gameManager.isAlone)
 			other.UpdateVisibility(gameManager.otherPlayer.id);
 	}
+	
 	protected void UpdateVisibility(long id)
 	{
 		RpcId(id, nameof(UpdateVisibility));
@@ -172,6 +173,9 @@ public abstract partial class Character : CharacterBody2D
 	}
 
 	public abstract CharacterType GetCharacterType();
-	public abstract bool CanSee(Vector3 otherPos);
+	public bool CanSee(Vector3 otherPos)
+    {
+        return (int)(pos.GetBlindAxisValue(pos.globalPos) / MapGenerator.tileSize) == (int)(pos.GetBlindAxisValue(otherPos) / MapGenerator.tileSize);
+    }
 	protected abstract void UpdateMap();
 }

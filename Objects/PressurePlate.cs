@@ -1,4 +1,5 @@
 using Godot;
+using System.Collections.Generic;
 
 public partial class PressurePlate : Object
 {
@@ -7,6 +8,25 @@ public partial class PressurePlate : Object
 
     Texture2D topTexturePressed;
     Texture2D sideTexturePressed;
+
+    static public PressurePlate CreatePressurePlate(Character character, Vector3I pos, Tile tile, List<Object> objects)
+    {
+        PressurePlate pressurePlate = CreateObject<PressurePlate>(character, pos);
+        GD.Print(Map.AlignPos(pos));
+        foreach(Object obj in objects)
+		{
+			if (!obj.activatable)
+				continue;
+			Vector3I objPos = MapGenerator.GetTilePos(obj.position3D);
+			if ((tile == Tile.ButtonX && pos.X == objPos.X) ||
+				(tile == Tile.ButtonY && pos.Y == objPos.Y) ||
+				(tile == Tile.ButtonZ && pos.Z == objPos.Z) )
+			{
+				pressurePlate.ButtonPressed += obj.Trigger;
+			}
+		}
+        return pressurePlate;
+    }
 
     public override void InitObject(Character player, Vector3 pos)
     {

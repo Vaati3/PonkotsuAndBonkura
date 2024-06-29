@@ -20,6 +20,15 @@ public abstract partial class Object : Node2D
 
 	[Signal]public delegate void FreeObjectEventHandler(Object obj);
 
+	static public T CreateObject<T>(Character character, Vector3I tilePos) where T : Object, new()
+	{
+		Vector3 pos =  Map.AlignPos(tilePos);
+		T obj = new T();
+		obj.InitObject(character, pos);
+
+		return obj;
+	}
+
 	public Object()
 	{
 		sprite = new Sprite2D();

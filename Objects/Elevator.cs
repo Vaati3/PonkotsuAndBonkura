@@ -13,6 +13,27 @@ public partial class Elevator : Object
     int direction;
     Axis axis;
     Timer pauseTimer;
+
+    static public Elevator CreateElevator(Map map, Character character, Vector3I pos, Tile tile)
+    {
+        List<Vector3I> stops = map.generator.Search(Tile.ElevatorStop, (Axis)((int)tile-(int)Tile.ElevatorX), pos);
+		if (stops.Count != 0)
+		{
+			Elevator elevator = CreateObject<Elevator>(character, pos);
+            foreach(Vector3I stop in stops)
+            {
+                elevator.stops.Add(Map.AlignPos(stop));
+                map.generator.SetTile(Tile.Void, stop);
+            }
+            Axis axis = (Axis)((int)tile-(int)Tile.ElevatorX);
+            elevator.axis = axis;
+            elevator.forward = axis == Axis.X ? Vector3.Right : axis == Axis.Y ? Vector3.Up : Vector3.Back;
+            elevator.direction = elevator.GetAxisValue(elevator.position3D) > elevator.GetAxisValue(elevator.stops[elevator.nextStop]) ? -1 : 1;
+            return elevator;
+		}
+        return null;
+    }
+
     public override void InitObject(Character player, Vector3 pos)
     {
         base.InitObject(player, pos);
@@ -30,18 +51,6 @@ public partial class Elevator : Object
 
         SetTexture("res://Objects/Textures/ElevatorTop.png", "res://Objects/Textures/ElevatorSide.png");
         activatable = true;
-    }
-
-    public void Setup(Axis axis, List<Vector3I> stops, MapGenerator generator)
-    {
-        foreach(Vector3I stop in stops)
-        {
-            this.stops.Add(Map.AlignPos(stop));
-            generator.SetTile(Tile.Void, stop);
-        }
-        this.axis = axis;
-        forward = axis == Axis.X ? Vector3.Right : axis == Axis.Y ? Vector3.Up : Vector3.Back;
-        direction = GetAxisValue(position3D) > GetAxisValue(this.stops[nextStop]) ? -1 : 1;
     }
 
     public override void _PhysicsProcess(double delta)

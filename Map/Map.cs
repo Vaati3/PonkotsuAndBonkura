@@ -95,7 +95,7 @@ public partial class Map : TileMap
 
 	private void GenerateObjects()
 	{
-
+		Character character = gameManager.player.characterType == CharacterType.Ponkotsu ? ponkotsu : bonkura;
 		Dictionary<Vector3I, Tile> buttons = new Dictionary<Vector3I, Tile>();
 		MapGenerator.Action action = (tile, pos) => {
 			if (tile > Tile.BonkuraGoal && tile != Tile.ElevatorStop)
@@ -103,12 +103,7 @@ public partial class Map : TileMap
 				switch (tile)
 				{
 					case Tile.ElevatorX: case Tile.ElevatorY : case Tile.ElevatorZ:
-						List<Vector3I> stops = generator.Search(Tile.ElevatorStop, (Axis)((int)tile-(int)Tile.ElevatorX), pos);
-						if (stops.Count != 0)
-						{
-							Elevator elevator = CreateObject<Elevator>(pos);
-							elevator.Setup((Axis)((int)tile-(int)Tile.ElevatorX), stops, generator);
-						}
+						AddObject(Elevator.CreateElevator(this, character, pos, tile));
 						break;
 					case Tile.ButtonX: case Tile.ButtonY: case Tile.ButtonZ:
 						buttons.Add(pos, tile);
@@ -119,38 +114,20 @@ public partial class Map : TileMap
 		};
 		generator.LoopAction(action);
 		foreach(KeyValuePair<Vector3I, Tile> button in buttons)
-		{
-			PressurePlate buttonObj = CreateObject<PressurePlate>(button.Key);
-			foreach(Object obj in objects)
-			{
-				if (!obj.activatable)
-					continue;
-				Vector3I pos = MapGenerator.GetTilePos(obj.position3D);
-				if ((button.Value == Tile.ButtonX && button.Key.X == pos.X) ||
-					(button.Value == Tile.ButtonY && button.Key.Y == pos.Y) ||
-					(button.Value == Tile.ButtonZ && button.Key.Z == pos.Z) )
-				{
-					buttonObj.ButtonPressed += obj.Trigger;
-				}
-			}
-		}
+			AddObject(PressurePlate.CreatePressurePlate(character, button.Key, button.Value, objects));
 		UpdateObjects();
 	}
 
-	private T CreateObject<T>(Vector3I tilePos) where T : Object, new()
+	private void AddObject(Object obj)
 	{
-		Character character = gameManager.player.characterType == CharacterType.Ponkotsu ? ponkotsu : bonkura;
-		Vector3 pos = AlignPos(tilePos);
-		T obj = new T();
-		obj.InitObject(character, pos);
+		if (obj == null)
+			return;
 		obj.FreeObject += FreeObject;
-
 		objectLayer.AddChild(obj);
 		objects.Add(obj);
-		return obj;
 	}
 
-	private void FreeObject(Object obj)
+	public void FreeObject(Object obj)
 	{
 		freeQueue.Enqueue(obj);
 	}

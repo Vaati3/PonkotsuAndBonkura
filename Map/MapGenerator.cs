@@ -10,7 +10,8 @@ public enum Tile {
 	PonkotsuSpawn, BonkuraSpawn,
 	PonkotsuGoal, BonkuraGoal,
 	ElevatorX, ElevatorY, ElevatorZ, ElevatorStop,
-	ButtonX, ButtonY, ButtonZ
+	ButtonX, ButtonY, ButtonZ,
+	Rotator
 }
 
 public partial class MapGenerator : Node

@@ -15,7 +15,8 @@ Tiles = [
     [255, 145, 0],  #elvator stop
     [255, 0, 255],  #button X
     [200, 0, 200],  #button Y
-    [145, 0, 145]   #button Z
+    [145, 0, 145],  #button Z
+    [0, 0, 255]     #rotator 
 ]
 
 parser = argparse.ArgumentParser(description="Process some integers.")
@@ -37,7 +38,7 @@ def read_file(path):
     header = True
     size = get_size(args.size)
     half = {"x": math.floor(size["x"]/2), "y": math.floor(size["y"]/2), "z": math.floor(size["z"]/2)}
-    data:str = [chr(0)] * (size["x"] * size["y"] * size["z"])
+    data = [0] * (size["x"] * size["y"] * size["z"])
     for line in file:
         if header:
             if line == "end_header\n":
@@ -50,17 +51,24 @@ def read_file(path):
             value = 0
             for tile in Tiles:
                 if list[3] == tile[0] and list[4] == tile[1] and list[5] == tile[2]:
-                    data[list[0] + (list[1] * size["x"]) + (list[2] * size["x"] * size["y"])] = chr(value)
+                    data[list[0] + (list[1] * size["x"]) + (list[2] * size["x"] * size["y"])] = value
                 value += 1
     file.close()
-    return "".join(data)
+    return data
 
 def create_level_file(path, data):
     name = os.path.splitext(os.path.basename(path))[0]
     path = args.dest + name + ".dat"
-
-    file = open(path, "w")
-    file.write(args.size + "\n" + data)
+    sizeBytes = []
+    size = get_size(args.size)
+    sizeBytes += [ord(c) for c in str(size["x"])]
+    sizeBytes += [ord("x")]
+    sizeBytes += [ord(c) for c in str(size["y"])]
+    sizeBytes += [ord("x")]
+    sizeBytes += [ord(c) for c in str(size["z"])]
+    sizeBytes += [ord("\n")]
+    file = open(path, "wb")
+    file.write(bytearray(sizeBytes) + bytearray(data))
     file.close()
 
 if (args.files == None):

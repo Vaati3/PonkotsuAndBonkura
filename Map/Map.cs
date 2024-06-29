@@ -58,7 +58,7 @@ public partial class Map : TileMap
 	{
 		gameMenu.Init(mapName, mapNumber);
 		generator.Read(mapName);
-		GenerateObjects();
+		FillObjects();
 		if (gameManager.player.characterType == CharacterType.Ponkotsu)
 			ponkotsu.Possess(generator.spawns);
 		else
@@ -93,7 +93,7 @@ public partial class Map : TileMap
 		}
 	}
 
-	private void GenerateObjects()
+	private void FillObjects()
 	{
 		Character character = gameManager.player.characterType == CharacterType.Ponkotsu ? ponkotsu : bonkura;
 		Dictionary<Vector3I, Tile> buttons = new Dictionary<Vector3I, Tile>();
@@ -107,6 +107,9 @@ public partial class Map : TileMap
 						break;
 					case Tile.ButtonX: case Tile.ButtonY: case Tile.ButtonZ:
 						buttons.Add(pos, tile);
+						break;
+					case Tile.Rotator:
+						AddObject(Object.CreateObject<Rotator>(character, pos));
 						break;
 				}
 				generator.SetTile(Tile.Void, pos);

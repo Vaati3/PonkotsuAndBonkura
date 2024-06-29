@@ -12,7 +12,6 @@ public partial class PressurePlate : Object
     static public PressurePlate CreatePressurePlate(Character character, Vector3I pos, Tile tile, List<Object> objects)
     {
         PressurePlate pressurePlate = CreateObject<PressurePlate>(character, pos);
-        GD.Print(Map.AlignPos(pos));
         foreach(Object obj in objects)
 		{
 			if (!obj.activatable)

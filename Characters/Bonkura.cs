@@ -60,6 +60,16 @@ public partial class Bonkura : Character
         return CharacterType.Bonkura;
     }
 
+    public void RotateAxis()
+    {
+        if (pos.blindAxis == Axis.Z)
+            pos.blindAxis = Axis.X;
+        else
+            pos.blindAxis = Axis.Z;
+        Position = pos.GetLocalPos();
+        UpdateMap();
+    }
+
     protected override bool UpdateTile(Vector3I tilePos, int x, int y)
     {
         Vector2I tile = Vector2I.One;

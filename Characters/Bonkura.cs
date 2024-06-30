@@ -66,8 +66,11 @@ public partial class Bonkura : Character
             pos.blindAxis = Axis.X;
         else
             pos.blindAxis = Axis.Z;
-        Position = pos.GetLocalPos();
-        UpdateMap();
+        if (isControlled)
+        {
+            Position = pos.GetLocalPos();
+            UpdateMap();
+        }
     }
 
     protected override bool UpdateTile(Vector3I tilePos, int x, int y)

@@ -168,13 +168,14 @@ public partial class Lobby : Panel
 	{
 		GetNode<MainMenu>("/root/MainMenu").Visible = true;
 		GetNode<MultiplayerController>("/root/MultiplayerController").Quit();
-		HideGame();
+		CloseLobby();
 	}
 
-	public void HideGame()
+	public void CloseLobby()
 	{
-		map.BacktoLobby();
-		Visible = false;
+		map.QueueFree();
+		
+		QueueFree();
 	}
 
 	public void PlayerDisconnected()

@@ -164,4 +164,12 @@ public partial class Map : TileMap
 		GetNode<CanvasLayer>("Shader").Hide();
 		EmitSignal(nameof(UnloadMap));
 	}
+
+	public void FreeMap()
+	{
+		ClearMap();
+		ponkotsu.QueueFree();
+		bonkura.QueueFree();
+		QueueFree();
+	}
 }

@@ -76,7 +76,7 @@ public partial class MultiplayerController : Node
 	{
 		if (Multiplayer.MultiplayerPeer is OfflineMultiplayerPeer)
 			return;
-		lobby.HideGame();
+		lobby.CloseLobby();
 		GetNode<MainMenu>("/root/MainMenu").Visible = true;
 		peer.Close();
 		Multiplayer.MultiplayerPeer = new OfflineMultiplayerPeer();

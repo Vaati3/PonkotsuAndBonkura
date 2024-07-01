@@ -30,4 +30,9 @@ public partial class MapButton : Button
 		Disabled = true;
 		EmitSignal(nameof(LevelPressed), this);
 	}
+
+    public override void _Process(double delta)
+    {
+        base._Process(delta);
+    }
 }

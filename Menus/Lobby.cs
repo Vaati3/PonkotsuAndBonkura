@@ -46,8 +46,7 @@ public partial class Lobby : Panel
 		{
 			if (!dir.CurrentIsDir())
 			{
-				MapButton mapButton = new MapButton(fileName, n, LevelPressed);
-				grid.AddChild(mapButton);
+				grid.AddChild(new MapButton(fileName, n, gameManager.player.progression, LevelPressed));
 			} else {
 				GD.Print("folder " + fileName);
 				n--;
@@ -83,8 +82,8 @@ public partial class Lobby : Panel
 	private void JoinUpdate()
 	{
 		Rpc(nameof(UpdateMenu));
+		timer.QueueFree();
 		gameManager.UpdateServer += UpdateServer;
-		timer.QueueFree();//use for start timer, free to be removed
 	}
 
 	private void UpdateServer()
@@ -127,6 +126,7 @@ public partial class Lobby : Panel
 	private void SwitchCharacter()
 	{
 		gameManager.player.characterType = gameManager.player.characterType == CharacterType.Ponkotsu ? CharacterType.Bonkura : CharacterType.Ponkotsu;
+		gameManager.Save();
 		if (gameManager.otherPlayer != null)
 			gameManager.otherPlayer.characterType = gameManager.otherPlayer.characterType == CharacterType.Ponkotsu ? CharacterType.Bonkura : CharacterType.Ponkotsu;
 		UpdateMenu();
@@ -150,12 +150,12 @@ public partial class Lobby : Panel
 		selectedMapNumber = -1;
 	}
 
-	public string GetMap(int number)
+	public MapButton GetMap(int number)
 	{
 		if (number >= grid.GetChildCount())
 			return null;
 		if (grid.GetChild(number) is MapButton button)
-			return button.mapName;
+			return button;
 		return null;
 	}
 
@@ -163,7 +163,6 @@ public partial class Lobby : Panel
 	{
 		Rpc(nameof(SwitchCharacter));
 	}
-
 
 	public void ConfirmLeave()
 	{

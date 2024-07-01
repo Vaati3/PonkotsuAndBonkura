@@ -3,6 +3,7 @@ using System;
 
 public partial class GameMenu : CanvasLayer
 {
+	GameManager manager;
 	Map map;
 
 	Control levelCompleted;
@@ -11,12 +12,13 @@ public partial class GameMenu : CanvasLayer
 	public string currentMap {get; private set;}
 	public int curentMapNumber {get; private set;}
 
-	public delegate string GetMapCallback(int number);
+	public delegate MapButton GetMapCallback(int number);
 	public GetMapCallback GetMap;
 
-	string nextMap;
+	MapButton nextMap;
 	public override void _Ready()
 	{
+		manager = GetNode<GameManager>("/root/GameManager");
 		if (GetParent() is Map map)
 			this.map = map;
 
@@ -58,6 +60,12 @@ public partial class GameMenu : CanvasLayer
 		Visible = true;
 
 		nextMap = GetMap(curentMapNumber + 1);
+		if (manager.player.progression <= curentMapNumber)
+		{
+			manager.player.progression = curentMapNumber + 1;
+			manager.Save();
+			nextMap.Visible = true;
+		}
 		levelCompleted.GetNode<Button>("VBoxContainer/NextLevel").Visible = nextMap != null;
 	}
 
@@ -102,6 +110,6 @@ public partial class GameMenu : CanvasLayer
 
 	public void _on_next_level_pressed()
 	{
-		Rpc(nameof(LoadMap), nextMap, curentMapNumber + 1);
+		Rpc(nameof(LoadMap), nextMap.mapName, curentMapNumber + 1);
 	}
 }

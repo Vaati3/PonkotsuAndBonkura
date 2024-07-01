@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 public class Player {
 	public long id {get; set;}
 	public string name {get; set;}
-	public int progression {get; private set;}
+	public int progression {get; set;}
 	public CharacterType characterType {get; set;}
 	public bool isReady {get; set;}
 	public Player(long id = 0, string name = "", int progression = 0, CharacterType characterType = CharacterType.Ponkotsu)
@@ -46,6 +46,10 @@ public partial class GameManager : Node
 			otherPlayer.characterType = player.characterType == CharacterType.Ponkotsu ? CharacterType.Bonkura : CharacterType.Ponkotsu;
 		else
 			player.characterType = otherPlayer.characterType == CharacterType.Ponkotsu ? CharacterType.Bonkura : CharacterType.Ponkotsu;
+		if (newPlayer.progression > player.progression)
+			player.progression = newPlayer.progression;
+		else
+			newPlayer.progression = player.progression;
 		if (isServer)
 			EmitSignal(nameof(UpdateServer));
 	}

@@ -134,7 +134,7 @@ public abstract partial class Character : CharacterBody2D
 			return;
 		other.Visible = CanSee(other.pos.globalPos);
 		if (!gameManager.isAlone)
-			other.UpdateVisibility(gameManager.otherPlayer.id);
+			other?.UpdateVisibility(gameManager.otherPlayer.id);
 	}
 	
 	protected void UpdateVisibility(long id)

@@ -51,6 +51,8 @@ public partial class Elevator : Object
 
         SetTexture("res://Objects/Textures/ElevatorTop.png", "res://Objects/Textures/ElevatorSide.png");
         activatable = true;
+        overlapSize.Y = 10;
+        overlapOffset.Y = 10;
     }
 
     public override void _PhysicsProcess(double delta)

@@ -46,7 +46,7 @@ public partial class Ponkotsu : Character
     protected override bool UpdateTile(Vector3I tilePos, int x, int y)
     {
         if (map.generator.GetTile(tilePos) == Tile.Void && 
-            map.generator.GetTile(tilePos.X, tilePos.Y + 1, tilePos.Z) == Tile.Void)
+            map.generator.GetTile(tilePos.X, tilePos.Y + 1, tilePos.Z) != Tile.Block)
         {
             map.SetTile(x, y, new Vector2I(4,2));
             return true;

@@ -31,6 +31,7 @@ public partial class Bonkura : Character
             return;
         Vector3 dir = Vector3.Zero;
         dir.Y = Velocity.Y + (GetGravity() * (float)delta);
+        dir.Y = !canFall && dir.Y > 0 ? 0 : dir.Y;
         if (Input.IsActionPressed("move_right"))
         {
             dir.X += speed;
@@ -43,7 +44,7 @@ public partial class Bonkura : Character
         }
         if (Input.IsActionPressed("move_up") && !IsFalling())
             dir.Y = jumpVelocity;
-        
+
         if (dir != Vector3.Zero)
             Move(pos.Convert(dir));
     }
@@ -51,7 +52,7 @@ public partial class Bonkura : Character
     public override void Move(Vector3 dir)
     {
         base.Move(dir);
-        if (dir.X != 0)
+        if (dir.Z != 0)
             UpdateMap();
     }
 

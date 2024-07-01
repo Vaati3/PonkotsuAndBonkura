@@ -14,6 +14,7 @@ public abstract partial class Object : Node2D
 	protected Character[] overlappingPlayers;
 	protected bool detectOverlap = true;
 	protected Vector3 overlapSize;
+	protected Vector3 overlapOffset;
 
 	private Texture2D topTexture;
 	private Texture2D sideTexture;
@@ -34,6 +35,7 @@ public abstract partial class Object : Node2D
 		sprite = new Sprite2D();
 		AddChild(sprite);
 		overlapSize = new Vector3(MapGenerator.tileSize, MapGenerator.tileSize, MapGenerator.tileSize);
+		overlapOffset = Vector3.Zero;
 		activatable = false;
 		overlappingPlayers = new Character[2];
 	}
@@ -89,8 +91,8 @@ public abstract partial class Object : Node2D
 
 	private bool CheckOverlap()
 	{
-		Vector3 min = position3D - overlapSize / 2;
-		Vector3 max = position3D + overlapSize / 2;
+		Vector3 min = position3D + overlapOffset - overlapSize / 2;
+		Vector3 max = position3D + overlapOffset + overlapSize / 2;
 		if (player.pos.globalPos.X >= min.X && player.pos.globalPos.X <= max.X &&
 			player.pos.globalPos.Y >= min.Y && player.pos.globalPos.Y <= max.Y &&
 			player.pos.globalPos.Z >= min.Z && player.pos.globalPos.Z <= max.Z)

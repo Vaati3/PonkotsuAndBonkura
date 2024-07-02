@@ -90,7 +90,8 @@ public partial class GameMenu : CanvasLayer
 	{
 		map.ClearMap();
 		map.StartMap(mapName, mapNumber);
-		Resume();
+		levelCompleted.Visible = false;
+		Visible = false;
 	}
 
 	public void _on_back_button_pressed()

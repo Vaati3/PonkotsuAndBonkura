@@ -3,7 +3,7 @@ using System;
 
 public partial class Bonkura : Character
 {
-    float jumpHeight = 100;
+    float jumpHeight = 130;
     float jumpAscendTime = 0.5f;
     float jumpFallTime = 0.4f;
     float jumpVelocity;
@@ -42,7 +42,7 @@ public partial class Bonkura : Character
             dir.X -= speed;
             Flip(true);
         }
-        if (Input.IsActionPressed("move_up") && !IsFalling())
+        if (Input.IsActionJustPressed("move_up") && !IsFalling())
             dir.Y = jumpVelocity;
 
         if (dir != Vector3.Zero)

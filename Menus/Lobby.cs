@@ -180,6 +180,10 @@ public partial class Lobby : Panel
 
 	public void PlayerDisconnected()
 	{
+		if (map.Visible)
+		{
+			map.BacktoLobby();
+		}
 		GetNode<Label>("VBox/Player2/Name").Text = "";
 		GetNode<Label>("VBox/Player2/Character").Text = "";
 		GetNode<Label>("VBox/Player2/Ready").Text = "";

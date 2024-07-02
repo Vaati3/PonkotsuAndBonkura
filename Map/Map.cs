@@ -7,6 +7,7 @@ public partial class Map : TileMap
 	GameManager gameManager;
 	public GameMenu gameMenu {get; private set;}
 	public MapGenerator generator {get; private set;}
+
 	Ponkotsu ponkotsu;
 	Bonkura bonkura;
 	Node objectLayer;

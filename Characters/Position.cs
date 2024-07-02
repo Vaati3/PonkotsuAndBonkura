@@ -56,6 +56,16 @@ public class Position
             return new Vector2(pos.Z, pos.Y);
     }
 
+    public Vector2I GlobalToLocal(Vector3I pos)
+    {
+        if (blindAxis == Axis.Z)
+            return new Vector2I(pos.X, pos.Y);
+        else if (blindAxis == Axis.Y)
+            return new Vector2I(pos.X, pos.Z);
+        else
+            return new Vector2I(pos.Z, pos.Y);
+    }
+
     public Vector2 GetLocalPos()
     {
         return GlobalToLocal(globalPos);

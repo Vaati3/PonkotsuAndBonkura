@@ -71,6 +71,7 @@ public partial class Bonkura : Character
         {
             Position = pos.GetLocalPos();
             UpdateMap();
+            UpdateCamera();
         }
     }
 

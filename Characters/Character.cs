@@ -17,6 +17,7 @@ public abstract partial class Character : CharacterBody2D
 	public Vector3 direction {get; private set;}
 	[Export]public float speed = 100;
 	protected Sprite2D sprite;
+	private Camera2D camera;
 
 	public bool canFall{get; set;}
 	private Item item = null;
@@ -55,6 +56,7 @@ public abstract partial class Character : CharacterBody2D
 	{
 		this.map = map;
 		this.other = other;
+		camera = map.GetNode<Camera2D>("Camera");
     }
 
     public void Possess(Vector3[] spawns)
@@ -68,7 +70,8 @@ public abstract partial class Character : CharacterBody2D
 		UpdateMap();
 		UpdateVisibility();
 
-		GetNode<Camera2D>("Camera").Enabled = true;
+		camera.Enabled = true;
+		UpdateCamera();
 	}
 
 	public void Possess()
@@ -79,13 +82,13 @@ public abstract partial class Character : CharacterBody2D
 		UpdateMap();
 		UpdateVisibility();
 
-		GetNode<Camera2D>("Camera").Enabled = true;
+		camera.Enabled = true;		UpdateCamera();
 	}
 
 	public void UnPossess()
 	{
 		isControlled = false;
-		GetNode<Camera2D>("Camera").Enabled = false;
+		camera.Enabled = false;
 	}
 
 	public virtual void Move(Vector3 dir)
@@ -100,6 +103,7 @@ public abstract partial class Character : CharacterBody2D
 		MoveAndSlide();
 		pos.Move(Position, dir);
 		UpdateVisibility();
+		UpdateCamera();
 		map.UpdateObjects();
 
 		Rpc(nameof(UpdatePosition), pos.globalPos);
@@ -119,6 +123,37 @@ public abstract partial class Character : CharacterBody2D
 		return oldItem;
 	}
 
+	protected void UpdateCamera()
+	{
+		Vector2I size = pos.GlobalToLocal(map.generator.size) * MapGenerator.tileSize;
+		Vector2 screen = GetViewportRect().Size;
+		Vector2 cameraPos = Vector2.Zero;
+
+		if (size.X > screen.X)
+		{
+			if (Position.X <= -MapGenerator.tileSize)
+				cameraPos.X = -MapGenerator.tileSize;
+			else if (Position.X >= size.X)
+				cameraPos.X = size.X;
+			else 
+				cameraPos.X = Position.X;
+		} else {
+			cameraPos.X = size.X/2;
+		}
+		if (size.Y > screen.Y)
+		{
+			if (Position.Y <= -MapGenerator.tileSize)
+				cameraPos.Y = -MapGenerator.tileSize;
+			else if (Position.Y >= size.Y)
+				cameraPos.Y = size.Y;
+			else 
+				cameraPos.Y = Position.Y;
+		} else { 
+			cameraPos.Y = size.Y/2;
+		}
+		camera.Position = cameraPos;
+	}
+
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer)]
 	protected void UpdatePosition(Vector3 newPos)
 	{
@@ -133,8 +168,8 @@ public abstract partial class Character : CharacterBody2D
 		if (!isControlled)
 			return;
 		other.Visible = CanSee(other.pos.globalPos);
-		if (!gameManager.isAlone)
-			other?.UpdateVisibility(gameManager.otherPlayer.id);
+		if (!gameManager.isAlone && gameManager.otherPlayer != null)
+			other.UpdateVisibility(gameManager.otherPlayer.id);
 	}
 	
 	protected void UpdateVisibility(long id)

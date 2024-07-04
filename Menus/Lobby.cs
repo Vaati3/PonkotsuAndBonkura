@@ -84,6 +84,8 @@ public partial class Lobby : Panel
 		Rpc(nameof(UpdateMenu));
 		timer.QueueFree();
 		gameManager.UpdateServer += UpdateServer;
+		if (!gameManager.isAlone && gameManager.player.id == 1)
+			GetNode<Label>("IP").Text = "IP\n" + GetNode<MultiplayerController>("/root/MultiplayerController").GetIP();
 	}
 
 	private void UpdateServer()

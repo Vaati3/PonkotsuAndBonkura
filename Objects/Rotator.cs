@@ -26,7 +26,14 @@ public partial class Rotator : Object
         if (character?.GetCharacterType() == CharacterType.Bonkura)
         {
            ((Bonkura)character).RotateAxis();
+           //Rpc(nameof(FlipSprite));
         }
+    }
+
+    [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
+    private void FlipSprite()
+    {
+        sprite.FlipH = !sprite.FlipH;
     }
 
     public override void Trigger(bool state)

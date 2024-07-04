@@ -84,6 +84,11 @@ public partial class MultiplayerController : Node
 		AddChild(Popup.Open(reason));
 	}
 
+	public string GetIP()
+	{
+		return IP.ResolveHostname(OS.GetEnvironment("COMPUTERNAME"), Godot.IP.Type.Ipv4);
+	}
+
 	//multiplayer signals
 	public void PlayerConnected(long id)
 	{

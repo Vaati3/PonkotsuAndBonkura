@@ -9,6 +9,7 @@ public partial class MainMenu : Panel
 	Control menu;
 	Control playMenu;
 	Control joinMenu;
+	Control optionMenu;
 	Control namePopup;
 	public override void _Ready()
 	{
@@ -18,6 +19,8 @@ public partial class MainMenu : Panel
 		menu = GetNode<Control>("Menu");
 		playMenu = GetNode<Control>("Play");
 		joinMenu = GetNode<Control>("JoinMenu");
+		optionMenu = GetNode<Control>("OptionMenu");
+		optionMenu.GetNode<Button>("Back").Pressed += _on_option_back_pressed;
 		namePopup = GetNode<Control>("NamePopup");
 		if (!manager.Load())
 		{
@@ -52,14 +55,14 @@ public partial class MainMenu : Panel
 	public void _on_options_pressed()
 	{
 		soundManager.PlaySFX("button");
-		GD.Print("Option button has been pressed");
+		optionMenu.Visible = true;
 	}
 	public void _on_quit_pressed()
 	{
 		soundManager.PlaySFX("button");
 		GetTree().Quit();
 	}
-	//play and option menu
+	//play menus
 	public void _on_host_pressed()
 	{
 		soundManager.PlaySFX("button");
@@ -101,5 +104,11 @@ public partial class MainMenu : Panel
 			namePopup.Visible = false;
 			menu.Visible = true;
 		}
+	}
+	//options
+	public void _on_option_back_pressed()
+	{
+		soundManager.PlaySFX("button");
+		optionMenu.Visible = false;
 	}
 }

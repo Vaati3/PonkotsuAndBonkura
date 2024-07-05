@@ -15,15 +15,16 @@ public partial class SoundManager : Node
     private void CreatePlayers()
     {
         musicPlayer = new AudioStreamPlayer();
+        musicPlayer.Bus = "Music";
         AddChild(musicPlayer);
         players = new AudioStreamPlayer[playerAmount];
         
         for (int i = 0; i < playerAmount; i++)
         {
             AudioStreamPlayer player = new AudioStreamPlayer();
+            player.Bus = "SFX";
             AddChild(player);
             players[i] = player;
-            //change bus to sfx
         }
     }
 

@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 GameManager="*res://Singleton/GameManager.cs"
 MultiplayerController="*res://Singleton/MultiplayerController.cs"
+SoundManager="*res://Singleton/SoundManager.cs"
 
 [dotnet]
 

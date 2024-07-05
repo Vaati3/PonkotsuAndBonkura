@@ -8,6 +8,7 @@ public partial class MapButton : Button
 
 	public MapButton(string mapName, int number, int progression, LevelPressedEventHandler mapPressed)
 	{
+		
 		this.mapName = mapName.GetBaseName();
 		mapNumber = number;
 
@@ -27,6 +28,7 @@ public partial class MapButton : Button
 
 	public void _on_button_pressed()
 	{
+		GetNode<SoundManager>("/root/SoundManager").PlaySFX("button", true);
 		Disabled = true;
 		EmitSignal(nameof(LevelPressed), this);
 	}

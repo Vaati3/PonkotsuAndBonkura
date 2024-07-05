@@ -7,32 +7,23 @@ public partial class SoundManager : Node
 {
     const int playerAmount = 8;
     AudioStreamPlayer[] players;
-    bool[] availablePlayers;
+    AudioStreamPlayer musicPlayer;
     Dictionary<string, AudioStream> sfx;
+    Dictionary<string, AudioStream> musics;
     Queue<AudioStream> sfxQueue;
 
     private void CreatePlayers()
     {
+        musicPlayer = new AudioStreamPlayer();
+        AddChild(musicPlayer);
         players = new AudioStreamPlayer[playerAmount];
-        availablePlayers = new bool[playerAmount];
         
         for (int i = 0; i < playerAmount; i++)
         {
             AudioStreamPlayer player = new AudioStreamPlayer();
-            player.Finished += StreamFinished;
             AddChild(player);
             players[i] = player;
             //change bus to sfx
-            availablePlayers[i] = true;
-        }
-    }
-
-    private void StreamFinished()
-    {
-        for(int i = 0; i > playerAmount; i++)
-        {
-            if(!availablePlayers[i] && !players[i].Playing)
-                availablePlayers[i] = true;
         }
     }
 
@@ -40,9 +31,8 @@ public partial class SoundManager : Node
     {
         for(int i = 0; i < playerAmount; i++)
         {
-            if(availablePlayers[i])
+            if(!players[i].Playing)
             {
-                availablePlayers[i] = false;
                 players[i].Stream = stream;
                 players[i].Play();
                 return ;
@@ -51,40 +41,36 @@ public partial class SoundManager : Node
         return;
     }
 
-    private void LoadSFX()
+    private Dictionary<string, AudioStream> LoadSounds(string path)
     {
-        DirAccess dir = DirAccess.Open("res://Sounds/SFX/");
+        DirAccess dir = DirAccess.Open(path);
 
         if (dir == null)
-            return;
+            return null;
 
+        Dictionary<string, AudioStream> sounds = new Dictionary<string, AudioStream>();
         dir.ListDirBegin();
         string fileName = dir.GetNext();
         while(fileName != "")
         {
             if (!dir.CurrentIsDir() && !fileName.Contains("import"))
-                AddSFX(fileName);
+            {
+                AudioStream audio = GD.Load<AudioStream>(path + fileName);
+                if (audio != null)
+                    sounds.Add(fileName.GetBaseName(), audio);
+            }
             fileName = dir.GetNext();
         }
-    }
-
-    private void AddSFX(string fileName)
-    {
-        AudioStream audio = GD.Load<AudioStream>("res://Sounds/SFX/" + fileName);
-
-        if (audio == null)
-            return;
-
-        sfx.Add(fileName.GetBaseName(), audio);
+        return sounds;
     }
 
     public override void _Ready()
     {
         CreatePlayers();
         
-        sfx = new Dictionary<string, AudioStream>();
+        sfx = LoadSounds("res://Sounds/SFX/");
+        musics = LoadSounds("res://Sounds/Music/");
         sfxQueue = new Queue<AudioStream>();
-        LoadSFX();
     }
 
     public override void _Process(double delta)
@@ -107,4 +93,14 @@ public partial class SoundManager : Node
         }
     }
 
+    public void PlayMusic(string musicName, bool rpc = false)
+    {
+        AudioStream audio;
+        if (musics.TryGetValue(musicName, out audio))
+        {
+            musicPlayer.Stop();
+            musicPlayer.Stream = audio;
+            musicPlayer.Play();
+        }
+    }
 }

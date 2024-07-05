@@ -22,11 +22,13 @@ public partial class Popup : CanvasLayer
 
 	public void _on_yes_button_pressed()
 	{
+		GetNode<SoundManager>("/root/SoundManager").PlaySFX("button", true);
 		EmitSignal(nameof(Confirm));
 		QueueFree();
 	}
 	public void _on_no_button_pressed()
 	{
+		GetNode<SoundManager>("/root/SoundManager").PlaySFX("button", true);
 		QueueFree();
 	}
 }

@@ -4,6 +4,7 @@ using System;
 public partial class GameMenu : CanvasLayer
 {
 	GameManager manager;
+	SoundManager soundManager;
 	Map map;
 
 	Control levelCompleted;
@@ -19,6 +20,7 @@ public partial class GameMenu : CanvasLayer
 	public override void _Ready()
 	{
 		manager = GetNode<GameManager>("/root/GameManager");
+		soundManager = GetNode<SoundManager>("/root/SoundManager");
 		if (GetParent() is Map map)
 			this.map = map;
 
@@ -96,21 +98,25 @@ public partial class GameMenu : CanvasLayer
 
 	public void _on_back_button_pressed()
 	{
+		soundManager.PlaySFX("button", true);
 		Rpc(nameof(BacktoLobby));
 	}
 
 	public void _on_resume_pressed()
 	{
+		soundManager.PlaySFX("button", true);
 		Rpc(nameof(Resume));
 	}
 
 	public void _on_reset_pressed()
 	{
+		soundManager.PlaySFX("button", true);
 		Rpc(nameof(LoadMap), currentMap, curentMapNumber);
 	}
 
 	public void _on_next_level_pressed()
 	{
+		soundManager.PlaySFX("button", true);
 		Rpc(nameof(LoadMap), nextMap.mapName, curentMapNumber + 1);
 	}
 }

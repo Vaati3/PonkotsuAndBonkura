@@ -26,6 +26,7 @@ public partial class MainMenu : Panel
 		}
 		
 		controller.HostCreated += OpenLobby;
+		soundManager.PlayMusic("music");
 	}
 
 	public void OpenLobby()

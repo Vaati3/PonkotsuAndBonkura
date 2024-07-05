@@ -4,6 +4,7 @@ using System;
 public partial class Lobby : Panel
 {
 	GameManager gameManager;
+	SoundManager soundManager;
 	Map map;
 	Timer timer;
 	GridContainer grid;
@@ -12,6 +13,7 @@ public partial class Lobby : Panel
 	public override void _Ready()
 	{
 		gameManager = GetNode<GameManager>("/root/GameManager");
+		soundManager = GetNode<SoundManager>("/root/SoundManager");
 
 		//delay to wait for serverplayer to update on other
         timer = new Timer
@@ -161,11 +163,6 @@ public partial class Lobby : Panel
 		return null;
 	}
 
-	public void _on_switch_characters_pressed()
-	{
-		Rpc(nameof(SwitchCharacter));
-	}
-
 	public void ConfirmLeave()
 	{
 		GetNode<MainMenu>("/root/MainMenu").Visible = true;
@@ -196,8 +193,15 @@ public partial class Lobby : Panel
 		UpdatePlayerInfo(gameManager.player);
 	}
 
+	public void _on_switch_characters_pressed()
+	{
+		soundManager.PlaySFX("button", true);
+		Rpc(nameof(SwitchCharacter));
+	}
+
 	public void _on_ready_pressed()
 	{
+		soundManager.PlaySFX("button", true);
 		gameManager.player.isReady = !gameManager.player.isReady;
 		
 		GetNode<Button>("Ready").Text = gameManager.player.isReady ? "Not\nReady" : "Ready";
@@ -211,6 +215,7 @@ public partial class Lobby : Panel
 
 	public void _on_leave_pressed()
 	{
+		soundManager.PlaySFX("button");
 		AddChild(Popup.Open("Are you sure you want to leave ?", ConfirmLeave));
 		//to be completed button is not visible
 	}

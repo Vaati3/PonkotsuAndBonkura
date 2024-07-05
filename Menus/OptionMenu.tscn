@@ -2,7 +2,7 @@
 
 [ext_resource type="Theme" uid="uid://dundbkyo1dqnu" path="res://Menus/Themes/Panel.tres" id="1_q3ye3"]
 [ext_resource type="FontFile" uid="uid://dbv2ovpyr0js6" path="res://Menus/Themes/PlaywriteFRTrad-Regular.ttf" id="2_ygyrl"]
-[ext_resource type="PackedScene" uid="uid://cp10rxv4iq406" path="res://Menus/Wigets/VolumeSlider.tscn" id="4_c1ogl"]
+[ext_resource type="PackedScene" uid="uid://cp10rxv4iq406" path="res://Menus/Widgets/VolumeSlider.tscn" id="4_c1ogl"]
 [ext_resource type="Theme" uid="uid://c7wnqipmhvxh0" path="res://Menus/Themes/Button.tres" id="5_ji8g2"]
 
 [node name="OptionMenu" type="Panel"]

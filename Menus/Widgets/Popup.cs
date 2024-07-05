@@ -6,7 +6,7 @@ public partial class Popup : CanvasLayer
 	[Signal]public delegate void ConfirmEventHandler();
 	static public Popup Open(string text, ConfirmEventHandler confirm = null)
 	{
-		Popup popup = GD.Load<PackedScene>("res://Menus/Widget/Popup.tscn").Instantiate<Popup>();
+		Popup popup = GD.Load<PackedScene>("res://Menus/Widgets/Popup.tscn").Instantiate<Popup>();
 
 		popup.GetNode<Label>("Label").Text = text;
 		if (confirm == null)

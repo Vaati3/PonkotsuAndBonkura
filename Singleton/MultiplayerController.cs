@@ -46,7 +46,8 @@ public partial class MultiplayerController : Node
 
 	public bool Join(string address)
 	{
-		peer.CreateClient(address, port);
+		if (peer.CreateClient(address, port) != Error.Ok)
+			return false;
 		peer.Host.Compress(ENetConnection.CompressionMode.RangeCoder);
 		Multiplayer.MultiplayerPeer = peer;
 		gameManager.player.id = Multiplayer.GetUniqueId();

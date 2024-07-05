@@ -87,7 +87,7 @@ public partial class MainMenu : Panel
 	public void _on_confirm_join_pressed()
 	{
 		soundManager.PlaySFX("button");
-		string address = GetNode<TextEdit>("JoinMenu/TextEdit").Text;//"127.0.0.1"
+		string address = GetNode<TextEdit>("JoinMenu/TextEdit").Text;
 		controller.Join(address);
 		joinMenu.Visible = false;
 		menu.Visible = true;

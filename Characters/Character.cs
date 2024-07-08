@@ -38,10 +38,7 @@ public abstract partial class Character : CharacterBody2D
 		if (!map.gameMenu.Visible && @event.IsActionPressed("pause") && !@event.IsEcho())
 			map.gameMenu.Pause();
 		if (@event.IsActionPressed("use_item") && !@event.IsEcho())
-		{
-			map.gameMenu.MapCompleted();
 			item?.Use();
-		}
 		if (map.switchCooldown.IsStopped() && gameManager.isAlone && @event.IsActionPressed("switch") && !@event.IsEcho())
 		{
 			map.switchCooldown.Start();

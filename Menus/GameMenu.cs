@@ -13,8 +13,8 @@ public partial class GameMenu : CanvasLayer
 	public string currentMap {get; private set;}
 	public int curentMapNumber {get; private set;}
 
-	public delegate MapButton GetMapCallback(int number);
-	public GetMapCallback GetMap;
+	public delegate MapButton GetMapEventHandler(int number);
+	public GetMapEventHandler GetMap;
 
 	MapButton nextMap;
 	public override void _Ready()

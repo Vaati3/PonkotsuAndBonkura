@@ -26,6 +26,7 @@ public partial class Map : TileMap
 		gameManager = GetNode<GameManager>("/root/GameManager");
 		gameMenu = GetNode<GameMenu>("GameMenu");
 		generator = new MapGenerator();
+		generator.CreateItem += CreateItem;
 		AddChild(generator);
 
 		ponkotsu = GetNode<Ponkotsu>("Ponkotsu");
@@ -101,6 +102,7 @@ public partial class Map : TileMap
 		MapGenerator.Action action = (tile, pos) => {
 			if (tile > Tile.BonkuraGoal && tile != Tile.ElevatorStop)
 			{
+				Tile newTile = Tile.Void;
 				switch (tile)
 				{
 					case Tile.ElevatorX: case Tile.ElevatorY : case Tile.ElevatorZ:
@@ -112,8 +114,12 @@ public partial class Map : TileMap
 					case Tile.Rotator:
 						AddObject(Object.CreateObject<Rotator>(character, pos));
 						break;
+					case Tile.Door:
+						AddObject(Object.CreateObject<Door>(character, pos));
+						newTile = Tile.Block;
+						break;
 				}
-				generator.SetTile(Tile.Void, pos);
+				generator.SetTile(newTile, pos);
 			}
 		};
 		generator.LoopAction(action);
@@ -129,6 +135,14 @@ public partial class Map : TileMap
 		obj.FreeObject += FreeObject;
 		objectLayer.AddChild(obj);
 		objects.Add(obj);
+	}
+
+	private void CreateItem(ItemType type, Vector3I pos)
+	{
+		Character character = gameManager.player.characterType == CharacterType.Ponkotsu ? ponkotsu : bonkura;
+		ItemPickup itemPickup = Object.CreateObject<ItemPickup>(character, pos);
+		itemPickup.CreateItem(type);
+		AddObject(itemPickup);
 	}
 
 	public void FreeObject(Object obj)

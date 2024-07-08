@@ -22,7 +22,7 @@ public partial class ItemPickup : Object
 
     private void PickedUp(Character character)
     {
-        if (character.GetCharacterType() != item.GetUserType())
+        if (item.GetUserType() != CharacterType.Both && character.GetCharacterType() != item.GetUserType())
             return;
         
         RemoveChild(item);

@@ -11,7 +11,7 @@ public enum Tile {
 	PonkotsuGoal, BonkuraGoal,
 	ElevatorX, ElevatorY, ElevatorZ, ElevatorStop,
 	ButtonX, ButtonY, ButtonZ,
-	Rotator
+	Rotator, Door
 }
 
 public partial class MapGenerator : Node
@@ -21,8 +21,8 @@ public partial class MapGenerator : Node
 	public Tile[,,] data {get; private set;}
 	public Vector3[] spawns {get; private set;}
 
-	[Signal] public delegate void CreateObjectEventHandler(Vector3I pos); 
-
+	public delegate void CreateItemEventHandler(ItemType item, Vector3I pos);
+	public CreateItemEventHandler CreateItem;
     public override void _Ready()
     {
 		spawns = new Vector3[2];
@@ -36,6 +36,12 @@ public partial class MapGenerator : Node
 			b = 0;
 		}
 		//Check and create items
+		if (b > 200)
+		{
+			CreateItem((ItemType)(255 - b), pos);
+			b = 0;
+		}
+
 		SetTile((Tile)b, pos);
 	}
 

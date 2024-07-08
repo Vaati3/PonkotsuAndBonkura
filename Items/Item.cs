@@ -1,6 +1,7 @@
 using Godot;
 
 public enum ItemType {
+    Key,
     Hookshot
 }
 
@@ -37,8 +38,8 @@ public abstract partial class Item : Node2D
         sprite.FlipH = state;
     }
 
-    public abstract ItemType GetItemType();//replace with getType
-    public abstract CharacterType GetUserType();//replace with getType
+    public abstract ItemType GetItemType();
+    public abstract CharacterType GetUserType();
     public abstract void Use();
 
 }

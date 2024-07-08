@@ -5,9 +5,6 @@ public partial class Hookshot : Item
 {    
     const int lenght = 500;
 
-    public Hookshot() : base()
-    {
-    }
     public override CharacterType GetUserType()
     {
         return CharacterType.Ponkotsu; 

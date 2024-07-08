@@ -92,7 +92,7 @@ public partial class Bonkura : Character
         return true;
     }
 
-    protected override void UpdateMap()
+    public override void UpdateMap()
 	{
 		Vector3I tilePos = Vector3I.Zero;
 		tilePos.Z = (int)pos.GetBlindAxisValue(pos.globalPos) / MapGenerator.tileSize;

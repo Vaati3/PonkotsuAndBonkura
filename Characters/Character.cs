@@ -78,8 +78,8 @@ public abstract partial class Character : CharacterBody2D
 		other.Position = pos.GlobalToLocal(other.pos.globalPos);
 		UpdateMap();
 		UpdateVisibility();
-
-		camera.Enabled = true;		UpdateCamera();
+		camera.Enabled = true;		
+		UpdateCamera();
 	}
 
 	public void UnPossess()
@@ -118,6 +118,15 @@ public abstract partial class Character : CharacterBody2D
 		item = newItem;
 		AddChild(item);
 		return oldItem;
+	}
+
+	public void RemoveItem()
+	{
+		if (item == null)
+			return;
+
+		RemoveChild(item);
+		item = null;
 	}
 
 	protected void UpdateCamera()
@@ -209,5 +218,5 @@ public abstract partial class Character : CharacterBody2D
     {
         return (int)(pos.GetBlindAxisValue(pos.globalPos) / MapGenerator.tileSize) == (int)(pos.GetBlindAxisValue(otherPos) / MapGenerator.tileSize);
     }
-	protected abstract void UpdateMap();
+	public abstract void UpdateMap();
 }

@@ -26,7 +26,7 @@ public abstract partial class Item : Node2D
         Scale = new Vector2(2, 2);
     }
 
-    public void Equip(Character character)
+    public virtual void Equip(Character character)
     {
         owner = character;
         Position = new Vector2(0, 24);

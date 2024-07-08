@@ -11,7 +11,7 @@ public partial class Map : TileMap
 	Ponkotsu ponkotsu;
 	Bonkura bonkura;
 	Node objectLayer;
-	List<Object> objects;
+	public List<Object> objects {get; private set;}
 	Queue<Object> freeQueue;
 
 	Label ponkotsuDebug;

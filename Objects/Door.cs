@@ -15,6 +15,7 @@ public partial class Door : Object
     public void Open(Map map)
     {
         map.generator.SetTile(Tile.Void, tilePos);
+        player.UpdateMap();
         //add unlock sfx
         EmitSignal(nameof(FreeObject), this);
     }

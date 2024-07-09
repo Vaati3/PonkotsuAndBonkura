@@ -118,6 +118,9 @@ public partial class Map : TileMap
 						AddObject(Object.CreateObject<Door>(character, pos));
 						newTile = Tile.Block;
 						break;
+					case Tile.Swapper:
+						AddObject(Swapper.CreateSwapper(character, pos, objects));
+						break;
 				}
 				generator.SetTile(newTile, pos);
 			}

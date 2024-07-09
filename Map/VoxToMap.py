@@ -17,7 +17,8 @@ Tiles = [
     [200, 0, 200],   #button Y
     [145, 0, 145],   #button Z
     [0, 0, 255],     #rotator 
-    [200, 200, 250]  #door
+    [200, 200, 250], #door
+    [255, 0, 100]    #swapper
 ]
 
 items = [

@@ -110,6 +110,14 @@ public abstract partial class Character : CharacterBody2D
 			map.gameMenu.MapCompleted();
 	}
 
+	public void SetPos(Vector3 newPos)
+	{
+		UpdatePosition(newPos);
+		Rpc(nameof(UpdatePosition), newPos);
+		UpdateMap();
+		UpdateVisibility();
+	}
+
 	public Item SwitchItem(Item newItem)
 	{
 		if (item != null)

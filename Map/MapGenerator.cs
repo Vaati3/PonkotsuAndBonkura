@@ -1,8 +1,5 @@
 using Godot;
-using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Dynamic;
 
 public enum Tile {
 	Void,
@@ -11,7 +8,7 @@ public enum Tile {
 	PonkotsuGoal, BonkuraGoal,
 	ElevatorX, ElevatorY, ElevatorZ, ElevatorStop,
 	ButtonX, ButtonY, ButtonZ,
-	Rotator, Door
+	Rotator, Door, Swapper
 }
 
 public partial class MapGenerator : Node

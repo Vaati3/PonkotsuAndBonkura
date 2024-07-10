@@ -226,7 +226,6 @@ theme_override_colors/font_readonly_color = Color(1, 1, 1, 1)
 theme_override_colors/font_placeholder_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("3_wmdyp")
 theme_override_font_sizes/font_size = 20
-text = "cvbcvbcvb"
 placeholder_text = "Enter username"
 
 [node name="ConfirmName" type="Button" parent="NamePopup"]

@@ -87,15 +87,20 @@ public abstract partial class Object : Node2D
 		return overlappingPlayers[0] != null || overlappingPlayers[1] != null;
 	}
 
-	private bool CheckOverlap()
+
+	protected bool CheckOverlap(Character character)
 	{
 		Vector3 min = position3D + overlapOffset - overlapSize / 2;
 		Vector3 max = position3D + overlapOffset + overlapSize / 2;
-		if (player.pos.globalPos.X >= min.X && player.pos.globalPos.X <= max.X &&
-			player.pos.globalPos.Y >= min.Y && player.pos.globalPos.Y <= max.Y &&
-			player.pos.globalPos.Z >= min.Z && player.pos.globalPos.Z <= max.Z)
+		if (character.pos.globalPos.X >= min.X && character.pos.globalPos.X <= max.X &&
+			character.pos.globalPos.Y >= min.Y && character.pos.globalPos.Y <= max.Y &&
+			character.pos.globalPos.Z >= min.Z && character.pos.globalPos.Z <= max.Z)
 			return true;
 		return false;
+	}
+	protected bool CheckOverlap()
+	{
+		return CheckOverlap(player);
 	}
 
 	protected virtual void OverlapStarted()

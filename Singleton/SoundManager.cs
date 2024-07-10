@@ -90,7 +90,7 @@ public partial class SoundManager : Node
         {
             sfxQueue.Enqueue(audio);
             if (rpc)
-                Rpc(nameof(PlaySFX), sfxName);
+                Rpc(nameof(PlaySFX), sfxName, false);
         }
     }
 

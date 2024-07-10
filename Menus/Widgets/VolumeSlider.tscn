@@ -65,4 +65,3 @@ theme_override_font_sizes/font_size = 0
 text = "    Mute"
 
 [connection signal="value_changed" from="Slider" to="." method="_on_slider_value_changed"]
-[connection signal="toggled" from="Mute" to="." method="_on_mute_toggled"]

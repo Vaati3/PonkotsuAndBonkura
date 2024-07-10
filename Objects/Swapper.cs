@@ -3,7 +3,10 @@ using System.Collections.Generic;
 
 public partial class Swapper : Object
 {
-    public List<Swapper> swappers = null;
+    public List<Swapper> swappers {get; private set;} = null;
+    public Vector3I tilePos {get; private set;}
+
+    Timer timer;
 
     static public Swapper CreateSwapper(Character character, Vector3I pos, List<Object> objects)
     {
@@ -11,6 +14,13 @@ public partial class Swapper : Object
 
         swapper.SetupSwappers(objects);
         swapper.SetTexture("res://Objects/Textures/Swapper.png", "res://Objects/Textures/Swapper.png");
+        swapper.tilePos = pos;
+        swapper.timer = new Timer() {
+            OneShot = true,
+            WaitTime = 5,
+            Autostart = false
+        };
+        swapper.AddChild(swapper.timer);
         return swapper;
     }
 
@@ -29,31 +39,38 @@ public partial class Swapper : Object
             swappers = new List<Swapper>{this};
     }
 
-    public Character CanSwap()
+    public bool CanSwap()
     {
-        if (overlappingPlayers[0] != null && overlappingPlayers[1] != null)
-            return null;
-        if (overlappingPlayers[0] != null)
-            return overlappingPlayers[0];
-        if (overlappingPlayers[1] != null)
-            return overlappingPlayers[1];
-        return null;
+        if (!timer.IsStopped())
+            return false;
+        return CheckOverlap(player.other);
     }
 
     protected override void OverlapStarted()
     {
         base.OverlapStarted();
+        if (!timer.IsStopped())
+            return;
+
         foreach (Swapper swapper in swappers)
         {
             if (swapper == this)
                 continue;
-            Character other = swapper.CanSwap();
-            if (other != null)
+            if (swapper.CanSwap())
             {
-                Vector3 buf = other.pos.globalPos;
-                other.SetPos(player.pos.globalPos);
-                player.SetPos(buf);
+                // GD.Print(player.GetType());
+                // Vector3 buf = player.other.pos.globalPos;
+                timer.Start();
+                player.SetPos(Map.AlignPos(swapper.tilePos));
+                Rpc(nameof(UpdateOther), Map.AlignPos(tilePos));
             }
         }
+    }
+
+    [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
+    private void UpdateOther(Vector3 pos)
+    {
+        timer.Start();
+        player.SetPos(pos);
     }
 }

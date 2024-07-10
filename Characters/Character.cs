@@ -110,12 +110,16 @@ public abstract partial class Character : CharacterBody2D
 			map.gameMenu.MapCompleted();
 	}
 
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer)]
 	public void SetPos(Vector3 newPos)
 	{
-		UpdatePosition(newPos);
+		if (!isControlled)
+			return;
+		pos.globalPos = newPos;
+		Position = pos.GetLocalPos();
 		Rpc(nameof(UpdatePosition), newPos);
-		UpdateMap();
 		UpdateVisibility();
+		UpdateMap();
 	}
 
 	public Item SwitchItem(Item newItem)

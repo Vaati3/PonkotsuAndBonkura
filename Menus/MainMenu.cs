@@ -22,7 +22,7 @@ public partial class MainMenu : Panel
 		optionMenu = GetNode<Control>("OptionMenu");
 		optionMenu.GetNode<Button>("Back").Pressed += _on_option_back_pressed;
 		namePopup = GetNode<Control>("NamePopup");
-		if (!manager.Load())
+		if (manager.player.name == "")
 		{
 			menu.Visible = false;
 			namePopup.Visible = true;
@@ -110,5 +110,6 @@ public partial class MainMenu : Panel
 	{
 		soundManager.PlaySFX("button");
 		optionMenu.Visible = false;
+		manager.Save();
 	}
 }

@@ -27,8 +27,7 @@ public partial class Ponkotsu : Character
             dir.Z -= speed;
         if (falling)
             dir.Y += gravity * (float)delta;    
-        if (dir != Vector3.Zero)
-            Move(dir);
+        Move(dir);
     }
 
     public override void Move(Vector3 dir)

@@ -58,8 +58,8 @@ public partial class Swapper : Object
                 continue;
             if (swapper.CanSwap())
             {
-                // GD.Print(player.GetType());
-                // Vector3 buf = player.other.pos.globalPos;
+                //add swap noise
+                //and particles or shader effect
                 timer.Start();
                 player.SetPos(Map.AlignPos(swapper.tilePos));
                 Rpc(nameof(UpdateOther), Map.AlignPos(tilePos));

@@ -122,6 +122,13 @@ public abstract partial class Character : CharacterBody2D
 		UpdateMap();
 	}
 
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer)]
+	protected void UpdatePosition(Vector3 newPos)
+	{
+		pos.globalPos = newPos;
+		Position = other.pos.GlobalToLocal(newPos);
+	}
+
 	public Item SwitchItem(Item newItem)
 	{
 		if (item != null)
@@ -173,13 +180,6 @@ public abstract partial class Character : CharacterBody2D
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer)]
-	protected void UpdatePosition(Vector3 newPos)
-	{
-		pos.globalPos = newPos;
-		Position = other.pos.GlobalToLocal(newPos);
-	}
-
-	[Rpc(MultiplayerApi.RpcMode.AnyPeer)]
 	protected void UpdateVisibility()
 	{
 		Visible = true;
@@ -199,10 +199,15 @@ public abstract partial class Character : CharacterBody2D
 	{
 		if (!canFall)
 			return false;
-		float half = sprite.Texture.GetSize().Y * sprite.Scale.Y / 2f + 1;
+		float half = GetSize().Y / 2f + 1;
         if (map.generator.GetTile(pos.globalPos.X, pos.globalPos.Y + half, pos.globalPos.Z) != Tile.Block)
 			return true;
 		return false;
+	}
+
+	public Vector2 GetSize()
+	{
+		return sprite.Texture.GetSize() * sprite.Scale;
 	}
 	protected virtual bool UpdateTile(Vector3I tilePos, int x, int y)
 	{

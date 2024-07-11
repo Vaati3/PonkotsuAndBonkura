@@ -45,8 +45,7 @@ public partial class Bonkura : Character
         if (Input.IsActionJustPressed("move_up") && !IsFalling())
             dir.Y = jumpVelocity;
 
-        if (dir != Vector3.Zero)
-            Move(pos.Convert(dir));
+        Move(pos.Convert(dir));
     }
 
     public override void Move(Vector3 dir)

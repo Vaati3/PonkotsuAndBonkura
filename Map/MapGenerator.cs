@@ -8,7 +8,7 @@ public enum Tile {
 	PonkotsuGoal, BonkuraGoal,
 	ElevatorX, ElevatorY, ElevatorZ, ElevatorStop,
 	ButtonX, ButtonY, ButtonZ,
-	Rotator, Door, Swapper
+	Rotator, Door, Swapper, Box
 }
 
 public partial class MapGenerator : Node

@@ -6,7 +6,8 @@ public abstract partial class Object : Node2D
 	public Vector3 position3D {get; protected set;}
 	public bool activatable {get; protected set;}
 
-	private bool hide = false;
+	protected bool hide = false;
+	protected bool updatePos = true;
 	protected Sprite2D sprite;
 
 	protected Character[] overlappingPlayers;
@@ -113,7 +114,7 @@ public abstract partial class Object : Node2D
 		overlappingPlayers[(int)player.GetCharacterType()] = null;
 	}
 
-	public void Switch(Character character)
+	public virtual void Switch(Character character)
 	{
 		player = character;
 
@@ -132,9 +133,10 @@ public abstract partial class Object : Node2D
 		Visible = overlappingPlayers[(int)player.GetCharacterType()] != null || (!hide && player.CanSee(position3D));
 	}
 
-	public void Update()
+	public virtual void Update()
 	{	
-		Position = player.pos.GlobalToLocal(position3D);
+		if (updatePos)
+			Position = player.pos.GlobalToLocal(position3D);
 
 		if (detectOverlap && CheckOverlap())
 		{

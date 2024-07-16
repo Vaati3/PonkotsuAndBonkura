@@ -1,0 +1,83 @@
+[gd_scene load_steps=6 format=3 uid="uid://fep0ly7duade"]
+
+[ext_resource type="Theme" uid="uid://dundbkyo1dqnu" path="res://Menus/Themes/Panel.tres" id="1_3madw"]
+[ext_resource type="Script" path="res://Menus/Widgets/Popup.cs" id="1_a6sc5"]
+[ext_resource type="Theme" uid="uid://c7wnqipmhvxh0" path="res://Menus/Themes/Button.tres" id="3_gjs00"]
+[ext_resource type="FontFile" uid="uid://dbv2ovpyr0js6" path="res://Menus/Themes/PlaywriteFRTrad-Regular.ttf" id="3_jutr5"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_malua"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 7
+border_width_top = 7
+border_width_right = 7
+border_width_bottom = 7
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="Popup" type="CanvasLayer"]
+script = ExtResource("1_a6sc5")
+
+[node name="Panel" type="Panel" parent="."]
+custom_minimum_size = Vector2(400, 200)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -199.0
+offset_top = -100.0
+offset_right = 201.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_3madw")
+theme_override_styles/panel = SubResource("StyleBoxFlat_malua")
+
+[node name="Label" type="Label" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -126.0
+offset_top = -58.0
+offset_right = 126.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_jutr5")
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -141.0
+offset_top = 27.0
+offset_right = 142.0
+offset_bottom = 67.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 125
+alignment = 1
+
+[node name="YesButton" type="Button" parent="HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme = ExtResource("3_gjs00")
+theme_override_font_sizes/font_size = 11
+text = "Yes"
+
+[node name="NoButton" type="Button" parent="HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme = ExtResource("3_gjs00")
+theme_override_font_sizes/font_size = 11
+text = "No"
+
+[connection signal="pressed" from="HBoxContainer/YesButton" to="." method="_on_yes_button_pressed"]
+[connection signal="pressed" from="HBoxContainer/NoButton" to="." method="_on_no_button_pressed"]

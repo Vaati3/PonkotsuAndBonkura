@@ -1,0 +1,7 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://dhfaf1ffdghe7"]
+
+[ext_resource type="Shader" path="res://Shaders/Shader.gdshader" id="1_xpcup"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_xpcup")

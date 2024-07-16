@@ -1,0 +1,78 @@
+[gd_scene load_steps=5 format=3 uid="uid://cm6c8xflpv8hq"]
+
+[ext_resource type="Theme" uid="uid://dundbkyo1dqnu" path="res://Menus/Themes/Panel.tres" id="1_q3ye3"]
+[ext_resource type="FontFile" uid="uid://dbv2ovpyr0js6" path="res://Menus/Themes/PlaywriteFRTrad-Regular.ttf" id="2_ygyrl"]
+[ext_resource type="PackedScene" uid="uid://cp10rxv4iq406" path="res://Menus/Widgets/VolumeSlider.tscn" id="4_c1ogl"]
+[ext_resource type="Theme" uid="uid://c7wnqipmhvxh0" path="res://Menus/Themes/Button.tres" id="5_ji8g2"]
+
+[node name="OptionMenu" type="Panel"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_q3ye3")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -138.0
+offset_top = 39.0
+offset_right = 138.0
+offset_bottom = 125.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("2_ygyrl")
+theme_override_font_sizes/font_size = 30
+text = "Options"
+horizontal_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -350.0
+offset_top = -195.0
+offset_right = 676.0
+offset_bottom = 413.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.7, 0.7)
+
+[node name="MasterSlider" parent="VBoxContainer" instance=ExtResource("4_c1ogl")]
+layout_mode = 2
+label = "Master Volume"
+busName = "Master"
+
+[node name="MusicSlider" parent="VBoxContainer" instance=ExtResource("4_c1ogl")]
+layout_mode = 2
+label = "Music Volume"
+busName = "Music"
+
+[node name="SFXSlider" parent="VBoxContainer" instance=ExtResource("4_c1ogl")]
+layout_mode = 2
+label = "Sound Effects Volume"
+busName = "SFX"
+
+[node name="Back" type="Button" parent="."]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -37.0
+offset_top = -82.0
+offset_right = 63.0
+offset_bottom = -26.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("5_ji8g2")
+text = "Go back"
+
+[connection signal="pressed" from="Back" to="." method="_on_back_pressed"]

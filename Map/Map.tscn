@@ -1,0 +1,57 @@
+[gd_scene load_steps=8 format=3 uid="uid://dxen73ot6hbp"]
+
+[ext_resource type="TileSet" uid="uid://b8v1g2dywrail" path="res://Map/TileSet.tres" id="1_p1aeu"]
+[ext_resource type="Script" path="res://Map/Map.cs" id="1_yu23f"]
+[ext_resource type="PackedScene" uid="uid://csmno7m2m8r0r" path="res://Characters/Character.tscn" id="2_2purt"]
+[ext_resource type="Script" path="res://Characters/Ponkotsu.cs" id="3_5yg6x"]
+[ext_resource type="Script" path="res://Characters/Bonkura.cs" id="4_40oqy"]
+[ext_resource type="Material" uid="uid://dhfaf1ffdghe7" path="res://Shaders/ShaderMaterial.tres" id="6_84da2"]
+[ext_resource type="PackedScene" uid="uid://dypu0aioxn2ln" path="res://Menus/GameMenu.tscn" id="6_v4ehb"]
+
+[node name="Map" type="TileMap"]
+tile_set = ExtResource("1_p1aeu")
+format = 2
+script = ExtResource("1_yu23f")
+
+[node name="Objects" type="Node2D" parent="."]
+
+[node name="Camera" type="Camera2D" parent="."]
+position = Vector2(3, 0)
+enabled = false
+zoom = Vector2(1.3, 1.3)
+limit_smoothed = true
+
+[node name="Ponkotsu" parent="." instance=ExtResource("2_2purt")]
+script = ExtResource("3_5yg6x")
+
+[node name="Bonkura" parent="." instance=ExtResource("2_2purt")]
+script = ExtResource("4_40oqy")
+
+[node name="GameMenu" parent="." instance=ExtResource("6_v4ehb")]
+
+[node name="Shader" type="CanvasLayer" parent="."]
+
+[node name="Debug" type="VBoxContainer" parent="Shader"]
+visible = false
+offset_right = 274.0
+offset_bottom = 239.0
+size_flags_horizontal = 4
+
+[node name="Ponkotsu" type="Label" parent="Shader/Debug"]
+modulate = Color(0.455164, 0.0995564, 0.631745, 1)
+layout_mode = 2
+
+[node name="Bonkura" type="Label" parent="Shader/Debug"]
+modulate = Color(0.455164, 0.0995564, 0.631745, 1)
+layout_mode = 2
+
+[node name="ColorRect" type="ColorRect" parent="Shader"]
+visible = false
+material = ExtResource("6_84da2")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 0)

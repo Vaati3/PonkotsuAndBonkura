@@ -7,7 +7,6 @@ public abstract partial class Object : Node2D
 	public bool activatable {get; protected set;}
 
 	protected bool hide = false;
-	protected bool updatePos = true;
 	protected Sprite2D sprite;
 
 	protected Character[] overlappingPlayers;
@@ -44,6 +43,9 @@ public abstract partial class Object : Node2D
 		this.player = player;
 		SetPosition(pos);
 		UpdateVisibility();
+
+		Vector2 half = player.size / 2;
+		GD.Print(player.size + " " + half);
 	}
 
 	protected void UpdateTexture(Texture2D topTexture, Texture2D sideTexture)
@@ -88,16 +90,37 @@ public abstract partial class Object : Node2D
 		return overlappingPlayers[0] != null || overlappingPlayers[1] != null;
 	}
 
-
-	protected bool CheckOverlap(Character character)
+	protected bool CheckOverlap(float x, float y, float z)
 	{
 		Vector3 min = position3D + overlapOffset - overlapSize / 2;
 		Vector3 max = position3D + overlapOffset + overlapSize / 2;
-		if (character.pos.globalPos.X >= min.X && character.pos.globalPos.X <= max.X &&
-			character.pos.globalPos.Y >= min.Y && character.pos.globalPos.Y <= max.Y &&
-			character.pos.globalPos.Z >= min.Z && character.pos.globalPos.Z <= max.Z)
+		if (x >= min.X && x <= max.X && y >= min.Y && y <= max.Y && z >= min.Z && z <= max.Z)
 			return true;
 		return false;
+	}
+
+	protected bool CheckOverlap(Character character)
+	{
+		Vector2 half = character.size / 2;
+		Vector3 pos = character.pos.globalPos;
+		if (character.pos.blindAxis == Axis.Z)
+		{
+			return CheckOverlap(pos.X - half.X, pos.Y - half.Y, pos.Z) ||
+				   CheckOverlap(pos.X - half.X, pos.Y + half.Y, pos.Z) ||
+				   CheckOverlap(pos.X + half.X, pos.Y - half.Y, pos.Z) ||
+				   CheckOverlap(pos.X + half.X, pos.Y + half.Y, pos.Z);
+		}
+		if (character.pos.blindAxis == Axis.Y)
+		{
+			return CheckOverlap(pos.X - half.X, pos.Y, pos.Z - half.Y) ||
+				   CheckOverlap(pos.X - half.X, pos.Y, pos.Z + half.Y) ||
+				   CheckOverlap(pos.X + half.X, pos.Y, pos.Z - half.Y) ||
+				   CheckOverlap(pos.X + half.X, pos.Y, pos.Z + half.Y);
+		}
+		return CheckOverlap(pos.X, pos.Y - half.Y, pos.Z - half.X) ||
+			   CheckOverlap(pos.X, pos.Y + half.Y, pos.Z - half.X) ||
+			   CheckOverlap(pos.X, pos.Y - half.Y, pos.Z + half.X) ||
+			   CheckOverlap(pos.X, pos.Y + half.Y, pos.Z + half.X);
 	}
 	protected bool CheckOverlap()
 	{
@@ -135,7 +158,6 @@ public abstract partial class Object : Node2D
 
 	public virtual void Update()
 	{	
-		if (updatePos)
 			Position = player.pos.GlobalToLocal(position3D);
 
 		if (detectOverlap && CheckOverlap())

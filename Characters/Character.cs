@@ -22,6 +22,8 @@ public abstract partial class Character : CharacterBody2D
 	public bool canFall{get; set;}
 	private Item item = null;
 
+	public Vector2 size {get; private set;}
+
 	public override void _Ready()
 	{
 		pos = new Position(GetCharacterType());
@@ -29,6 +31,8 @@ public abstract partial class Character : CharacterBody2D
 		canFall = true;
 		gameManager = GetNode<GameManager>("/root/GameManager");
 		sprite = GetNode<Sprite2D>("Sprite");
+		if (GetNode<CollisionShape2D>("CollisionShape").Shape is RectangleShape2D shape)
+			size = shape.Size;
 	}
 
 	public override void _Input(InputEvent @event)
@@ -199,16 +203,12 @@ public abstract partial class Character : CharacterBody2D
 	{
 		if (!canFall)
 			return false;
-		float half = GetSize().Y / 2f + 1;
+		float half = size.Y / 2f + 1;
         if (map.generator.GetTile(pos.globalPos.X, pos.globalPos.Y + half, pos.globalPos.Z) != Tile.Block)
 			return true;
 		return false;
 	}
 
-	public Vector2 GetSize()
-	{
-		return sprite.Texture.GetSize() * sprite.Scale;
-	}
 	protected virtual bool UpdateTile(Vector3I tilePos, int x, int y)
 	{
 		Tile tile = map.generator.GetTile(tilePos);

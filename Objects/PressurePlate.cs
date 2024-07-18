@@ -24,10 +24,7 @@ public partial class PressurePlate : Object
 			if ((tile == Tile.ButtonX && tilepos.X == objPos.X) ||
 				(tile == Tile.ButtonY && tilepos.Y == objPos.Y) ||
 				(tile == Tile.ButtonZ && tilepos.Z == objPos.Z) )
-			{
 				ButtonPressed += obj.Trigger;
-                GD.Print("tile");
-			}
 		}
         SetTexture("res://Objects/Textures/ButtonTop.png", "res://Objects/Textures/ButtonSide.png");
         topTexturePressed = GD.Load<Texture2D>("res://Objects/Textures/ButtonTopPressed.png");

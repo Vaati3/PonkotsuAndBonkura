@@ -4,26 +4,31 @@ public partial class Box : Object
 {
     const int speed = 20;
     const int range = 5;
+
+    Map map;
+
+    StaticBody2D collisionBody;
+    CollisionShape2D collisionShape;
     public override void InitObject(Character player, Vector3 pos, Map map)
     {
         base.InitObject(player, pos, map);
         SetTexture("res://Objects/Textures/Box.png", "res://Objects/Textures/Box.png");
 
-        overlapSize = new Vector3(MapGenerator.tileSize + range * 2, MapGenerator.tileSize, MapGenerator.tileSize + range * 2);
-
-        // StaticBody2D staticBody = new StaticBody2D()
-        // {
-        //     Position = Vector2.Zero,
-        //     CollisionLayer = 2
-        // };
-        // AddChild(staticBody);
-        // CollisionShape2D collisionShape = new CollisionShape2D()
-        // {
-        //     Shape = new RectangleShape2D(){
-        //         Size = new Vector2(MapGenerator.tileSize, MapGenerator.tileSize)
-        //     }
-        // };
-        // staticBody.AddChild(collisionShape);
+        overlapSize = new Vector3(MapGenerator.tileSize + range * 2, MapGenerator.tileSize + range * 2, MapGenerator.tileSize + range * 2);
+        this.map = map;
+        collisionBody = new StaticBody2D()
+        {
+            Position = Vector2.Zero,
+            CollisionLayer = 2
+        };
+        AddChild(collisionBody);
+        collisionShape = new CollisionShape2D()
+        {
+            Shape = new RectangleShape2D(){
+                Size = new Vector2(MapGenerator.tileSize, MapGenerator.tileSize)
+            }
+        };
+        collisionBody.AddChild(collisionShape);
     }
 
     public override void _PhysicsProcess(double delta)
@@ -50,7 +55,17 @@ public partial class Box : Object
 
     private void Move(Vector2 dir)
     {
-        position3D = player.pos.LocalToGlobal(Position + dir);
+        Vector3 newPos = player.pos.LocalToGlobal(Position + dir);
+        float half = MapGenerator.tileSize / 2;
+        if (map.generator.GetTile(newPos.X - half, newPos.Y, newPos.Z - half) != Tile.Void || 
+            map.generator.GetTile(newPos.X - half, newPos.Y, newPos.Z + half) != Tile.Void ||
+            map.generator.GetTile(newPos.X + half, newPos.Y, newPos.Z - half) != Tile.Void ||
+            map.generator.GetTile(newPos.X + half, newPos.Y, newPos.Z + half) != Tile.Void)
+            {
+                player.Velocity = Vector2.Zero;
+                return;
+            }
+        position3D = newPos;
 
         Rpc(nameof(UpdatePosition), position3D);
         Update();

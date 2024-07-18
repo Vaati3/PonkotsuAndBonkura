@@ -21,7 +21,16 @@ public partial class Map : TileMap
 
 	[Signal]public delegate void UnloadMapEventHandler();
 
-	public override void _Ready()
+    public override void _Input(InputEvent @event)
+    {
+        if (@event.IsActionPressed("debug_mode") && !@event.IsEcho())
+		{
+			VBoxContainer debug = GetNode<VBoxContainer>("Shader/Debug");
+			debug.Visible = !debug.Visible;
+		}
+    }
+
+    public override void _Ready()
 	{
 		gameManager = GetNode<GameManager>("/root/GameManager");
 		gameMenu = GetNode<GameMenu>("GameMenu");

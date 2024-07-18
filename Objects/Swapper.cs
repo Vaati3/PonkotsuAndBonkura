@@ -61,7 +61,10 @@ public partial class Swapper : Object
                 //and particles or shader effect
                 timer.Start();
                 player.SetPos(Map.AlignPos(swapper.tilePos));
-                Rpc(nameof(UpdateOther), Map.AlignPos(tilePos));
+                if (GetNode<GameManager>("/root/GameManager").isAlone)
+                    player.other.SetPos(Map.AlignPos(tilePos));
+                else
+                    Rpc(nameof(UpdateOther), Map.AlignPos(tilePos));
             }
         }
     }

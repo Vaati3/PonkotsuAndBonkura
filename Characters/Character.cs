@@ -117,7 +117,7 @@ public abstract partial class Character : CharacterBody2D
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer)]
 	public void SetPos(Vector3 newPos)
 	{
-		if (!isControlled)
+		if (!isControlled && !gameManager.isAlone)
 			return;
 		pos.globalPos = newPos;
 		Position = pos.GetLocalPos();

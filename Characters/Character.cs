@@ -203,8 +203,9 @@ public abstract partial class Character : CharacterBody2D
 	{
 		if (!canFall)
 			return false;
-		float half = size.Y / 2f + 1;
-        if (map.generator.GetTile(pos.globalPos.X, pos.globalPos.Y + half, pos.globalPos.Z) != Tile.Block)
+		Vector3I tilePos = MapGenerator.GetTilePos(pos.globalPos);
+		tilePos.Y++;
+        if (map.generator.GetTile(tilePos) != Tile.Block)
 			return true;
 		return false;
 	}

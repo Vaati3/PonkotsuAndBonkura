@@ -10,6 +10,20 @@ public partial class Box : Object
         SetTexture("res://Objects/Textures/Box.png", "res://Objects/Textures/Box.png");
 
         overlapSize = new Vector3(MapGenerator.tileSize + range * 2, MapGenerator.tileSize, MapGenerator.tileSize + range * 2);
+
+        // StaticBody2D staticBody = new StaticBody2D()
+        // {
+        //     Position = Vector2.Zero,
+        //     CollisionLayer = 2
+        // };
+        // AddChild(staticBody);
+        // CollisionShape2D collisionShape = new CollisionShape2D()
+        // {
+        //     Shape = new RectangleShape2D(){
+        //         Size = new Vector2(MapGenerator.tileSize, MapGenerator.tileSize)
+        //     }
+        // };
+        // staticBody.AddChild(collisionShape);
     }
 
     public override void _PhysicsProcess(double delta)
@@ -17,26 +31,19 @@ public partial class Box : Object
         if(!player.CanSee(position3D))
             return;
         if (overlappingPlayers[(int)player.GetCharacterType()] != null)
-            Move(GetDirection(player.Position, player.pos.GlobalToLocal(player.direction), player.size, (float)delta));
+            Move(GetDirection(player.Position, player.Velocity, player.size, (float)delta));
     }
 
-    private Vector2 GetDirection(Vector2 pos, Vector2 dir, Vector2 size, float delta)
+    private Vector2 GetDirection(Vector2 pos, Vector2 velocity, Vector2 size, float delta)
     {
         size /= 2;
-        // float halfTile = MapGenerator.tileSize/2;
-        if (player.GetCharacterType() == CharacterType.Ponkotsu && pos.X + size.X > Position.X && pos.X + size.X < Position.X + MapGenerator.tileSize && dir.X == 0)
+        if (velocity.X == 0 && ((pos.Y > Position.Y && velocity.Y < 0) || (pos.Y < Position.Y && velocity.Y > 0)))
         {
-            if (pos.Y + size.Y < Position.Y && dir.Y > 0)
-                return new Vector2(0, player.Velocity.Y * delta);
-            if (pos.Y + size.Y > Position.Y + MapGenerator.tileSize && dir.Y < 0 )
-                return new Vector2(0, -(player.Velocity.Y * delta));
+            return new Vector2(0, player.Velocity.Y * delta);
         }
-        if (pos.Y + size.Y > Position.Y && pos.Y + size.Y < Position.Y + MapGenerator.tileSize && dir.Y == 0)
+        if (velocity.Y == 0 && ((pos.X > Position.X && velocity.X < 0) || (pos.X < Position.X && velocity.X > 0)))
         {
-            if (pos.X + size.X < Position.X && dir.X > 0)
-                return new Vector2(player.Velocity.X * delta, 0);
-            if (pos.X + size.X > Position.X + MapGenerator.tileSize && dir.X < 0)
-                return new Vector2(-(player.Velocity.X * delta), 0);
+            return new Vector2(player.Velocity.X * delta, 0);
         }
         return Vector2.Zero;
     }

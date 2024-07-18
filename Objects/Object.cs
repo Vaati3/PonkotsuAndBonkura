@@ -43,9 +43,6 @@ public abstract partial class Object : Node2D
 		this.player = player;
 		SetPosition(pos);
 		UpdateVisibility();
-
-		Vector2 half = player.size / 2;
-		GD.Print(player.size + " " + half);
 	}
 
 	protected void UpdateTexture(Texture2D topTexture, Texture2D sideTexture)

@@ -4,9 +4,9 @@ public partial class Box : Object
 {
     const int speed = 20;
     const int range = 5;
-    public override void InitObject(Character player, Vector3 pos)
+    public override void InitObject(Character player, Vector3 pos, Map map)
     {
-        base.InitObject(player, pos);
+        base.InitObject(player, pos, map);
         SetTexture("res://Objects/Textures/Box.png", "res://Objects/Textures/Box.png");
 
         overlapSize = new Vector3(MapGenerator.tileSize + range * 2, MapGenerator.tileSize, MapGenerator.tileSize + range * 2);

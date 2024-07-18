@@ -6,9 +6,9 @@ public partial class Rotator : Object
 {
     Timer timer;
 
-    public override void InitObject(Character player, Vector3 pos)
+    public override void InitObject(Character player, Vector3 pos, Map map)
     {
-        base.InitObject(player, pos);
+        base.InitObject(player, pos, map);
         activatable = true;
         SetTexture("res://Objects/Textures/Rotator.png", "");
         

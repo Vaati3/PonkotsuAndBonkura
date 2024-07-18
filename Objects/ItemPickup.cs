@@ -12,7 +12,6 @@ public partial class ItemPickup : Object
         AddChild(item);
     }
 
-
     protected override void OverlapStarted()
     {
         base.OverlapStarted();

@@ -8,20 +8,19 @@ public partial class Swapper : Object
 
     Timer timer;
 
-    static public Swapper CreateSwapper(Character character, Vector3I pos, List<Object> objects)
+    public override void InitObject(Character player, Vector3 pos, Map map)
     {
-        Swapper swapper = Object.CreateObject<Swapper>(character, pos);
+        base.InitObject(player, pos, map);
 
-        swapper.SetupSwappers(objects);
-        swapper.SetTexture("res://Objects/Textures/Swapper.png", "res://Objects/Textures/Swapper.png");
-        swapper.tilePos = pos;
-        swapper.timer = new Timer() {
+        SetupSwappers(map.objects);
+        SetTexture("res://Objects/Textures/Swapper.png", "res://Objects/Textures/Swapper.png");
+        tilePos = MapGenerator.GetTilePos(pos);
+        timer = new Timer() {
             OneShot = true,
             WaitTime = 5,
             Autostart = false
         };
-        swapper.AddChild(swapper.timer);
-        return swapper;
+        AddChild(timer);
     }
 
     private void SetupSwappers(List<Object> objects)

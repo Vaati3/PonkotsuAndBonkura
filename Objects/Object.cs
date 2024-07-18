@@ -17,13 +17,16 @@ public abstract partial class Object : Node2D
 	private Texture2D topTexture;
 	private Texture2D sideTexture;
 
+	protected Tile newTile = Tile.Void;
+
 	[Signal]public delegate void FreeObjectEventHandler(Object obj);
 
-	static public T CreateObject<T>(Character character, Vector3I tilePos) where T : Object, new()
+	static public T CreateObject<T>(Character character, Vector3I tilePos, Map map = null) where T : Object, new()
 	{
 		Vector3 pos =  Map.AlignPos(tilePos);
 		T obj = new T();
-		obj.InitObject(character, pos);
+		obj.InitObject(character, pos, map);
+		map.generator.SetTile(obj.newTile, MapGenerator.GetTilePos(pos));
 
 		return obj;
 	}
@@ -38,7 +41,7 @@ public abstract partial class Object : Node2D
 		overlappingPlayers = new Character[2];
 	}
 
-	virtual public void InitObject(Character player, Vector3 pos)
+	virtual public void InitObject(Character player, Vector3 pos, Map map)
 	{
 		this.player = player;
 		SetPosition(pos);

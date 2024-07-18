@@ -14,33 +14,27 @@ public partial class Elevator : Object
     Axis axis;
     Timer pauseTimer;
 
-    static public Elevator CreateElevator(Map map, Character character, Vector3I pos, Tile tile)
+    public override void InitObject(Character player, Vector3 pos, Map map)
     {
-        List<Vector3I> stops = map.generator.Search(Tile.ElevatorStop, (Axis)((int)tile-(int)Tile.ElevatorX), pos);
-		if (stops.Count != 0)
-		{
-			Elevator elevator = CreateObject<Elevator>(character, pos);
-            foreach(Vector3I stop in stops)
-            {
-                elevator.stops.Add(Map.AlignPos(stop));
-                map.generator.SetTile(Tile.Void, stop);
-            }
-            Axis axis = (Axis)((int)tile-(int)Tile.ElevatorX);
-            elevator.axis = axis;
-            elevator.forward = axis == Axis.X ? Vector3.Right : axis == Axis.Y ? Vector3.Up : Vector3.Back;
-            elevator.direction = elevator.GetAxisValue(elevator.position3D) > elevator.GetAxisValue(elevator.stops[elevator.nextStop]) ? -1 : 1;
-            return elevator;
-		}
-        return null;
-    }
-
-    public override void InitObject(Character player, Vector3 pos)
-    {
-        base.InitObject(player, pos);
+        base.InitObject(player, pos, map);
+        Tile tile = map.generator.GetTile(pos);
+        List<Vector3I> allStops = map.generator.Search(Tile.ElevatorStop, (Axis)((int)tile-(int)Tile.ElevatorX), MapGenerator.GetTilePos(pos));
         stops = new List<Vector3>
         {
             position3D
         };
+        if (allStops.Count != 0)
+		{
+            foreach(Vector3I stop in allStops)
+            {
+                stops.Add(Map.AlignPos(stop));
+                map.generator.SetTile(Tile.Void, stop);
+            }
+            axis = (Axis)((int)tile-(int)Tile.ElevatorX);
+            forward = axis == Axis.X ? Vector3.Right : axis == Axis.Y ? Vector3.Up : Vector3.Back;
+            direction = GetAxisValue(position3D) > GetAxisValue(stops[nextStop]) ? -1 : 1;
+		}
+
         pauseTimer = new Timer
         {
             Autostart = false,

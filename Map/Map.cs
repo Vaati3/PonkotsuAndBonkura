@@ -102,35 +102,32 @@ public partial class Map : TileMap
 		MapGenerator.Action action = (tile, pos) => {
 			if (tile > Tile.BonkuraGoal && tile != Tile.ElevatorStop)
 			{
-				Tile newTile = Tile.Void;
 				switch (tile)
 				{
 					case Tile.ElevatorX: case Tile.ElevatorY : case Tile.ElevatorZ:
-						AddObject(Elevator.CreateElevator(this, character, pos, tile));
+						AddObject(Object.CreateObject<Elevator>(character, pos, this));
 						break;
 					case Tile.ButtonX: case Tile.ButtonY: case Tile.ButtonZ:
 						buttons.Add(pos, tile);
 						break;
 					case Tile.Rotator:
-						AddObject(Object.CreateObject<Rotator>(character, pos));
+						AddObject(Object.CreateObject<Rotator>(character, pos, this));
 						break;
 					case Tile.Door:
-						AddObject(Object.CreateObject<Door>(character, pos));
-						newTile = Tile.Block;
+						AddObject(Object.CreateObject<Door>(character, pos, this));
 						break;
 					case Tile.Swapper:
-						AddObject(Swapper.CreateSwapper(character, pos, objects));
+						AddObject(Object.CreateObject<Swapper>(character, pos, this));
 						break;
 					case Tile.Box:
-						AddObject(Object.CreateObject<Box>(character, pos));
+						AddObject(Object.CreateObject<Box>(character, pos, this));
 						break;
 				}
-				generator.SetTile(newTile, pos);
 			}
 		};
 		generator.LoopAction(action);
 		foreach(KeyValuePair<Vector3I, Tile> button in buttons)
-			AddObject(PressurePlate.CreatePressurePlate(character, button.Key, button.Value, objects));
+			AddObject(Object.CreateObject<PressurePlate>(character, button.Key, this));
 		UpdateObjects();
 	}
 
@@ -146,7 +143,7 @@ public partial class Map : TileMap
 	private void CreateItem(ItemType type, Vector3I pos)
 	{
 		Character character = gameManager.player.characterType == CharacterType.Ponkotsu ? ponkotsu : bonkura;
-		ItemPickup itemPickup = Object.CreateObject<ItemPickup>(character, pos);
+		ItemPickup itemPickup = Object.CreateObject<ItemPickup>(character, pos, this);
 		itemPickup.CreateItem(type);
 		AddObject(itemPickup);
 	}

@@ -9,28 +9,26 @@ public partial class PressurePlate : Object
     Texture2D topTexturePressed;
     Texture2D sideTexturePressed;
 
-    static public PressurePlate CreatePressurePlate(Character character, Vector3I pos, Tile tile, List<Object> objects)
+    public override void InitObject(Character player, Vector3 pos, Map map)
     {
-        PressurePlate pressurePlate = CreateObject<PressurePlate>(character, pos);
-        foreach(Object obj in objects)
+        base.InitObject(player, pos, map);
+
+        Tile tile = map.generator.GetTile(pos);
+        Vector3I tilepos = MapGenerator.GetTilePos(pos);
+        foreach(Object obj in map.objects)
 		{
 			if (!obj.activatable)
 				continue;
 			Vector3I objPos = MapGenerator.GetTilePos(obj.position3D);
-			if ((tile == Tile.ButtonX && pos.X == objPos.X) ||
-				(tile == Tile.ButtonY && pos.Y == objPos.Y) ||
-				(tile == Tile.ButtonZ && pos.Z == objPos.Z) )
+
+			if ((tile == Tile.ButtonX && tilepos.X == objPos.X) ||
+				(tile == Tile.ButtonY && tilepos.Y == objPos.Y) ||
+				(tile == Tile.ButtonZ && tilepos.Z == objPos.Z) )
 			{
-				pressurePlate.ButtonPressed += obj.Trigger;
+				ButtonPressed += obj.Trigger;
+                GD.Print("tile");
 			}
 		}
-        return pressurePlate;
-    }
-
-    public override void InitObject(Character player, Vector3 pos)
-    {
-        base.InitObject(player, pos);
-
         SetTexture("res://Objects/Textures/ButtonTop.png", "res://Objects/Textures/ButtonSide.png");
         topTexturePressed = GD.Load<Texture2D>("res://Objects/Textures/ButtonTopPressed.png");
         sideTexturePressed = GD.Load<Texture2D>("res://Objects/Textures/ButtonSidePressed.png"); 

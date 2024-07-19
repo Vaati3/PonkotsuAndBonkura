@@ -26,7 +26,7 @@ public partial class Ponkotsu : Character
         if (!falling && Input.IsActionPressed("move_up"))
             dir.Z -= speed;
         if (falling)
-            dir.Y += gravity * (float)delta;    
+            dir.Y += gravity * (float)delta;
         Move(dir);
     }
 

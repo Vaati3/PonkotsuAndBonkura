@@ -36,45 +36,71 @@ public partial class Box : Object
         if(!player.CanSee(position3D))
             return;
         if (overlappingPlayers[(int)player.GetCharacterType()] != null)
-            Move(GetDirection(player.Position, player.Velocity, player.size, (float)delta));
+        {
+            if (player.pos.globalPos.Y < position3D.Y)
+            {
+                player.canFall = false;
+            } else {
+                Move(GetDirection(player.Position, player.Velocity, player.size, (float)delta));
+            }
+        }
     }
 
-    private Vector2 GetDirection(Vector2 pos, Vector2 velocity, Vector2 size, float delta)
+    public override void Update()
+    {
+        base.Update();
+        collisionShape.Disabled = !Visible;
+    }
+
+    protected override void OverlapEnded()
+    {
+        base.OverlapEnded();
+        if(!player.canFall)
+            player.canFall = true;
+    }
+
+    private Vector3 GetDirection(Vector2 pos, Vector2 velocity, Vector2 size, float delta)
     {
         size /= 2;
-        if (velocity.X == 0 && ((pos.Y > Position.Y && velocity.Y < 0) || (pos.Y < Position.Y && velocity.Y > 0)))
-        {
-            return new Vector2(0, player.Velocity.Y * delta);
-        }
         if (velocity.Y == 0 && ((pos.X > Position.X && velocity.X < 0) || (pos.X < Position.X && velocity.X > 0)))
         {
-            return new Vector2(player.Velocity.X * delta, 0);
+            return new Vector3(player.Velocity.X * delta, 0, 0);
         }
-        return Vector2.Zero;
+        if (player.GetCharacterType() == CharacterType.Bonkura)
+            return Vector3.Zero;
+        if (velocity.X == 0 && ((pos.Y > Position.Y && velocity.Y < 0) || (pos.Y < Position.Y && velocity.Y > 0)))
+        {
+            return new Vector3(0, 0,player.Velocity.Y * delta);
+        }
+        return Vector3.Zero;
     }
 
-    private void Move(Vector2 dir)
+    private void Move(Vector3 dir)
     {
-        Vector3 newPos = player.pos.LocalToGlobal(Position + dir);
-        float half = MapGenerator.tileSize / 2;
+        if (dir == Vector3.Zero)
+            return;
+        Vector3 newPos = position3D + dir;
+        float half = MapGenerator.tileSize / 2 - 1;
         if (map.generator.GetTile(newPos.X - half, newPos.Y, newPos.Z - half) != Tile.Void || 
             map.generator.GetTile(newPos.X - half, newPos.Y, newPos.Z + half) != Tile.Void ||
             map.generator.GetTile(newPos.X + half, newPos.Y, newPos.Z - half) != Tile.Void ||
             map.generator.GetTile(newPos.X + half, newPos.Y, newPos.Z + half) != Tile.Void)
-            {
-                player.Velocity = Vector2.Zero;
-                return;
-            }
+        {
+            return;
+        }
         position3D = newPos;
-
-        Rpc(nameof(UpdatePosition), position3D);
+        Rpc(nameof(UpdatePosition), dir);
         Update();
     }
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
-    private void UpdatePosition(Vector3 newPos)
+    private void UpdatePosition(Vector3 dir)
     {
-        position3D = newPos;
-        Position = player.other.pos.GlobalToLocal(newPos);
+        position3D += dir;
+
+        if (overlappingPlayers[(int)player.GetCharacterType()] != null && player.pos.globalPos.Y < position3D.Y)
+        {
+            player.SetPos(player.pos.globalPos + dir);
+        }
     }
 }

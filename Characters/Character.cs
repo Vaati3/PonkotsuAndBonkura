@@ -92,7 +92,7 @@ public abstract partial class Character : CharacterBody2D
 		camera.Enabled = false;
 	}
 
-	public virtual void Move(Vector3 dir)
+	public void Move(Vector3 dir)
 	{
 		if (gameManager.isAlone && !isControlled)
 		{
@@ -108,10 +108,13 @@ public abstract partial class Character : CharacterBody2D
 		map.UpdateObjects();
 
 		Rpc(nameof(UpdatePosition), pos.globalPos);
-		
-		if (isControlled && map.generator.GetTile(pos.globalPos) == (Tile)((int)Tile.PonkotsuGoal + GetCharacterType()) &&
+		if (!isControlled)
+			return;
+		if (map.generator.GetTile(pos.globalPos) == (Tile)((int)Tile.PonkotsuGoal + GetCharacterType()) &&
 			map.generator.GetTile(other.pos.globalPos) == (Tile)((int)Tile.PonkotsuGoal + other.GetCharacterType()))
 			map.gameMenu.MapCompleted();
+		if (pos.GetBlindAxisValue(dir) != 0)
+			UpdateMap();
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer)]

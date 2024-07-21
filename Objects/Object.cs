@@ -73,11 +73,11 @@ public abstract partial class Object : Node2D
 	protected void SetTexture(string topTexturePath, string sideTexturePath)
 	{
 
-		if (FileAccess.FileExists(topTexturePath))
+		if (ResourceLoader.Exists(topTexturePath))
 			topTexture = GD.Load<Texture2D>(topTexturePath);
 		else
 			topTexture = null;
-		if (FileAccess.FileExists(sideTexturePath))
+		if (ResourceLoader.Exists(sideTexturePath))
 			sideTexture = GD.Load<Texture2D>(sideTexturePath);
 		else
 			sideTexture = null;

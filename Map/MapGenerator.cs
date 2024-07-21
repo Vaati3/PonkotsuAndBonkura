@@ -45,7 +45,7 @@ public partial class MapGenerator : Node
 	public bool Read(string mapName)
 	{
 		string path = "res://Map/Maps/" + mapName + ".dat";
-		if (! FileAccess.FileExists(path))
+		if (!ResourceLoader.Exists(path))
 			return false;
 		FileAccess file = FileAccess.Open(path, FileAccess.ModeFlags.Read);
 		string[] sizeStr = file.GetLine().Split("x");

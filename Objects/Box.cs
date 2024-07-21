@@ -35,14 +35,10 @@ public partial class Box : Object
     {
         if(!player.CanSee(position3D))
             return;
-        if (overlappingPlayers[(int)player.GetCharacterType()] != null)
+        if (overlappingPlayers[(int)player.GetCharacterType()] != null
+            && player.pos.globalPos.Y > position3D.Y)
         {
-            if (player.pos.globalPos.Y < position3D.Y)
-            {
-                player.canFall = false;
-            } else {
-                Move(GetDirection(player.Position, player.Velocity, player.size, (float)delta));
-            }
+            Move(GetDirection(player.Position, player.Velocity, player.size, (float)delta));
         }
     }
 
@@ -50,6 +46,15 @@ public partial class Box : Object
     {
         base.Update();
         collisionShape.Disabled = !Visible;
+    }
+
+    protected override void OverlapStarted()
+    {
+        base.OverlapStarted();
+        if (player.pos.globalPos.Y < Position.Y)
+        {
+            player.canFall = false;
+        }
     }
 
     protected override void OverlapEnded()

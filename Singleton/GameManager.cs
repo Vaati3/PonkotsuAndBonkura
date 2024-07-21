@@ -98,7 +98,7 @@ public partial class GameManager : Node
 
 	public bool Load()
 	{
-		if (!FileAccess.FileExists(savePath))
+		if (!ResourceLoader.Exists(savePath))
 		{
 			player = new Player();
 			settings = new Settings();

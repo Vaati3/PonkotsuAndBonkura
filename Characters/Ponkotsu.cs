@@ -30,13 +30,6 @@ public partial class Ponkotsu : Character
         Move(dir);
     }
 
-    public override void Move(Vector3 dir)
-    {
-        base.Move(dir);
-        if (isControlled && dir.Y != 0)
-            UpdateMap();
-    }
-
     public override CharacterType GetCharacterType()
     {
         return CharacterType.Ponkotsu;

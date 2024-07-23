@@ -1,5 +1,5 @@
 using Godot;
-using System;
+using GodotSteam;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
@@ -9,7 +9,7 @@ public class Player {
 	public int progression {get; set;}
 	public CharacterType characterType {get; set;}
 	public bool isReady {get; set;}
-	public Player(long id = 0, string name = "", int progression = 0, CharacterType characterType = CharacterType.Ponkotsu)
+	public Player(int progression = 0, CharacterType characterType = CharacterType.Ponkotsu, long id = 0, string name = "")
 	{
 		this.id = id;
 		this.name = name;
@@ -25,7 +25,17 @@ public class Player {
 	{
 		string[] data = str.Split(" ");
 		long id = long.Parse(Regex.Replace(data[0], "[^0-9]", ""));
-		return new Player(id, data[1], data[2].ToInt(), (CharacterType)data[3].ToInt());
+		return new Player(data[2].ToInt(), (CharacterType)data[3].ToInt(), id, data[1]);
+	}
+
+	public string Save()
+	{
+		return progression + " " + (int)characterType;
+	}
+	static public Player Load(string str)
+	{
+		string[] data = str.Split(" ");
+		return new Player(data[0].ToInt(), (CharacterType)data[1].ToInt());
 	}
 }
 
@@ -65,11 +75,28 @@ public partial class GameManager : Node
 	public Player player {get; private set;}
 	public Player otherPlayer {get; private set;}
 
+	//steam
+	const uint appId = 480;
+
 	[Signal]public delegate void UpdateServerEventHandler();
+
+    public override void _EnterTree()
+    {
+        OS.SetEnvironment("SteamAppId", appId.ToString());
+        OS.SetEnvironment("SteamGameId", appId.ToString());
+    }
 
     public override void _Ready()
     {
 		Load();
+		Steam.SteamInit();
+        if (!Steam.IsSteamRunning())
+        {
+            GD.Print("Steam is not running");
+			return;
+        }
+		ulong id = Steam.GetSteamID();
+		player.name = Steam.GetFriendPersonaName(id);
     }
 
     public void PlayerJoined(Player newPlayer, bool isServer)
@@ -92,21 +119,23 @@ public partial class GameManager : Node
 	{
 		FileAccess file = FileAccess.Open(savePath, FileAccess.ModeFlags.Write);
 
-		file.StoreLine(player.ToString());
+		file.StoreLine(player.Save());
 		file.StoreLine(settings.ToString());
+		file.Close();
 	}
 
 	public bool Load()
 	{
-		if (!ResourceLoader.Exists(savePath))
+		FileAccess file = FileAccess.Open(savePath, FileAccess.ModeFlags.Read);
+		if (file == null)
 		{
 			player = new Player();
 			settings = new Settings();
 			return false;
 		}
-		FileAccess file = FileAccess.Open(savePath, FileAccess.ModeFlags.Read);
-		player = Player.FromString(file.GetLine());
+		player = Player.Load(file.GetLine());
 		settings = Settings.FromString(file.GetLine());
+		file.Close();
 		return true;
 	}
 

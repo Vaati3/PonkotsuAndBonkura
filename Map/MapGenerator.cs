@@ -32,7 +32,6 @@ public partial class MapGenerator : Node
 			spawns[b-2] = pos * tileSize + new Vector3(tileSize/2, tileSize/2, tileSize/2);
 			b = 0;
 		}
-		//Check and create items
 		if (b > 200)
 		{
 			CreateItem((ItemType)(255 - b), pos);
@@ -45,9 +44,9 @@ public partial class MapGenerator : Node
 	public bool Read(string mapName)
 	{
 		string path = "res://Map/Maps/" + mapName + ".dat";
-		if (!ResourceLoader.Exists(path))
-			return false;
 		FileAccess file = FileAccess.Open(path, FileAccess.ModeFlags.Read);
+		if (file == null)
+			return false;
 		string[] sizeStr = file.GetLine().Split("x");
 		size = new Vector3I(sizeStr[0].ToInt(), sizeStr[2].ToInt(), sizeStr[1].ToInt());
 		data = new Tile[size.X, size.Y, size.Z];

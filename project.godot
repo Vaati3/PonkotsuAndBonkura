@@ -25,6 +25,10 @@ GameManager="*res://Singleton/GameManager.cs"
 MultiplayerController="*res://Singleton/MultiplayerController.cs"
 SoundManager="*res://Singleton/SoundManager.cs"
 
+[debug]
+
+file_logging/enable_file_logging=true
+
 [dotnet]
 
 project/assembly_name="PonkotsuAndBonkura"

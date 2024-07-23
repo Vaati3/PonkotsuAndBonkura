@@ -68,7 +68,11 @@ public partial class Map : TileMap
     public void StartMap(string mapName, int mapNumber)
 	{
 		gameMenu.Init(mapName, mapNumber);
-		generator.Read(mapName);
+		if (!generator.Read(mapName))
+		{
+			GD.Print("Error loading map");
+			return;
+		}
 		FillObjects();
 		if (gameManager.player.characterType == CharacterType.Ponkotsu)
 			ponkotsu.Possess(generator.spawns);

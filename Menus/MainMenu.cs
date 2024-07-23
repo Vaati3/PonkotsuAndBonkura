@@ -21,13 +21,6 @@ public partial class MainMenu : Panel
 		joinMenu = GetNode<Control>("JoinMenu");
 		optionMenu = GetNode<Control>("OptionMenu");
 		optionMenu.GetNode<Button>("Back").Pressed += _on_option_back_pressed;
-		namePopup = GetNode<Control>("NamePopup");
-		if (manager.player.name == "")
-		{
-			menu.Visible = false;
-			namePopup.Visible = true;
-		}
-		
 		controller.HostCreated += OpenLobby;
 		soundManager.PlayMusic("music");
 	}

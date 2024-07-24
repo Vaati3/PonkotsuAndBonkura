@@ -11,6 +11,8 @@ public partial class MainMenu : Panel
 	Control joinMenu;
 	Control optionMenu;
 	Control namePopup;
+
+	bool local;
 	public override void _Ready()
 	{
 		controller = GetNode<MultiplayerController>("/root/MultiplayerController");
@@ -21,21 +23,39 @@ public partial class MainMenu : Panel
 		joinMenu = GetNode<Control>("JoinMenu");
 		optionMenu = GetNode<Control>("OptionMenu");
 		optionMenu.GetNode<Button>("Back").Pressed += _on_option_back_pressed;
-		controller.HostCreated += OpenLobby;
+		controller.OpenLobby += OpenLobby;
+		controller.BackToMainMenu += BackToMainMenu;
 		soundManager.PlayMusic("music");
 	}
 
 	public void OpenLobby()
 	{
 		controller.lobby = GD.Load<PackedScene>("res://Menus/Lobby.tscn").Instantiate<Lobby>();
+		controller.lobby.local = local;
 		GetTree().Root.AddChild(controller.lobby);
+		BackToMainMenu();
 		Visible = false;
 	}
 
+	public void BackToMainMenu()
+	{
+		playMenu.Visible = false;
+		menu.Visible = true;
+	}
+
 	//main menu
+
+	public void _on_local_play_pressed()
+	{
+		soundManager.PlaySFX("button");
+		local = true;
+		menu.Visible = false;
+		playMenu.Visible = true;
+	}
 	public void _on_play_pressed()
 	{
 		soundManager.PlaySFX("button");
+		local = false;
 		menu.Visible = false;
 		playMenu.Visible = true;
 	}
@@ -55,14 +75,21 @@ public partial class MainMenu : Panel
 		soundManager.PlaySFX("button");
 		GetTree().Quit();
 	}
+
 	//play menus
 	public void _on_host_pressed()
 	{
 		soundManager.PlaySFX("button");
-		if (!controller.Host())
-			GD.Print("host failed");
-		playMenu.Visible = false;
-		menu.Visible = true;
+		if (local)
+		{
+			if (!controller.Host())
+			{
+				GD.Print("host failed");
+				BackToMainMenu();
+			}
+		} else {
+			controller.HostSteam();
+		}
 	}
 	public void _on_join_pressed()
 	{
@@ -81,23 +108,19 @@ public partial class MainMenu : Panel
 	{
 		soundManager.PlaySFX("button");
 		string address = GetNode<TextEdit>("JoinMenu/TextEdit").Text;
-		controller.Join(address);
-		joinMenu.Visible = false;
-		menu.Visible = true;
-	}
-	//name popup
-	public void _on_confirm_name_pressed()
-	{
-		soundManager.PlaySFX("button");
-		string name = namePopup.GetNode<TextEdit>("NameTextbox").Text;
-		if (name != "")
+		if (local)
 		{
-			manager.player.name = name;
-			manager.Save();
-			namePopup.Visible = false;
-			menu.Visible = true;
+			if (!controller.Join(address))
+			{
+				GD.Print("join Failed");
+				BackToMainMenu();
+			}
+		} else {
+			controller.JoinSteam(ulong.Parse(address));
 		}
+
 	}
+
 	//options
 	public void _on_option_back_pressed()
 	{

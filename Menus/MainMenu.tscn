@@ -47,9 +47,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -101.5
-offset_top = -124.0
+offset_top = -153.5
 offset_right = 101.5
-offset_bottom = 201.0
+offset_bottom = 264.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 17
@@ -60,6 +60,12 @@ custom_minimum_size = Vector2(100, 70)
 layout_mode = 2
 theme = ExtResource("3_5sobe")
 text = "Multiplayer"
+
+[node name="LocalPlay" type="Button" parent="Menu/VBoxContainer"]
+custom_minimum_size = Vector2(100, 70)
+layout_mode = 2
+theme = ExtResource("3_5sobe")
+text = "Local Multiplayer"
 
 [node name="SinglePlayer" type="Button" parent="Menu/VBoxContainer"]
 custom_minimum_size = Vector2(100, 70)

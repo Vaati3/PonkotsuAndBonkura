@@ -93,6 +93,10 @@ public partial class GameManager : Node
         if (!Steam.IsSteamRunning())
         {
             GD.Print("Steam is not running");
+			if (OS.HasEnvironment("USERNAME"))
+				player.name = OS.GetEnvironment("USERNAME");
+			else
+				player.name = "player";
 			return;
         }
 		ulong id = Steam.GetSteamID();

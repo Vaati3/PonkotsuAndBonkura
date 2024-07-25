@@ -89,7 +89,7 @@ public partial class Lobby : Panel
 		timer.QueueFree();
 		gameManager.UpdateServer += UpdateServer;
 		if (local && !gameManager.isAlone && gameManager.player.id == 1)
-			GetNode<Label>("IP").Text = "IP\n" + GetNode<MultiplayerController>("/root/MultiplayerController").GetIP();
+			GetNode<Label>("HBox/IP").Text = "IP\n" + GetNode<MultiplayerController>("/root/MultiplayerController").GetIP();
 	}
 
 	private void UpdateServer()
@@ -101,9 +101,9 @@ public partial class Lobby : Panel
     private void UpdatePlayerInfo(Player player)
 	{
 		int playerNumber = player.id == 1 ? 1 : 2;
-		GetNode<Label>("VBox/Player" + playerNumber + "/Name").Text = player.name;
-		GetNode<Label>("VBox/Player" + playerNumber + "/Character").Text = player.characterType.ToString();
-		GetNode<Label>("VBox/Player" + playerNumber + "/Ready").Text = player.isReady ? "Ready" : "Not Ready";
+		GetNode<Label>("HBox/VBox/Player" + playerNumber + "/Name").Text = player.name;
+		GetNode<Label>("HBox/VBox/Player" + playerNumber + "/Character").Text = player.characterType.ToString();
+		GetNode<Label>("HBox/VBox/Player" + playerNumber + "/Ready").Text = player.isReady ? "Ready" : "Not Ready";
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal=true)]
@@ -185,9 +185,9 @@ public partial class Lobby : Panel
 		{
 			map.BacktoLobby();
 		}
-		GetNode<Label>("VBox/Player2/Name").Text = "";
-		GetNode<Label>("VBox/Player2/Character").Text = "";
-		GetNode<Label>("VBox/Player2/Ready").Text = "";
+		GetNode<Label>("HBox/VBox/Player2/Name").Text = "";
+		GetNode<Label>("HBox/VBox/Player2/Character").Text = "";
+		GetNode<Label>("HBox/VBox/Player2/Ready").Text = "";
 		Button button = GetNode<Button>("Ready");
 		button.Text = "Ready";
 		button.Disabled = true;

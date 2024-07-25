@@ -12,7 +12,7 @@ public partial class MultiplayerController : Node
 
 	//steam
 	SteamMultiplayerPeer steamPeer;
-	ulong lobbyId = 0;
+	public ulong lobbyId { get; private set;}= 0;
 
 	[Signal] public delegate void OpenLobbyEventHandler();
 	[Signal] public delegate void BackToMainMenuEventHandler();
@@ -55,7 +55,7 @@ public partial class MultiplayerController : Node
 
 	public void HostSteam()
 	{
-		Steam.CreateLobby(Steam.LobbyType.FriendsOnly, 2);
+		Steam.CreateLobby(Steam.LobbyType.Public, 2);
 	}
 
 	public void LobbyCreated(long connect, ulong lobbyId)
@@ -67,7 +67,7 @@ public partial class MultiplayerController : Node
 			return;
 		}
 		this.lobbyId = lobbyId;
-		Steam.SetLobbyData(lobbyId, "lobby", (string)Steam.GetPersonaName());
+		Steam.SetLobbyData(lobbyId, gameManager.player.name, (string)Steam.GetPersonaName());
 		steamPeer.CreateHost(0, new Godot.Collections.Array());
 		Multiplayer.MultiplayerPeer = steamPeer;
 		gameManager.player.id = 1;

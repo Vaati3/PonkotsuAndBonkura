@@ -29,9 +29,9 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -269.5
-offset_top = 28.0
+offset_top = 42.0
 offset_right = 269.5
-offset_bottom = 148.0
+offset_bottom = 162.0
 grow_horizontal = 2
 theme_override_fonts/font = ExtResource("3_wmdyp")
 theme_override_font_sizes/font_size = 42
@@ -60,12 +60,6 @@ custom_minimum_size = Vector2(100, 70)
 layout_mode = 2
 theme = ExtResource("3_5sobe")
 text = "Multiplayer"
-
-[node name="LocalPlay" type="Button" parent="Menu/VBoxContainer"]
-custom_minimum_size = Vector2(100, 70)
-layout_mode = 2
-theme = ExtResource("3_5sobe")
-text = "Local Multiplayer"
 
 [node name="SinglePlayer" type="Button" parent="Menu/VBoxContainer"]
 custom_minimum_size = Vector2(100, 70)
@@ -101,29 +95,35 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -49.0
-offset_top = -76.5
-offset_right = 49.0
-offset_bottom = 76.5
+offset_left = -102.0
+offset_top = -165.5
+offset_right = 102.0
+offset_bottom = 165.5
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 15
+theme_override_constants/separation = 17
 alignment = 1
 
-[node name="Host" type="Button" parent="Play/VBoxContainer"]
-custom_minimum_size = Vector2(100, 50)
+[node name="HostSteam" type="Button" parent="Play/VBoxContainer"]
+custom_minimum_size = Vector2(100, 70)
 layout_mode = 2
 theme = ExtResource("3_5sobe")
-text = "Host"
+text = "Host Steam"
+
+[node name="Host" type="Button" parent="Play/VBoxContainer"]
+custom_minimum_size = Vector2(100, 70)
+layout_mode = 2
+theme = ExtResource("3_5sobe")
+text = "Host Local"
 
 [node name="Join" type="Button" parent="Play/VBoxContainer"]
-custom_minimum_size = Vector2(100, 50)
+custom_minimum_size = Vector2(100, 70)
 layout_mode = 2
 theme = ExtResource("3_5sobe")
-text = "Join"
+text = "Join Local"
 
 [node name="Back" type="Button" parent="Play/VBoxContainer"]
-custom_minimum_size = Vector2(100, 50)
+custom_minimum_size = Vector2(100, 70)
 layout_mode = 2
 theme = ExtResource("3_5sobe")
 text = "Go back"
@@ -160,20 +160,6 @@ theme_override_fonts/font = ExtResource("3_wmdyp")
 theme_override_font_sizes/font_size = 20
 placeholder_text = "Enter host"
 
-[node name="ErrorMsg" type="Label" parent="JoinMenu"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = 41.0
-offset_right = 20.0
-offset_bottom = 64.0
-grow_horizontal = 2
-grow_vertical = 2
-
 [node name="HBoxContainer" type="HBoxContainer" parent="JoinMenu"]
 custom_minimum_size = Vector2(150, 50)
 layout_mode = 1
@@ -202,54 +188,10 @@ layout_mode = 2
 theme = ExtResource("3_5sobe")
 text = "Join"
 
-[node name="NamePopup" type="Control" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="NameTextbox" type="TextEdit" parent="NamePopup"]
-custom_minimum_size = Vector2(300, 40)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -150.0
-offset_top = -90.0
-offset_right = 150.0
-offset_bottom = -14.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/background_color = Color(0, 0, 0, 1)
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_selected_color = Color(1, 1, 1, 1)
-theme_override_colors/font_readonly_color = Color(1, 1, 1, 1)
-theme_override_colors/font_placeholder_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("3_wmdyp")
-theme_override_font_sizes/font_size = 20
-placeholder_text = "Enter username"
-
-[node name="ConfirmName" type="Button" parent="NamePopup"]
-custom_minimum_size = Vector2(100, 50)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -50.0
-offset_top = 6.0
-offset_right = 50.0
-offset_bottom = 56.0
-grow_horizontal = 2
-grow_vertical = 2
-theme = ExtResource("3_5sobe")
-text = "Confirm"
+[node name="Lobbies" type="VBoxContainer" parent="JoinMenu"]
+layout_mode = 0
+offset_right = 324.0
+offset_bottom = 483.0
 
 [node name="OptionMenu" parent="." instance=ExtResource("5_jkksb")]
 visible = false
@@ -259,9 +201,10 @@ layout_mode = 1
 [connection signal="pressed" from="Menu/VBoxContainer/SinglePlayer" to="." method="_on_play_solo_pressed"]
 [connection signal="pressed" from="Menu/VBoxContainer/Options" to="." method="_on_options_pressed"]
 [connection signal="pressed" from="Menu/VBoxContainer/Quit" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="Play/VBoxContainer/HostSteam" to="." method="_on_host_pressed"]
+[connection signal="pressed" from="Play/VBoxContainer/HostSteam" to="." method="_on_host_steam_pressed"]
 [connection signal="pressed" from="Play/VBoxContainer/Host" to="." method="_on_host_pressed"]
 [connection signal="pressed" from="Play/VBoxContainer/Join" to="." method="_on_join_pressed"]
 [connection signal="pressed" from="Play/VBoxContainer/Back" to="." method="_on_back_pressed"]
 [connection signal="pressed" from="JoinMenu/HBoxContainer/Back" to="." method="_on_back_pressed"]
 [connection signal="pressed" from="JoinMenu/HBoxContainer/ConfirmJoin" to="." method="_on_confirm_join_pressed"]
-[connection signal="pressed" from="NamePopup/ConfirmName" to="." method="_on_confirm_name_pressed"]

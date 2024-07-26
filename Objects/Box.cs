@@ -42,16 +42,17 @@ public partial class Box : Object
         }
     }
 
-    public override void Update()
+    protected override void UpdateVisibility()
     {
-        base.Update();
-        collisionShape.Disabled = !Visible;
+        Visible = !hide && player.CanSee(position3D);
+        if (collisionShape != null)
+            collisionShape.Disabled = !Visible;
     }
 
     protected override void OverlapStarted()
     {
         base.OverlapStarted();
-        if (player.pos.globalPos.Y < Position.Y)
+        if (player.pos.globalPos.Y < position3D.Y)
         {
             player.canFall = false;
         }

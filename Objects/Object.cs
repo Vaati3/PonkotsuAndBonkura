@@ -101,26 +101,22 @@ public abstract partial class Object : Node2D
 
 	protected bool CheckOverlap(Character character)
 	{
-		Vector2 half = character.size / 2;
 		Vector3 pos = character.pos.globalPos;
-		if (character.pos.blindAxis == Axis.Z)
-		{
-			return CheckOverlap(pos.X - half.X, pos.Y - half.Y, pos.Z) ||
-				   CheckOverlap(pos.X - half.X, pos.Y + half.Y, pos.Z) ||
-				   CheckOverlap(pos.X + half.X, pos.Y - half.Y, pos.Z) ||
-				   CheckOverlap(pos.X + half.X, pos.Y + half.Y, pos.Z);
-		}
+		Vector2 halfSpr = character.size / 2;
+		Vector3 half;
 		if (character.pos.blindAxis == Axis.Y)
-		{
-			return CheckOverlap(pos.X - half.X, pos.Y, pos.Z - half.Y) ||
-				   CheckOverlap(pos.X - half.X, pos.Y, pos.Z + half.Y) ||
-				   CheckOverlap(pos.X + half.X, pos.Y, pos.Z - half.Y) ||
-				   CheckOverlap(pos.X + half.X, pos.Y, pos.Z + half.Y);
-		}
-		return CheckOverlap(pos.X, pos.Y - half.Y, pos.Z - half.X) ||
-			   CheckOverlap(pos.X, pos.Y + half.Y, pos.Z - half.X) ||
-			   CheckOverlap(pos.X, pos.Y - half.Y, pos.Z + half.X) ||
-			   CheckOverlap(pos.X, pos.Y + half.Y, pos.Z + half.X);
+			half = new Vector3(halfSpr.X, halfSpr.Y, halfSpr.Y);
+		else
+			half = new Vector3(halfSpr.X, halfSpr.Y, halfSpr.X);
+
+		return CheckOverlap(pos.X - half.X, pos.Y - half.Y, pos.Z - half.Z) ||
+			   CheckOverlap(pos.X - half.X, pos.Y + half.Y, pos.Z - half.Z) ||
+			   CheckOverlap(pos.X + half.X, pos.Y - half.Y, pos.Z - half.Z) ||
+			   CheckOverlap(pos.X + half.X, pos.Y + half.Y, pos.Z - half.Z) ||
+			   CheckOverlap(pos.X - half.X, pos.Y - half.Y, pos.Z + half.Z) ||
+			   CheckOverlap(pos.X - half.X, pos.Y + half.Y, pos.Z + half.Z) ||
+			   CheckOverlap(pos.X + half.X, pos.Y - half.Y, pos.Z + half.Z) ||
+			   CheckOverlap(pos.X + half.X, pos.Y + half.Y, pos.Z + half.Z);
 	}
 	protected bool CheckOverlap()
 	{
@@ -151,7 +147,7 @@ public abstract partial class Object : Node2D
 		Position = player.pos.GlobalToLocal(pos);
 	}
 
-	private void UpdateVisibility()
+	protected virtual void UpdateVisibility()
 	{
 		Visible = overlappingPlayers[(int)player.GetCharacterType()] != null || (!hide && player.CanSee(position3D));
 	}

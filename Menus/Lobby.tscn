@@ -66,6 +66,14 @@ offset_right = 268.0
 offset_bottom = 140.0
 grow_horizontal = 2
 
+[node name="Invite" type="Button" parent="HBox"]
+visible = false
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+theme = ExtResource("3_o5ijt")
+text = "Invite
+Friend"
+
 [node name="IP" type="Label" parent="HBox"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("4_ls8ml")
@@ -143,3 +151,4 @@ columns = 10
 [connection signal="pressed" from="SwitchCharacters" to="." method="_on_switch_characters_pressed"]
 [connection signal="pressed" from="Leave" to="." method="_on_leave_pressed"]
 [connection signal="pressed" from="Ready" to="." method="_on_ready_pressed"]
+[connection signal="pressed" from="HBox/Invite" to="." method="_on_invite_pressed"]

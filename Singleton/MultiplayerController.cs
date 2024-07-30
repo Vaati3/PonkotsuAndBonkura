@@ -12,7 +12,7 @@ public partial class MultiplayerController : Node
 
 	//steam
 	SteamMultiplayerPeer steamPeer;
-	public ulong lobbyId { get; private set;}= 0;
+	public ulong lobbyId { get; private set;} = 0;
 
 	[Signal] public delegate void OpenLobbyEventHandler();
 	[Signal] public delegate void BackToMainMenuEventHandler();
@@ -27,6 +27,8 @@ public partial class MultiplayerController : Node
 
 		Steam.LobbyCreated += LobbyCreated;
 		Steam.LobbyJoined += LobbyJoined;
+		Steam.JoinRequested += JoinRequested;
+		Steam.LobbyInvite += InviteRequested;
 
 		peer = new ENetMultiplayerPeer();
 		steamPeer = new SteamMultiplayerPeer();
@@ -48,7 +50,6 @@ public partial class MultiplayerController : Node
 			return false;
 		peer.Host.Compress(ENetConnection.CompressionMode.RangeCoder);
 		Multiplayer.MultiplayerPeer = peer;
-		gameManager.player.id = 1;
 		EmitSignal(nameof(OpenLobby));
 		return true;
 	}
@@ -85,9 +86,10 @@ public partial class MultiplayerController : Node
 		return true;
 	}
 
-	public void JoinSteam(ulong lobbyId)
+	public void JoinRequested(ulong lobbyId, ulong steamId)
 	{
-		Steam.JoinLobby(lobbyId);
+		GD.Print("joining " + Steam.GetFriendPersonaName(steamId) + " game");
+		Steam.JoinLobby(lobbyId);		
 	}
 
 	public void LobbyJoined(ulong lobbyId, long permissions, bool locked, long response)
@@ -106,6 +108,12 @@ public partial class MultiplayerController : Node
 			Multiplayer.MultiplayerPeer = steamPeer;
 			gameManager.player.id = (long)id;
 		}
+	}
+
+	public void InviteRequested(ulong inviter, ulong lobbyId, ulong game)
+	{
+		GD.Print("joining " + Steam.GetFriendPersonaName(inviter) + " game");
+		Steam.JoinLobby(lobbyId);
 	}
 
 	public void Quit()

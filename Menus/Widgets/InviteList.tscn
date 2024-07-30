@@ -1,0 +1,50 @@
+[gd_scene load_steps=4 format=3 uid="uid://xdt7c5dwy4df"]
+
+[ext_resource type="Theme" uid="uid://dundbkyo1dqnu" path="res://Menus/Themes/Panel.tres" id="1_mho46"]
+[ext_resource type="Theme" uid="uid://c7wnqipmhvxh0" path="res://Menus/Themes/Button.tres" id="2_nvocb"]
+[ext_resource type="Script" path="res://Menus/Widgets/InviteList.cs" id="3_kgn1b"]
+
+[node name="InviteList" type="Panel"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_mho46")
+script = ExtResource("3_kgn1b")
+
+[node name="Grid" type="GridContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -508.0
+offset_top = -272.0
+offset_right = 502.0
+offset_bottom = 192.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+columns = 7
+
+[node name="Back" type="Button" parent="."]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -49.0
+offset_top = -89.0
+offset_right = 51.0
+offset_bottom = -33.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("2_nvocb")
+text = "Go back"
+
+[connection signal="pressed" from="Back" to="." method="Close"]

@@ -34,6 +34,8 @@ public partial class Lobby : Panel
 		map.Visible = false;
 		map.UnloadMap += ReloadLobby;
 		map.gameMenu.GetMap += GetMap;
+		if (!local)
+			GetNode<Button>("HBox/Invite").Visible = true;
 	}
 
 	private void CreateMapButtons(string path)
@@ -220,5 +222,10 @@ public partial class Lobby : Panel
 		soundManager.PlaySFX("button");
 		AddChild(Popup.Open("Are you sure you want to leave ?", ConfirmLeave));
 		//to be completed button is not visible
+	}
+
+	public void _on_invite_pressed()
+	{
+		AddChild(GD.Load<PackedScene>("res://Menus/Widgets/InviteList.tscn").Instantiate<InviteList>());
 	}
 }

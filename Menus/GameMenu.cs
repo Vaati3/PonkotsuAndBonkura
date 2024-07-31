@@ -9,6 +9,7 @@ public partial class GameMenu : CanvasLayer
 
 	Control levelCompleted;
 	Control pause;
+	OptionMenu optionMenu;
 
 	public string currentMap {get; private set;}
 	public int curentMapNumber {get; private set;}
@@ -21,6 +22,7 @@ public partial class GameMenu : CanvasLayer
 	{
 		manager = GetNode<GameManager>("/root/GameManager");
 		soundManager = GetNode<SoundManager>("/root/SoundManager");
+		optionMenu = GetNode<OptionMenu>("Pause/OptionMenu");
 		if (GetParent() is Map map)
 			this.map = map;
 
@@ -118,5 +120,11 @@ public partial class GameMenu : CanvasLayer
 	{
 		soundManager.PlaySFX("button", true);
 		Rpc(nameof(LoadMap), nextMap.mapName, curentMapNumber + 1);
+	}
+
+	public void _on_options_pressed()
+	{
+		soundManager.PlaySFX("button", true);
+		optionMenu.Visible = true;
 	}
 }

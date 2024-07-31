@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://dypu0aioxn2ln"]
+[gd_scene load_steps=6 format=3 uid="uid://dypu0aioxn2ln"]
 
 [ext_resource type="Theme" uid="uid://dundbkyo1dqnu" path="res://Menus/Themes/Panel.tres" id="1_fg6so"]
 [ext_resource type="Script" path="res://Menus/GameMenu.cs" id="1_pfg35"]
 [ext_resource type="FontFile" uid="uid://dbv2ovpyr0js6" path="res://Menus/Themes/PlaywriteFRTrad-Regular.ttf" id="3_5g7go"]
 [ext_resource type="Theme" uid="uid://c7wnqipmhvxh0" path="res://Menus/Themes/Button.tres" id="4_a4t2n"]
+[ext_resource type="PackedScene" uid="uid://cm6c8xflpv8hq" path="res://Menus/OptionMenu.tscn" id="5_aef7o"]
 
 [node name="GameMenu" type="CanvasLayer"]
 visible = false
@@ -90,9 +91,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -137.0
-offset_top = -166.0
+offset_top = -237.0
 offset_right = 139.0
-offset_bottom = -80.0
+offset_bottom = -151.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_fonts/font = ExtResource("3_5g7go")
@@ -129,6 +130,13 @@ theme = ExtResource("4_a4t2n")
 theme_override_font_sizes/font_size = 0
 text = "Reset"
 
+[node name="Options" type="Button" parent="Pause/VBoxContainer"]
+custom_minimum_size = Vector2(30, 15)
+layout_mode = 2
+theme = ExtResource("4_a4t2n")
+theme_override_font_sizes/font_size = 0
+text = "Options"
+
 [node name="BackButton" type="Button" parent="Pause/VBoxContainer"]
 custom_minimum_size = Vector2(30, 15)
 layout_mode = 2
@@ -136,8 +144,13 @@ theme = ExtResource("4_a4t2n")
 theme_override_font_sizes/font_size = 0
 text = "Back to Lobby"
 
+[node name="OptionMenu" parent="Pause" instance=ExtResource("5_aef7o")]
+visible = false
+layout_mode = 1
+
 [connection signal="pressed" from="LevelCompleted/VBoxContainer/NextLevel" to="." method="_on_next_level_pressed"]
 [connection signal="pressed" from="LevelCompleted/VBoxContainer/BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="pressed" from="Pause/VBoxContainer/Resume" to="." method="_on_resume_pressed"]
 [connection signal="pressed" from="Pause/VBoxContainer/Reset" to="." method="_on_reset_pressed"]
+[connection signal="pressed" from="Pause/VBoxContainer/Options" to="." method="_on_options_pressed"]
 [connection signal="pressed" from="Pause/VBoxContainer/BackButton" to="." method="_on_back_button_pressed"]

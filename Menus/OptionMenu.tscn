@@ -1,9 +1,21 @@
-[gd_scene load_steps=5 format=3 uid="uid://cm6c8xflpv8hq"]
+[gd_scene load_steps=7 format=3 uid="uid://cm6c8xflpv8hq"]
 
 [ext_resource type="Theme" uid="uid://dundbkyo1dqnu" path="res://Menus/Themes/Panel.tres" id="1_q3ye3"]
+[ext_resource type="Script" path="res://Menus/OptionMenu.cs" id="2_1yont"]
 [ext_resource type="FontFile" uid="uid://dbv2ovpyr0js6" path="res://Menus/Themes/PlaywriteFRTrad-Regular.ttf" id="2_ygyrl"]
 [ext_resource type="PackedScene" uid="uid://cp10rxv4iq406" path="res://Menus/Widgets/VolumeSlider.tscn" id="4_c1ogl"]
 [ext_resource type="Theme" uid="uid://c7wnqipmhvxh0" path="res://Menus/Themes/Button.tres" id="5_ji8g2"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3vmj5"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 4
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [node name="OptionMenu" type="Panel"]
 anchors_preset = 15
@@ -12,6 +24,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_q3ye3")
+script = ExtResource("2_1yont")
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 1
@@ -19,9 +32,9 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -138.0
-offset_top = 39.0
+offset_top = 28.0
 offset_right = 138.0
-offset_bottom = 125.0
+offset_bottom = 114.0
 grow_horizontal = 2
 theme_override_fonts/font = ExtResource("2_ygyrl")
 theme_override_font_sizes/font_size = 30
@@ -66,13 +79,232 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -37.0
-offset_top = -82.0
-offset_right = 63.0
-offset_bottom = -26.0
+offset_left = 51.0
+offset_top = -83.0
+offset_right = 151.0
+offset_bottom = -27.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("5_ji8g2")
+text = "Go back"
+
+[node name="InputsButton" type="Button" parent="."]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -168.0
+offset_top = -83.0
+offset_right = -24.0
+offset_bottom = -27.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("5_ji8g2")
+text = "Show Inputs"
+
+[node name="InputsPanel" type="Panel" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="InputsPanel"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -138.0
+offset_top = 39.0
+offset_right = 138.0
+offset_bottom = 125.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("2_ygyrl")
+theme_override_font_sizes/font_size = 30
+text = "Inputs"
+horizontal_alignment = 1
+
+[node name="KeyR" type="Panel" parent="InputsPanel"]
+layout_mode = 0
+offset_left = 696.0
+offset_top = 198.0
+offset_right = 736.0
+offset_bottom = 238.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_3vmj5")
+
+[node name="Label" type="Label" parent="InputsPanel/KeyR"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 26
+text = ">"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="KeyL" type="Panel" parent="InputsPanel"]
+layout_mode = 0
+offset_left = 605.0
+offset_top = 198.0
+offset_right = 645.0
+offset_bottom = 238.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_3vmj5")
+
+[node name="Label" type="Label" parent="InputsPanel/KeyL"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 26
+text = "<"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="KeyD" type="Panel" parent="InputsPanel"]
+layout_mode = 0
+offset_left = 651.0
+offset_top = 198.0
+offset_right = 691.0
+offset_bottom = 238.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_3vmj5")
+
+[node name="Label" type="Label" parent="InputsPanel/KeyD"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_right = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 1.5708
+theme_override_font_sizes/font_size = 26
+text = ">"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="KeyU" type="Panel" parent="InputsPanel"]
+layout_mode = 0
+offset_left = 651.0
+offset_top = 152.0
+offset_right = 691.0
+offset_bottom = 192.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_3vmj5")
+
+[node name="Label" type="Label" parent="InputsPanel/KeyU"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_right = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 1.5708
+theme_override_font_sizes/font_size = 26
+text = "<"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DirLabel" type="Label" parent="InputsPanel"]
+custom_minimum_size = Vector2(500, 100)
+layout_mode = 0
+offset_left = 337.0
+offset_top = 143.0
+offset_right = 837.0
+offset_bottom = 243.0
+theme_override_fonts/font = ExtResource("2_ygyrl")
+text = "Use the arrow keys to move"
+vertical_alignment = 1
+
+[node name="KeyX" type="Panel" parent="InputsPanel"]
+layout_mode = 0
+offset_left = 651.0
+offset_top = 329.0
+offset_right = 691.0
+offset_bottom = 369.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_3vmj5")
+
+[node name="Label" type="Label" parent="InputsPanel/KeyX"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 26
+text = "X"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ItemLabel" type="Label" parent="InputsPanel"]
+custom_minimum_size = Vector2(500, 100)
+layout_mode = 0
+offset_left = 417.0
+offset_top = 298.0
+offset_right = 917.0
+offset_bottom = 398.0
+theme_override_fonts/font = ExtResource("2_ygyrl")
+text = "To use equiped item press                   "
+vertical_alignment = 1
+
+[node name="KeyZ" type="Panel" parent="InputsPanel"]
+layout_mode = 0
+offset_left = 650.0
+offset_top = 457.0
+offset_right = 690.0
+offset_bottom = 497.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_3vmj5")
+
+[node name="Label" type="Label" parent="InputsPanel/KeyZ"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 26
+text = "Z"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ItemLabel2" type="Label" parent="InputsPanel"]
+custom_minimum_size = Vector2(500, 100)
+layout_mode = 0
+offset_left = 265.0
+offset_top = 422.0
+offset_right = 765.0
+offset_bottom = 522.0
+theme_override_fonts/font = ExtResource("2_ygyrl")
+text = "In Singleplayer : switch characters using "
+vertical_alignment = 1
+
+[node name="BackInputs" type="Button" parent="InputsPanel"]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -47.0
+offset_top = -81.0
+offset_right = 53.0
+offset_bottom = -25.0
 grow_horizontal = 2
 grow_vertical = 0
 theme = ExtResource("5_ji8g2")
 text = "Go back"
 
 [connection signal="pressed" from="Back" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="InputsButton" to="." method="_on_inputs_button_pressed"]
+[connection signal="pressed" from="InputsPanel/BackInputs" to="." method="_on_back_inputs_pressed"]

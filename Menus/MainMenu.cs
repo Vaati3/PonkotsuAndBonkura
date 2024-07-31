@@ -21,7 +21,6 @@ public partial class MainMenu : Panel
 		playMenu = GetNode<Control>("Play");
 		joinMenu = GetNode<Control>("JoinMenu");
 		optionMenu = GetNode<Control>("OptionMenu");
-		optionMenu.GetNode<Button>("Back").Pressed += _on_option_back_pressed;
 		controller.OpenLobby += OpenLobby;
 		controller.BackToMainMenu += BackToMainMenu;
 		soundManager.PlayMusic("music");
@@ -107,13 +106,5 @@ public partial class MainMenu : Panel
 		}
 		BackToMainMenu();
 
-	}
-
-	//options
-	public void _on_option_back_pressed()
-	{
-		soundManager.PlaySFX("button");
-		optionMenu.Visible = false;
-		manager.Save();
 	}
 }

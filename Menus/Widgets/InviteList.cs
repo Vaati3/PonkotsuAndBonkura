@@ -35,7 +35,8 @@ public partial class InviteList : Panel
         for (int i = 0; i < n; i++)
         {
             ulong friendId = Steam.GetFriendByIndex(i, FriendFlag.Immediate);
-            grid.AddChild(new InviteButton(friendId, Close));
+            if (Steam.GetFriendPersonaState(friendId) != PersonaState.Offline)
+                grid.AddChild(new InviteButton(friendId, Close));
         }
     }
 

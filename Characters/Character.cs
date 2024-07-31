@@ -202,16 +202,7 @@ public abstract partial class Character : CharacterBody2D
 		RpcId(id, nameof(UpdateVisibility));
 	}
 
-	protected bool IsFalling()
-	{
-		if (!canFall)
-			return false;
-		
-		float y = pos.globalPos.Y + direction.Y + (size.Y/2);
-        if (map.generator.GetTile(pos.globalPos.X, y, pos.globalPos.Z) != Tile.Block)
-			return true;
-		return false;
-	}
+	protected abstract bool IsFalling();
 
 	protected virtual bool UpdateTile(Vector3I tilePos, int x, int y)
 	{

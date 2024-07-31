@@ -30,6 +30,17 @@ public partial class Ponkotsu : Character
         Move(dir);
     }
 
+    protected override bool IsFalling()
+	{
+		if (!canFall)
+			return false;
+		
+		float y = pos.globalPos.Y + (size.Y/2) + 1;
+        if (map.generator.GetTile(pos.globalPos.X, y, pos.globalPos.Z) != Tile.Block)
+			return true;
+		return false;
+	}
+
     public override CharacterType GetCharacterType()
     {
         return CharacterType.Ponkotsu;

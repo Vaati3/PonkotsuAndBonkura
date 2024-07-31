@@ -48,6 +48,16 @@ public partial class Bonkura : Character
         Move(pos.Convert(dir));
     }
 
+    protected override bool IsFalling()
+	{
+		if (!canFall)
+			return false;
+
+        if (Velocity.Y != 0)
+            return true;
+        return false;
+    }
+
     public override CharacterType GetCharacterType()
     {
         return CharacterType.Bonkura;

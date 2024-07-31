@@ -31,6 +31,18 @@ public partial class Box : Object
         collisionBody.AddChild(collisionShape);
     }
 
+    protected bool IsFalling()
+	{
+        float half = MapGenerator.tileSize/2;
+		float y = position3D.Y + half;
+        if (map.generator.GetTile(position3D.X - half, y, position3D.Z - half) != Tile.Block && 
+            map.generator.GetTile(position3D.X - half, y, position3D.Z + half) != Tile.Block &&
+            map.generator.GetTile(position3D.X + half, y, position3D.Z - half) != Tile.Block &&
+            map.generator.GetTile(position3D.X + half, y, position3D.Z + half) != Tile.Block)
+			return true;
+		return false;
+	}
+
     public override void _PhysicsProcess(double delta)
     {
         if(!player.CanSee(position3D))
@@ -52,7 +64,7 @@ public partial class Box : Object
     protected override void OverlapStarted()
     {
         base.OverlapStarted();
-        if (player.pos.globalPos.Y < position3D.Y)
+        if (player.GetCharacterType() == CharacterType.Ponkotsu && player.pos.globalPos.Y < position3D.Y)
         {
             player.canFall = false;
         }
@@ -94,8 +106,15 @@ public partial class Box : Object
         {
             return;
         }
+        if (IsFalling())
+        {
+            Vector3I pos = MapGenerator.GetTilePos(newPos);
+            while (map.generator.GetTile(pos) != Tile.Block)
+                pos.Y++;
+            newPos.Y = MapGenerator.GetWorldPos(pos).Y - half;
+        }
+        Rpc(nameof(UpdatePosition), newPos - position3D);
         position3D = newPos;
-        Rpc(nameof(UpdatePosition), dir);
         Update();
     }
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://s7aaejqohq5t"
-path="res://.godot/imported/Bonkura.png-828a04bb0fef800f25917c88d18a75c3.ctex"
+uid="uid://cipalt7jmhcnm"
+path="res://.godot/imported/Ponkotsu.png-9c09ef95c1641df891e9c0e766696870.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Characters/Bonkura.png"
-dest_files=["res://.godot/imported/Bonkura.png-828a04bb0fef800f25917c88d18a75c3.ctex"]
+source_file="res://Characters/Textures/Ponkotsu.png"
+dest_files=["res://.godot/imported/Ponkotsu.png-9c09ef95c1641df891e9c0e766696870.ctex"]
 
 [params]
 

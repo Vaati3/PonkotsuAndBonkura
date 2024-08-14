@@ -17,6 +17,7 @@ public abstract partial class Character : CharacterBody2D
 	public Vector3 direction {get; private set;}
 	[Export]public float speed = 100;
 	protected Sprite2D sprite;
+	protected AnimationTree animationTree;
 	private Camera2D camera;
 
 	public bool canFall{get; set;}
@@ -31,6 +32,7 @@ public abstract partial class Character : CharacterBody2D
 		canFall = true;
 		gameManager = GetNode<GameManager>("/root/GameManager");
 		sprite = GetNode<Sprite2D>("Sprite");
+		animationTree = GetNode<AnimationTree>("AnimationTree");
 		if (GetNode<CollisionShape2D>("CollisionShape").Shape is RectangleShape2D shape)
 			size = shape.Size;
 	}
@@ -94,6 +96,8 @@ public abstract partial class Character : CharacterBody2D
 
 	public void Move(Vector3 dir)
 	{
+		if (dir == Vector3.Zero)
+			return;
 		if (gameManager.isAlone && !isControlled)
 		{
 			pos.globalPos += dir;
@@ -223,6 +227,20 @@ public abstract partial class Character : CharacterBody2D
 	{
 		sprite.FlipH = state;
 		item?.Flip(state);
+	}
+
+	protected void UpdateWalkSprite(Vector3 dir, bool isfalling)
+	{
+		if (!isfalling && (dir.X != 0 || dir.Z != 0))
+		{
+			animationTree.Set("parameters/conditions/idle", false);
+            animationTree.Set("parameters/conditions/walk", true);
+		}
+        else
+		{
+			animationTree.Set("parameters/conditions/walk", false);
+            animationTree.Set("parameters/conditions/idle", true);
+		}
 	}
 
 	public abstract CharacterType GetCharacterType();

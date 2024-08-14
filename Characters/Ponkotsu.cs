@@ -27,6 +27,8 @@ public partial class Ponkotsu : Character
             dir.Z -= speed;
         if (falling)
             dir.Y += gravity * (float)delta;
+        
+        UpdateWalkSprite(dir, falling);
         Move(dir);
     }
 

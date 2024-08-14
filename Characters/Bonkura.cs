@@ -17,7 +17,7 @@ public partial class Bonkura : Character
         jumpGravity = -2 * jumpHeight / (jumpAscendTime * jumpAscendTime) * -1;
         fallGravity = -2 * jumpHeight / (jumpFallTime * jumpFallTime) * -1;
 
-        sprite.Texture = GD.Load<Texture2D>("res://Characters/Bonkura.png");
+        sprite.Texture = GD.Load<Texture2D>("res://Characters/Textures/Bonkura.png");
     }
 
     private float GetGravity()
@@ -42,8 +42,17 @@ public partial class Bonkura : Character
             dir.X -= speed;
             Flip(true);
         }
-        if (Input.IsActionJustPressed("move_up") && !IsFalling())
+        bool falling = IsFalling();
+        if (Input.IsActionJustPressed("move_up") && !falling)
+        {
             dir.Y = jumpVelocity;
+            animationTree.Set("parameters/conditions/jump", true);
+        }
+        if (falling)
+        {
+            animationTree.Set("parameters/conditions/jump", false);
+        }
+        UpdateWalkSprite(dir, falling);
 
         Move(pos.Convert(dir));
     }

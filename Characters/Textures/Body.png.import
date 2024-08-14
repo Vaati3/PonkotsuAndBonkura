@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cipalt7jmhcnm"
-path="res://.godot/imported/Ponkotsu.png-4b4a6cc9991b1d6bfaa104aaed4b47bf.ctex"
+uid="uid://bi6wwngnpnyhc"
+path="res://.godot/imported/Body.png-a334ec521bf67092c62028c35a08d3d0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Characters/Ponkotsu.png"
-dest_files=["res://.godot/imported/Ponkotsu.png-4b4a6cc9991b1d6bfaa104aaed4b47bf.ctex"]
+source_file="res://Characters/Textures/Body.png"
+dest_files=["res://.godot/imported/Body.png-a334ec521bf67092c62028c35a08d3d0.ctex"]
 
 [params]
 

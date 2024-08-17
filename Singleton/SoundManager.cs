@@ -104,4 +104,16 @@ public partial class SoundManager : Node
             musicPlayer.Play();
         }
     }
+
+    public void StopSFX(string sfxName)
+    {
+        foreach(AudioStreamPlayer player in players)
+        {
+            if (player.Playing && player.Stream.ResourcePath.GetFile().GetBaseName() == sfxName)
+            {
+                player.Stop();
+                return;
+            }
+        }
+    }
 }

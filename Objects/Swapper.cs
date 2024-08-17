@@ -60,6 +60,7 @@ public partial class Swapper : Object
                 //add swap noise
                 //and particles or shader effect
                 timer.Start();
+                soundManager.PlaySFX("swapper");
                 player.SetPos(Map.AlignPos(swapper.tilePos));
                 if (GetNode<GameManager>("/root/GameManager").isAlone)
                     player.other.SetPos(Map.AlignPos(tilePos));
@@ -74,5 +75,6 @@ public partial class Swapper : Object
     {
         timer.Start();
         player.SetPos(pos);
+        soundManager.PlaySFX("swapper");
     }
 }

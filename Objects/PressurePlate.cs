@@ -44,6 +44,7 @@ public partial class PressurePlate : Object
         base.OverlapStarted();
         if (pressed)
             return;
+        soundManager.PlaySFX("pressed", true);
         Rpc(nameof(UpdatePressed), true);
     }
 

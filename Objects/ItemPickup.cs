@@ -27,6 +27,7 @@ public partial class ItemPickup : Object
         RemoveChild(item);
         Item playerItem = character.SwitchItem(item);
         item.Equip(character);
+        soundManager.PlaySFX("pickup");
 
         if (playerItem == null)
         {

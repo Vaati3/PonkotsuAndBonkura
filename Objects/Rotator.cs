@@ -27,6 +27,7 @@ public partial class Rotator : Object
         {
            ((Bonkura)character).RotateAxis();
            //Rpc(nameof(FlipSprite));
+            soundManager.PlaySFX("rotator", true);
         }
     }
 

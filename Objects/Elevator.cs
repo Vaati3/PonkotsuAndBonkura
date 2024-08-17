@@ -14,6 +14,8 @@ public partial class Elevator : Object
     Axis axis;
     Timer pauseTimer;
 
+    bool isPlayingAudio = false;
+
     public override void InitObject(Character player, Vector3 pos, Map map)
     {
         base.InitObject(player, pos, map);
@@ -60,11 +62,21 @@ public partial class Elevator : Object
                 if (nextStop + direction >= stops.Count || nextStop + direction <= 0)
                     direction *= -1;
                 pauseTimer.Start();
+
+                soundManager.StopSFX("hover");
+                isPlayingAudio = false;
             }
             overlappingPlayers[0]?.Move(forward * direction * speed * (float)delta);
             overlappingPlayers[1]?.Move(forward * direction * speed * (float)delta);
             position3D += forward * direction * speed * (float)delta;
             Update();
+
+            if (!isPlayingAudio)
+            {
+                soundManager.PlaySFX("hover");
+                isPlayingAudio = true;
+            }
+            
         }
     }
 
@@ -92,5 +104,11 @@ public partial class Elevator : Object
     public override void Trigger(bool state)
     {
         isMoving = state;
+
+        if (!isMoving && isPlayingAudio)
+        {
+            soundManager.StopSFX("hover");
+            isPlayingAudio = false;
+        }
     }
 }

@@ -17,7 +17,7 @@ public partial class Door : Object
     {
         map.generator.SetTile(Tile.Void, tilePos);
         player.UpdateMap();
-        //add unlock sfx
+        soundManager.PlaySFX("unlock", true);
         EmitSignal(nameof(FreeObject), this);
     }
 }

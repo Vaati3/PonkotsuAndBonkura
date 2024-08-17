@@ -2,6 +2,7 @@ using Godot;
 
 public abstract partial class Object : Node2D
 {
+	protected SoundManager soundManager;
 	protected Character player;
 	public Vector3 position3D {get; protected set;}
 	public bool activatable {get; protected set;}
@@ -41,7 +42,12 @@ public abstract partial class Object : Node2D
 		overlappingPlayers = new Character[2];
 	}
 
-	virtual public void InitObject(Character player, Vector3 pos, Map map)
+    public override void _EnterTree()
+    {
+		soundManager = GetNode<SoundManager>("/root/SoundManager");
+    }
+
+    virtual public void InitObject(Character player, Vector3 pos, Map map)
 	{
 		this.player = player;
 		SetPosition(pos);

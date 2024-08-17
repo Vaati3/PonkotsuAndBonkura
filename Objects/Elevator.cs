@@ -16,6 +16,9 @@ public partial class Elevator : Object
 
     bool isPlayingAudio = false;
 
+    StaticBody2D collisionBody;
+    CollisionShape2D collisionShape;
+
     public override void InitObject(Character player, Vector3 pos, Map map)
     {
         base.InitObject(player, pos, map);
@@ -47,8 +50,21 @@ public partial class Elevator : Object
 
         SetTexture("res://Objects/Textures/ElevatorTop.png", "res://Objects/Textures/ElevatorSide.png");
         activatable = true;
-        overlapSize.Y = 10;
-        overlapOffset.Y = 10;
+
+        collisionBody = new StaticBody2D()
+        {
+            Position = new Vector2(0, (MapGenerator.tileSize-5)/2),
+            CollisionLayer = 2
+        };
+        AddChild(collisionBody);
+        collisionShape = new CollisionShape2D()
+        {
+            Shape = new RectangleShape2D(){
+                Size = new Vector2(MapGenerator.tileSize, 5)
+            },
+            Disabled = player.GetCharacterType() == CharacterType.Ponkotsu
+        };
+        collisionBody.AddChild(collisionShape);
     }
 
     public override void _PhysicsProcess(double delta)
@@ -89,16 +105,33 @@ public partial class Elevator : Object
         return axis == Axis.X ? pos.X : axis == Axis.Y ? pos.Y : pos.Z;
     }
 
+    public override void Switch(Character character)
+    {
+        base.Switch(character);
+        collisionShape.Disabled = player.GetCharacterType() == CharacterType.Ponkotsu;
+    }
+
+    protected override void UpdateVisibility()
+    {
+        base.UpdateVisibility();
+        if (player.GetCharacterType() == CharacterType.Bonkura && collisionShape != null)
+        {
+            collisionShape.Disabled = !Visible;
+        }
+    }
+
     protected override void OverlapStarted()
     {
         base.OverlapStarted();
-        player.canFall = false;
+        if (player.GetCharacterType() == CharacterType.Ponkotsu)
+            player.canFall = false;
     }
 
     protected override void OverlapEnded()
     {
         base.OverlapEnded();
-        player.canFall = true;
+        if (player.GetCharacterType() == CharacterType.Ponkotsu)
+            player.canFall = true;
     }
 
     public override void Trigger(bool state)

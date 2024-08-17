@@ -56,18 +56,11 @@ public abstract partial class Object : Node2D
 
 	protected void UpdateTexture(Texture2D topTexture, Texture2D sideTexture)
 	{
-		Visible = true;
 		if (player.GetCharacterType() == CharacterType.Ponkotsu)
 		{
-			if (topTexture != null)
-				sprite.Texture = topTexture;
-			else
-				Visible = false;
+			sprite.Texture = topTexture;
 		} else {
-			if (sideTexture != null)
-				sprite.Texture = sideTexture;
-			else
-				Visible = false;
+			sprite.Texture = sideTexture;
 		}
 	}
 
@@ -79,11 +72,11 @@ public abstract partial class Object : Node2D
 	protected void SetTexture(string topTexturePath, string sideTexturePath)
 	{
 
-		if (ResourceLoader.Exists(topTexturePath))
+		if (topTexturePath != "" && ResourceLoader.Exists(topTexturePath))
 			topTexture = GD.Load<Texture2D>(topTexturePath);
 		else
 			topTexture = null;
-		if (ResourceLoader.Exists(sideTexturePath))
+		if (sideTexturePath != "" && ResourceLoader.Exists(sideTexturePath))
 			sideTexture = GD.Load<Texture2D>(sideTexturePath);
 		else
 			sideTexture = null;

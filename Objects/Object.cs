@@ -153,7 +153,7 @@ public abstract partial class Object : Node2D
 
 	public virtual void Update()
 	{	
-			Position = player.pos.GlobalToLocal(position3D);
+		Position = player.pos.GlobalToLocal(position3D);
 
 		if (detectOverlap && CheckOverlap())
 		{

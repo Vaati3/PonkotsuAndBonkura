@@ -76,7 +76,10 @@ public partial class Elevator : Object
             {
                 nextStop += direction;
                 if (nextStop + direction >= stops.Count || nextStop + direction <= 0)
+                {
                     direction *= -1;
+                    nextStop += direction * 2;
+                }
                 pauseTimer.Start();
 
                 soundManager.StopSFX("hover");
@@ -85,14 +88,13 @@ public partial class Elevator : Object
             overlappingPlayers[0]?.Move(forward * direction * speed * (float)delta);
             overlappingPlayers[1]?.Move(forward * direction * speed * (float)delta);
             position3D += forward * direction * speed * (float)delta;
-            Update();
 
             if (!isPlayingAudio)
             {
                 soundManager.PlaySFX("hover");
                 isPlayingAudio = true;
             }
-            
+            Update();
         }
     }
 

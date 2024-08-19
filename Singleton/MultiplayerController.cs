@@ -13,12 +13,18 @@ public partial class MultiplayerController : Node
 	//steam
 	SteamMultiplayerPeer steamPeer;
 	public ulong lobbyId { get; private set;} = 0;
+	Godot.Collections.Array optionArray;
 
 	[Signal] public delegate void OpenLobbyEventHandler();
 	[Signal] public delegate void BackToMainMenuEventHandler();
 
 	public override void _Ready()
 	{
+		peer = new ENetMultiplayerPeer();
+		steamPeer = new SteamMultiplayerPeer();
+		optionArray = new Godot.Collections.Array();
+		gameManager = GetNode<GameManager>("/root/GameManager");
+
 		Multiplayer.PeerConnected += PlayerConnected;
 		Multiplayer.PeerDisconnected += PlayerDisconnected;
 		Multiplayer.ConnectedToServer += ConnectedToServer;
@@ -29,10 +35,8 @@ public partial class MultiplayerController : Node
 		Steam.LobbyJoined += LobbyJoined;
 		Steam.JoinRequested += JoinRequested;
 		Steam.LobbyInvite += InviteRequested;
-
-		peer = new ENetMultiplayerPeer();
-		steamPeer = new SteamMultiplayerPeer();
-		gameManager = GetNode<GameManager>("/root/GameManager");
+		Steam.LobbyChatUpdate += SteamLobbyUpdate;
+		steamPeer.PeerConnected += SteamPeerConnected;
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer)]
@@ -42,78 +46,6 @@ public partial class MultiplayerController : Node
 		gameManager.PlayerJoined(player, Multiplayer.IsServer());
 		if (Multiplayer.IsServer())
 			RpcId(player.id, nameof(UpdatePlayers), gameManager.player.ToString());
-	}
-
-	public bool Host()
-	{
-		if (peer.CreateServer(port, 2) != Error.Ok)
-			return false;
-		peer.Host.Compress(ENetConnection.CompressionMode.RangeCoder);
-		Multiplayer.MultiplayerPeer = peer;
-		EmitSignal(nameof(OpenLobby));
-		return true;
-	}
-
-	public void HostSteam()
-	{
-		Steam.CreateLobby(Steam.LobbyType.Public, 2);
-	}
-
-	public void LobbyCreated(long connect, ulong lobbyId)
-	{
-		if (connect != 1)
-		{
-			GD.Print("Lobby failed with error " + connect);
-			EmitSignal(nameof(BackToMainMenu));
-			return;
-		}
-		this.lobbyId = lobbyId;
-		Steam.SetLobbyData(lobbyId, gameManager.player.name, (string)Steam.GetPersonaName());
-		steamPeer.CreateHost(0, new Godot.Collections.Array());
-		Multiplayer.MultiplayerPeer = steamPeer;
-		gameManager.player.id = 1;
-		EmitSignal(nameof(OpenLobby));
-		GD.Print("Lobby successfully created with id " + lobbyId);
-	}
-
-	public bool Join(string address)
-	{
-		if (peer.CreateClient(address, port) != Error.Ok)
-			return false;
-		peer.Host.Compress(ENetConnection.CompressionMode.RangeCoder);
-		Multiplayer.MultiplayerPeer = peer;
-		gameManager.player.id = Multiplayer.GetUniqueId();
-		return true;
-	}
-
-	public void JoinRequested(ulong lobbyId, ulong steamId)
-	{
-		GD.Print("joining " + Steam.GetFriendPersonaName(steamId) + " game");
-		Steam.JoinLobby(lobbyId);		
-	}
-
-	public void LobbyJoined(ulong lobbyId, long permissions, bool locked, long response)
-	{
-		if (response != 1)
-		{
-			GD.Print("Lobby join failed with error " + response);
-			EmitSignal(nameof(BackToMainMenu));
-			return;
-		}
-		this.lobbyId = lobbyId;
-		ulong id = Steam.GetLobbyOwner(lobbyId);
-		if (id != Steam.GetSteamID())
-		{
-			steamPeer.CreateClient(id, 0, new Godot.Collections.Array());
-			Multiplayer.MultiplayerPeer = steamPeer;
-			gameManager.player.id = (long)id;
-		}
-	}
-
-	public void InviteRequested(ulong inviter, ulong lobbyId, ulong game)
-	{
-		GD.Print("joining " + Steam.GetFriendPersonaName(inviter) + " game");
-		Steam.JoinLobby(lobbyId);
 	}
 
 	public void Quit()
@@ -139,6 +71,32 @@ public partial class MultiplayerController : Node
 		gameManager.Clear();
 	}
 
+	//ENet
+	public string GetIP()
+	{
+		return IP.ResolveHostname(OS.GetEnvironment("COMPUTERNAME"), Godot.IP.Type.Ipv4);
+	}
+	public bool Host()
+	{
+		if (peer.CreateServer(port, 2) != Error.Ok)
+			return false;
+		peer.Host.Compress(ENetConnection.CompressionMode.RangeCoder);
+		Multiplayer.MultiplayerPeer = peer;
+		gameManager.player.id = 1;
+		EmitSignal(nameof(OpenLobby));
+		return true;
+	}
+
+	public bool Join(string address)
+	{
+		if (peer.CreateClient(address, port) != Error.Ok)
+			return false;
+		peer.Host.Compress(ENetConnection.CompressionMode.RangeCoder);
+		Multiplayer.MultiplayerPeer = peer;
+		gameManager.player.id = Multiplayer.GetUniqueId();
+		return true;
+	}
+
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer)]
 	public void KickPlayer(string reason)
 	{
@@ -149,15 +107,10 @@ public partial class MultiplayerController : Node
 		peer.Close();
 		Multiplayer.MultiplayerPeer = new OfflineMultiplayerPeer();
 		gameManager.Clear();
-		AddChild(Popup.Open(reason));
+		if (reason != "")
+			AddChild(Popup.Open(reason));
 	}
 
-	public string GetIP()
-	{
-		return IP.ResolveHostname(OS.GetEnvironment("COMPUTERNAME"), Godot.IP.Type.Ipv4);
-	}
-
-	//multiplayer signals
 	public void PlayerConnected(long id)
 	{
 		GD.Print("Player " + id + " connected");
@@ -192,7 +145,93 @@ public partial class MultiplayerController : Node
 		GD.Print("Connection failed");
 	}
 
-	//check disconnection
+	//Steam
+	public void HostSteam()
+	{
+		Steam.CreateLobby(Steam.LobbyType.Public, 2);
+	}
+
+	public void LobbyCreated(long connect, ulong lobbyId)
+	{
+		if (connect != 1)
+		{
+			GD.Print("Lobby failed with error " + connect);
+			EmitSignal(nameof(BackToMainMenu));
+			return;
+		}
+		Error error = steamPeer.CreateHost(0, optionArray);
+		if (error != Error.Ok)
+		{
+			GD.Print("Create Host failed with error " + error);
+			return;
+		}
+		GD.Print("Lobby successfully created with id " + lobbyId);
+		Steam.SetLobbyJoinable(lobbyId, true);
+		Steam.SetLobbyData(lobbyId, "name", gameManager.player.name);
+		Steam.SetLobbyData(lobbyId, "mode", "CoOP");
+		Multiplayer.MultiplayerPeer = steamPeer;
+		gameManager.player.id = 1;
+		this.lobbyId = lobbyId;
+		EmitSignal(nameof(OpenLobby));
+	}
+
+	public async void LobbyJoined(ulong lobbyId, long permissions, bool locked, long response)
+	{
+		if (response != 1)
+		{
+			GD.Print("Lobby join failed with error " + response);
+			EmitSignal(nameof(BackToMainMenu));
+			return;
+		}
+		if (locked)
+		{
+			GD.Print("Lobby is locked");
+			EmitSignal(nameof(BackToMainMenu));
+			return;
+		}
+		ulong owner = Steam.GetLobbyOwner(lobbyId);
+		if (owner == Steam.GetSteamID())
+			return;
+		this.lobbyId = lobbyId;
+		Error createrr = steamPeer.CreateClient(owner, 0, optionArray);
+		GD.Print("create client " + createrr);
+		Multiplayer.MultiplayerPeer = steamPeer;
+		gameManager.player.id = (long)Steam.GetSteamID();
+		await ToSignal(GetTree().CreateTimer(5), SceneTreeTimer.SignalName.Timeout);
+		Error err = RpcId(1, nameof(UpdatePlayers), gameManager.player.ToString());
+		GD.Print("test err " + err);
+		EmitSignal(nameof(OpenLobby));
+	}
+
+	public void JoinRequested(ulong lobbyId, ulong steamId)
+	{
+		GD.Print("joining " + Steam.GetFriendPersonaName(steamId) + " game");
+		Steam.JoinLobby(lobbyId);
+	}
+
+	public void InviteRequested(ulong inviter, ulong lobbyId, ulong game)
+	{
+		GD.Print("joining " + Steam.GetFriendPersonaName(inviter) + " game");
+		Steam.JoinLobby(lobbyId);
+	}
+
+	public void SteamPeerConnected(long id)
+	{
+		GD.Print("steam peer connected id " + id + " name " + Steam.GetFriendPersonaName((ulong)id));
+	}
+
+	public void SteamLobbyUpdate(ulong lobbyId, long changedId, long makingChangeId, long chatState)
+	{
+		// GD.Print("log");
+		// for (int i = 0; i < Steam.GetNumLobbyMembers(lobbyId); i++)
+		// {
+		// 	ulong id = Steam.GetLobbyMemberByIndex(lobbyId, i);
+		// 	GD.Print("user id " + id + " name " + Steam.GetFriendPersonaName(id));
+		// }
+		// =if (chatState == (int)Steam.ChatMemberStateChange.Entered)
+	}
+
+	//check disconnection and steam callbacks
     public override void _Notification(int what)
     {
         if (what == NotificationWMCloseRequest)

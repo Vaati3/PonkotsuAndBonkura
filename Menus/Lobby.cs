@@ -221,7 +221,6 @@ public partial class Lobby : Panel
 	{
 		soundManager.PlaySFX("button");
 		AddChild(Popup.Open("Are you sure you want to leave ?", ConfirmLeave));
-		//to be completed button is not visible
 	}
 
 	public void _on_invite_pressed()

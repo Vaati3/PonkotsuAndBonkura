@@ -108,6 +108,7 @@ alignment = 1
 custom_minimum_size = Vector2(100, 70)
 layout_mode = 2
 theme = ExtResource("3_5sobe")
+disabled = true
 text = "Host Steam"
 
 [node name="Host" type="Button" parent="Play/VBoxContainer"]

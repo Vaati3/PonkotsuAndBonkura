@@ -69,7 +69,7 @@ public class Settings
 
 public partial class GameManager : Node
 {
-	string savePath = "user://save.save";
+	const string savePath = "user://save.save";
 	public bool isAlone {get; set;} = false;
 	public Settings settings {get; private set;}
 	public Player player {get; private set;}

@@ -10,6 +10,7 @@ public partial class MainMenu : Panel
 	Control menu;
 	Control playMenu;
 	Control joinMenu;
+	EditorSelection editorSelection;
 	Control optionMenu;
 
 	public override void _Ready()
@@ -20,6 +21,7 @@ public partial class MainMenu : Panel
 		menu = GetNode<Control>("Menu");
 		playMenu = GetNode<Control>("Play");
 		joinMenu = GetNode<Control>("JoinMenu");
+		editorSelection = GetNode<EditorSelection>("EditorSelection");
 		optionMenu = GetNode<Control>("OptionMenu");
 		controller.OpenLobby += OpenLobby;
 		controller.BackToMainMenu += BackToMainMenu;
@@ -54,6 +56,11 @@ public partial class MainMenu : Panel
 		soundManager.PlaySFX("button");
 		manager.isAlone = true;
 		OpenLobby();
+	}
+	public void _on_level_editor_pressed()
+	{
+		soundManager.PlaySFX("button");
+		editorSelection.Open();
 	}
 	public void _on_options_pressed()
 	{

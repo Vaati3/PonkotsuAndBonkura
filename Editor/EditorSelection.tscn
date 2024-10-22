@@ -1,0 +1,65 @@
+[gd_scene load_steps=4 format=3 uid="uid://brk5piabg45bw"]
+
+[ext_resource type="Script" path="res://Editor/EditorSelection.cs" id="1_agtjd"]
+[ext_resource type="Theme" uid="uid://dundbkyo1dqnu" path="res://Menus/Themes/Panel.tres" id="1_m4uh0"]
+[ext_resource type="Theme" uid="uid://c7wnqipmhvxh0" path="res://Menus/Themes/Button.tres" id="2_n2vry"]
+
+[node name="EditorSelection" type="Panel"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_m4uh0")
+script = ExtResource("1_agtjd")
+
+[node name="Maps" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 334.0
+offset_top = 53.0
+offset_right = 817.0
+offset_bottom = 584.0
+
+[node name="Back" type="Button" parent="."]
+custom_minimum_size = Vector2(100, 100)
+offset_left = 43.0
+offset_top = 40.0
+offset_right = 143.0
+offset_bottom = 142.0
+theme = ExtResource("2_n2vry")
+text = "Back"
+
+[node name="Open" type="Button" parent="."]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -140.0
+offset_top = 43.0
+offset_right = -40.0
+offset_bottom = 145.0
+grow_horizontal = 0
+theme = ExtResource("2_n2vry")
+disabled = true
+text = "Open
+Map"
+
+[node name="New" type="Button" parent="."]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -140.0
+offset_top = 187.0
+offset_right = -40.0
+offset_bottom = 289.0
+grow_horizontal = 0
+theme = ExtResource("2_n2vry")
+text = "New
+Map"
+
+[connection signal="pressed" from="Back" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="Open" to="." method="_on_open_pressed"]
+[connection signal="pressed" from="New" to="." method="_on_new_pressed"]

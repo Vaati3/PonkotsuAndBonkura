@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://cb1ttnf1lg3w0"]
+
+[ext_resource type="Script" path="res://Editor/Editor.cs" id="1_yldpo"]
+[ext_resource type="Script" path="res://Editor/EditorCamera.cs" id="2_cw48p"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_os42e"]
+
+[sub_resource type="Environment" id="Environment_gojin"]
+ambient_light_source = 3
+ambient_light_color = Color(1, 1, 1, 1)
+ambient_light_energy = 7.26
+
+[node name="Editor" type="Node3D"]
+script = ExtResource("1_yldpo")
+
+[node name="testmesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
+mesh = SubResource("BoxMesh_os42e")
+
+[node name="testmesh2" type="MeshInstance3D" parent="."]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, -2.99277, 0, 0)
+mesh = SubResource("BoxMesh_os42e")
+
+[node name="CameraOrigin" type="Node3D" parent="."]
+script = ExtResource("2_cw48p")
+
+[node name="Camera" type="Camera3D" parent="CameraOrigin"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_gojin")

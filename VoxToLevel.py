@@ -12,7 +12,7 @@ Tiles = [
     [255, 255, 0],   #elevator X
     [200, 200, 0],   #elevator Y
     [145, 145, 0],   #elevator Z
-    [255, 145, 0],   #elvator stop
+    [255, 145, 0],   #elevator stop
     [255, 0, 255],   #button X
     [200, 0, 200],   #button Y
     [145, 0, 145],   #button Z

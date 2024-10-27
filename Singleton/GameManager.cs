@@ -89,7 +89,7 @@ public partial class GameManager : Node
     public override void _Ready()
     {
 		Load();
-		Steam.SteamInit();
+		//Steam.SteamInit();#uncomment for steam
         if (!Steam.IsSteamRunning())
         {
             GD.Print("Steam is not running");

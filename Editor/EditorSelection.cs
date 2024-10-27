@@ -6,7 +6,10 @@ public partial class EditorSelection : Control
 	const string folder = "user://CustomMaps/";
 
 	SoundManager soundManager;
+	Editor editor = null;
 	VBoxContainer maps;
+
+	string selectedMap = "";
 
 	private void UpdateLevels()
 	{
@@ -32,17 +35,24 @@ public partial class EditorSelection : Control
 
 	private void LevelPressed(MapButton mapButton)
 	{
-		GD.Print(mapButton.mapName);
+		if (selectedMap == "")
+			GetNode<Button>("Open").Disabled = false;
+		selectedMap = mapButton.mapName;
 	}
 
 	public override void _Ready()
 	{
-		maps = GetNode<VBoxContainer>("Maps");
 		soundManager = GetNode<SoundManager>("/root/SoundManager");
+		maps = GetNode<VBoxContainer>("Maps");
 	}
 
 	public void Open()
 	{
+		if (editor == null)
+		{
+			editor = GD.Load<PackedScene>("res://Editor/Editor.tscn").Instantiate<Editor>();
+			GetTree().Root.AddChild(editor);
+		}
 		Visible = true;
 		UpdateLevels();
 	}
@@ -56,6 +66,13 @@ public partial class EditorSelection : Control
 	public void _on_open_pressed()
 	{
 		soundManager.PlaySFX("button");
+		editor.LoadMap(selectedMap, folder);
+		GetParent<Control>().Hide();
+		// foreach(Node node in GetTree().Root.GetChildren())
+		// {
+		// 	GD.Print(node.GetType());
+		// }
+		// editor.LoadMap(selectedMap, folder);
 	}
 	public void _on_new_pressed()
 	{

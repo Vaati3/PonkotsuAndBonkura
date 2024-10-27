@@ -25,9 +25,14 @@ public partial class MapGenerator : Node
 		spawns = new Vector3[2];
     }
 
-	private void SetData(byte b, int x, int y, int z)
+	private void SetData(byte b, int x, int y, int z, bool raw)
 	{
 		Vector3I pos = new Vector3I(x, y, z);
+		if (raw)
+		{
+			SetTile((Tile)b, pos);
+			return;
+		}
 		if (b == 2 || b == 3){
 			spawns[b-2] = pos * tileSize + new Vector3(tileSize/2, tileSize/2, tileSize/2);
 			b = 0;
@@ -41,9 +46,9 @@ public partial class MapGenerator : Node
 		SetTile((Tile)b, pos);
 	}
 
-	public bool Read(string mapName)
+	public bool Read(string mapName, string folder = "res://Map/Maps/", bool raw = false)
 	{
-		string path = "res://Map/Maps/" + mapName + ".dat";
+		string path = folder + mapName + ".dat";
 		FileAccess file = FileAccess.Open(path, FileAccess.ModeFlags.Read);
 		if (file == null)
 			return false;
@@ -58,7 +63,7 @@ public partial class MapGenerator : Node
 			{
 				for (int x = 0; x < size.X; x++)
 				{
-					SetData(buffer[i], x, y, z);
+					SetData(buffer[i], x, y, z, raw);
 					i++;
 				}
 			}

@@ -21,3 +21,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10)
 environment = SubResource("Environment_gojin")
 
 [node name="MapOrigin" type="Node3D" parent="."]
+
+[node name="Area3D" type="Area3D" parent="."]

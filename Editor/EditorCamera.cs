@@ -21,6 +21,11 @@ public partial class EditorCamera : Node3D
 		camera.Position += Vector3.Back * speed;
 	}
 
+	public void Center(Vector3 mapSize)
+	{
+		Position = mapSize/2;
+	}
+
 	public override void _Input(InputEvent @event)
 	{
 		if (@event is InputEventMouseButton mouseButton)

@@ -3,6 +3,7 @@ using System;
 
 public partial class Editor : Node3D
 {
+    EditorCamera camera;
     Material[] materials;
     MeshInstance3D[,,] meshes;
     MapGenerator map = null;
@@ -24,6 +25,7 @@ public partial class Editor : Node3D
 
 	public override void _Ready()
 	{
+        camera = GetNode<EditorCamera>("CameraOrigin");
         mapOrigin = GetNode<Node3D>("MapOrigin");
         LoadTextures();
         map = new MapGenerator();
@@ -39,6 +41,7 @@ public partial class Editor : Node3D
 		    };
         }
         map.Read(mapName, folder, true);
+        camera.Center(map.size);
         meshes = new MeshInstance3D[map.size.X, map.size.Y, map.size.Z];
         map.LoopAction(SetMesh);
         Visible = true;
@@ -48,12 +51,7 @@ public partial class Editor : Node3D
     {
         if (tile == Tile.Void)
             return;
-        meshes[pos.X, pos.Y, pos.Z] = new MeshInstance3D()
-        {
-            Mesh = new BoxMesh(),
-            Position = pos,
-            MaterialOverride = materials[(int)tile]
-        };
+        meshes[pos.X, pos.Y, pos.Z] = new Cube(map, pos, materials[(int)tile]);
         mapOrigin.AddChild(meshes[pos.X, pos.Y, pos.Z]);
     }
 

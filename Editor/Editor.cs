@@ -4,11 +4,13 @@ using System;
 public partial class Editor : Node3D
 {
     EditorCamera camera;
+    EditorMenu menu;
     Material[] materials;
     MeshInstance3D[,,] meshes;
     MapGenerator map = null;
     Node3D mapOrigin;
-    private void LoadTextures()
+
+    private void LoadMaterials()
     {
         string[] tiles = Enum.GetNames(typeof(Tile));
         materials = new Material[tiles.Length];
@@ -26,9 +28,10 @@ public partial class Editor : Node3D
 	public override void _Ready()
 	{
         camera = GetNode<EditorCamera>("CameraOrigin");
+        menu = GetNode<EditorMenu>("EditorMenu");
         mapOrigin = GetNode<Node3D>("MapOrigin");
-        LoadTextures();
         map = new MapGenerator();
+        LoadMaterials();
 	}
 
     public void LoadMap(string mapName, string folder)
@@ -44,18 +47,30 @@ public partial class Editor : Node3D
         camera.Center(map.size);
         meshes = new MeshInstance3D[map.size.X, map.size.Y, map.size.Z];
         map.LoopAction(SetMesh);
-        Visible = true;
+        menu.Visible = true;
     }
 
     private void SetMesh(Tile tile, Vector3I pos)
     {
         if (tile == Tile.Void)
             return;
-        meshes[pos.X, pos.Y, pos.Z] = new Cube(map, pos, materials[(int)tile]);
+        meshes[pos.X, pos.Y, pos.Z] = new Cube(pos, map.size, materials[(int)tile], CubeClicked);
         mapOrigin.AddChild(meshes[pos.X, pos.Y, pos.Z]);
     }
 
-    public override void _Input(InputEvent @event)
+    private void CubeClicked(Cube cube)
     {
+        switch (menu.selectedMode)
+        {
+            case EditMode.Add:
+                break;
+            case EditMode.Remove:
+                cube.QueueFree();
+                break;
+            case EditMode.Replace:
+                map.SetTile(menu.selectedTile, cube.pos);
+                cube.Change(materials[(int)menu.selectedTile]);
+                break;
+        }
     }
 }

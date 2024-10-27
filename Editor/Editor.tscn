@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://cb1ttnf1lg3w0"]
+[gd_scene load_steps=5 format=3 uid="uid://cb1ttnf1lg3w0"]
 
 [ext_resource type="Script" path="res://Editor/Editor.cs" id="1_yldpo"]
 [ext_resource type="Script" path="res://Editor/EditorCamera.cs" id="2_cw48p"]
+[ext_resource type="PackedScene" uid="uid://4qj6bqa78ptx" path="res://Editor/EditorMenu.tscn" id="3_5gj8f"]
 
 [sub_resource type="Environment" id="Environment_gojin"]
 ambient_light_source = 3
@@ -22,4 +23,5 @@ environment = SubResource("Environment_gojin")
 
 [node name="MapOrigin" type="Node3D" parent="."]
 
-[node name="Area3D" type="Area3D" parent="."]
+[node name="EditorMenu" parent="." instance=ExtResource("3_5gj8f")]
+visible = false

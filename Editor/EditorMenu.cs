@@ -1,0 +1,54 @@
+using Godot;
+using System;
+
+public enum EditMode {
+    Add,
+    Remove,
+    Replace
+}
+
+public partial class EditorMenu : CanvasLayer
+{
+	public EditMode selectedMode { get; private set;}
+	public Tile selectedTile { get; private set;}
+
+	Button modeBtn = null;
+	Button tileBtn = null;
+	public override void _Ready()
+	{
+		selectedMode = EditMode.Add;
+		selectedTile = Tile.Block;
+
+		Tile[] tiles = (Tile[])Enum.GetValues(typeof(Tile));
+		GridContainer grid = GetNode<GridContainer>("Tiles");
+		for (int i = 1; i < tiles.Length; i++)
+		{
+			grid.AddChild(new EditorButton(tiles[i], EditorButtonPressed));
+		}
+		VBoxContainer vBox = GetNode<VBoxContainer>("EditModes");
+		vBox.AddChild(new EditorButton(EditMode.Add, EditorButtonPressed));
+		vBox.AddChild(new EditorButton(EditMode.Remove, EditorButtonPressed));
+		vBox.AddChild(new EditorButton(EditMode.Replace, EditorButtonPressed));
+	}
+
+	public void EditorButtonPressed(EditorButton button)
+	{
+		if (button.isMode)
+		{
+			if (modeBtn != null)
+				modeBtn.Disabled = false;
+			selectedMode = button.editMode;
+			modeBtn = button;
+		} else {
+			if (tileBtn != null)
+				tileBtn.Disabled = false;
+			selectedTile = button.tile;
+			tileBtn = button;
+		}
+	}
+
+	public void _on_back_pressed()
+	{
+		//Create signal to Editor to close
+	}
+}

@@ -9,7 +9,7 @@ public partial class EditorSelection : Control
 	Editor editor = null;
 	VBoxContainer maps;
 
-	string selectedMap = "";
+	MapButton selectedMap = null;
 
 	private void UpdateLevels()
 	{
@@ -35,9 +35,11 @@ public partial class EditorSelection : Control
 
 	private void LevelPressed(MapButton mapButton)
 	{
-		if (selectedMap == "")
+		if (selectedMap == null)
 			GetNode<Button>("Open").Disabled = false;
-		selectedMap = mapButton.mapName;
+		else
+			selectedMap.Disabled = false;
+		selectedMap = mapButton;
 	}
 
 	public override void _Ready()
@@ -53,8 +55,8 @@ public partial class EditorSelection : Control
 			editor = GD.Load<PackedScene>("res://Editor/Editor.tscn").Instantiate<Editor>();
 			GetTree().Root.AddChild(editor);
 		}
-		Visible = true;
 		UpdateLevels();
+		Visible = true;
 	}
 
 	//buttons
@@ -66,13 +68,8 @@ public partial class EditorSelection : Control
 	public void _on_open_pressed()
 	{
 		soundManager.PlaySFX("button");
-		editor.LoadMap(selectedMap, folder);
+		editor.LoadMap(selectedMap.mapName, folder);
 		GetParent<Control>().Hide();
-		// foreach(Node node in GetTree().Root.GetChildren())
-		// {
-		// 	GD.Print(node.GetType());
-		// }
-		// editor.LoadMap(selectedMap, folder);
 	}
 	public void _on_new_pressed()
 	{

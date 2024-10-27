@@ -3,14 +3,15 @@ using Godot;
 
 public partial class Cube : MeshInstance3D
 {
-    MapGenerator map;
-    Vector3I pos;
-    public Cube(MapGenerator map, Vector3I pos, Material material)
+    public Vector3I pos {get; private set;}
+
+    [Signal]public delegate void CubeClickedEventHandler(Cube cube);
+    public Cube(Vector3I pos, Vector3 mapSize, Material material, CubeClickedEventHandler cubeClicked)
     {
-        this.map = map;
         this.pos = pos;
+        CubeClicked += cubeClicked;
         Mesh = new BoxMesh();
-        Position = new Vector3(pos.X, map.size.Y - pos.Y, pos.Z);
+        Position = new Vector3(pos.X, mapSize.Y - pos.Y, pos.Z);
         MaterialOverride = material;
 
         Area3D area = new Area3D();
@@ -21,13 +22,18 @@ public partial class Cube : MeshInstance3D
         AddChild(area);
     }
 
+    public void Change(Material material)
+    {
+        MaterialOverride = material;
+    }
+
     private void InputEvent(Node camera, InputEvent @event, Vector3 pos, Vector3 normal, long shapeIdx)
     {
         if (@event is InputEventMouseButton mouseButton)
         {
             if (mouseButton.ButtonIndex == MouseButton.Left && @event.IsPressed() == true)
             {
-                QueueFree();
+                EmitSignal(nameof(CubeClicked), this);
             }
         }
     }

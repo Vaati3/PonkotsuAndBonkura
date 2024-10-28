@@ -1,5 +1,6 @@
 using Godot;
 using System.Collections.Generic;
+using System.Drawing;
 
 public enum Tile {
 	Void,
@@ -56,6 +57,7 @@ public partial class MapGenerator : Node
 		size = new Vector3I(sizeStr[0].ToInt(), sizeStr[2].ToInt(), sizeStr[1].ToInt());
 		data = new Tile[size.X, size.Y, size.Z];
 		byte[] buffer = file.GetBuffer(size.X * size.Y * size.Z);
+		file.Close();
 		int i = 0;
 		for (int y = size.Y - 1; y >= 0; y--)
 		{
@@ -68,6 +70,32 @@ public partial class MapGenerator : Node
 				}
 			}
 		}
+		return true;
+	}
+
+	public bool Save(string fileName, string folder)
+	{
+		string path = folder + fileName + ".dat";
+
+		FileAccess file = FileAccess.Open(path, FileAccess.ModeFlags.Write);
+		if (file == null)
+			return false;
+		byte[] buffer = new byte[size.X * size.Y * size.Z];
+		int i = 0;
+		for (int y = size.Y - 1; y >= 0; y--)
+		{
+			for(int z = 0; z < size.Z; z++)
+			{
+				for (int x = 0; x < size.X; x++)
+				{
+					buffer[i] = (byte)data[x, y, z];
+					i++;
+				}
+			}
+		}
+		file.StoreLine(size.X + "x" + size.Z + "x" + size.Y);
+		file.StoreBuffer(buffer);
+		file.Close();
 		return true;
 	}
 

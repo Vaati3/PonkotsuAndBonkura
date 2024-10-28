@@ -47,8 +47,17 @@ public partial class EditorMenu : CanvasLayer
 		}
 	}
 
-	public void _on_back_pressed()
+	[Signal] public delegate void CloseEditorEventHandler(bool save);
+
+	public void _on_save_quit_pressed()
 	{
-		//Create signal to Editor to close
+		GetNode<SoundManager>("/root/SoundManager").PlaySFX("button", true);
+		EmitSignal(nameof(CloseEditor), true);
+	}
+
+	public void _on_quit_pressed()
+	{
+		GetNode<SoundManager>("/root/SoundManager").PlaySFX("button", true);
+		EmitSignal(nameof(CloseEditor), false);
 	}
 }

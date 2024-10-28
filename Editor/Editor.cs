@@ -3,11 +3,11 @@ using System;
 
 public partial class Editor : Node3D
 {
+    public EditorMenu menu {get; private set;}
     EditorCamera camera;
-    EditorMenu menu;
     Material[] materials;
     MeshInstance3D[,,] meshes;
-    MapGenerator map = null;
+    public MapGenerator map {get; private set;} = null;
     Node3D mapOrigin;
 
     private void LoadMaterials()
@@ -38,15 +38,16 @@ public partial class Editor : Node3D
     {
         if (map != null)
         {
-            MapGenerator.Action action = (tile, pos) => {
-			if (tile != Tile.Void)
-                meshes[pos.X, pos.Y, pos.Z].QueueFree();
-		    };
+            foreach(Node node in mapOrigin.GetChildren())
+            {
+                node.QueueFree();
+            }
         }
         map.Read(mapName, folder, true);
         camera.Center(map.size);
         meshes = new MeshInstance3D[map.size.X, map.size.Y, map.size.Z];
         map.LoopAction(SetMesh);
+        Visible = true;
         menu.Visible = true;
     }
 
@@ -65,6 +66,7 @@ public partial class Editor : Node3D
             case EditMode.Add:
                 break;
             case EditMode.Remove:
+            map.SetTile(Tile.Void, cube.pos);
                 cube.QueueFree();
                 break;
             case EditMode.Replace:

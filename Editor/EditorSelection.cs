@@ -54,9 +54,21 @@ public partial class EditorSelection : Control
 		{
 			editor = GD.Load<PackedScene>("res://Editor/Editor.tscn").Instantiate<Editor>();
 			GetTree().Root.AddChild(editor);
+			editor.menu.CloseEditor += CloseEditor;
 		}
 		UpdateLevels();
 		Visible = true;
+	}
+
+	public void CloseEditor(bool save)
+	{
+		if (save)
+		{
+			GD.Print(editor.map.Save("test", folder));
+		}
+		editor.menu.Visible = false;
+		editor.Visible = false;
+		((Control)GetParent()).Visible = true;
 	}
 
 	//buttons
@@ -69,7 +81,7 @@ public partial class EditorSelection : Control
 	{
 		soundManager.PlaySFX("button");
 		editor.LoadMap(selectedMap.mapName, folder);
-		GetParent<Control>().Hide();
+		((Control)GetParent()).Visible = false;
 	}
 	public void _on_new_pressed()
 	{

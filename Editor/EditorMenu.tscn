@@ -1,7 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://4qj6bqa78ptx"]
+[gd_scene load_steps=5 format=3 uid="uid://4qj6bqa78ptx"]
 
 [ext_resource type="Script" path="res://Editor/EditorMenu.cs" id="1_580se"]
 [ext_resource type="Theme" uid="uid://c7wnqipmhvxh0" path="res://Menus/Themes/Button.tres" id="2_t7upk"]
+[ext_resource type="FontFile" uid="uid://dbv2ovpyr0js6" path="res://Menus/Themes/PlaywriteFRTrad-Regular.ttf" id="3_2rh8a"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fsknv"]
+bg_color = Color(1, 1, 1, 1)
 
 [node name="EditorMenu" type="CanvasLayer"]
 script = ExtResource("1_580se")
@@ -49,6 +53,32 @@ grow_vertical = 0
 theme = ExtResource("2_t7upk")
 theme_override_font_sizes/font_size = 13
 text = "Quit"
+
+[node name="Border" type="Panel" parent="."]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 215.0
+offset_top = -95.0
+offset_right = 507.0
+offset_bottom = -24.0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_fsknv")
+
+[node name="Filename" type="TextEdit" parent="Border"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = -5.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/background_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("3_2rh8a")
 
 [connection signal="pressed" from="SaveQuit" to="." method="_on_save_quit_pressed"]
 [connection signal="pressed" from="Quit" to="." method="_on_quit_pressed"]

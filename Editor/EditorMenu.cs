@@ -9,8 +9,9 @@ public enum EditMode {
 
 public partial class EditorMenu : CanvasLayer
 {
-	public EditMode selectedMode { get; private set;}
-	public Tile selectedTile { get; private set;}
+	public EditMode selectedMode {get; private set;}
+	public Tile selectedTile {get; private set;}
+	public TextEdit filename {get; private set;}
 
 	Button modeBtn = null;
 	Button tileBtn = null;
@@ -29,6 +30,8 @@ public partial class EditorMenu : CanvasLayer
 		vBox.AddChild(new EditorButton(EditMode.Add, EditorButtonPressed));
 		vBox.AddChild(new EditorButton(EditMode.Remove, EditorButtonPressed));
 		vBox.AddChild(new EditorButton(EditMode.Replace, EditorButtonPressed));
+
+		filename = GetNode<TextEdit>("Border/Filename");
 	}
 
 	public void EditorButtonPressed(EditorButton button)

@@ -48,6 +48,7 @@ public partial class Editor : Node3D
         meshes = new MeshInstance3D[map.size.X, map.size.Y, map.size.Z];
         map.LoopAction(SetMesh);
         Visible = true;
+        menu.filename.Text = mapName;
         menu.Visible = true;
     }
 
@@ -66,7 +67,7 @@ public partial class Editor : Node3D
             case EditMode.Add:
                 break;
             case EditMode.Remove:
-            map.SetTile(Tile.Void, cube.pos);
+                map.SetTile(Tile.Void, cube.pos);
                 cube.QueueFree();
                 break;
             case EditMode.Replace:

@@ -64,7 +64,7 @@ public partial class EditorSelection : Control
 	{
 		if (save)
 		{
-			GD.Print(editor.map.Save("test", folder));
+			GD.Print(editor.map.Save(editor.menu.filename.Text, folder)); //add filename check
 		}
 		editor.menu.Visible = false;
 		editor.Visible = false;

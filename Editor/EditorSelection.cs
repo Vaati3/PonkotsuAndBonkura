@@ -11,16 +11,21 @@ public partial class EditorSelection : Control
 
 	MapButton selectedMap = null;
 
-	private void UpdateLevels()
+	private void UpdateMaps()
 	{
-		DirAccess dir = DirAccess.Open(folder);
+		foreach(Node node in maps.GetChildren())
+		{
+			node.QueueFree();
+		}
+		GetNode<Button>("Open").Disabled = true;
+		selectedMap = null;
 
+		DirAccess dir = DirAccess.Open(folder);
 		if (dir == null)
 		{
 			DirAccess.MakeDirAbsolute(folder);
 			return;
 		}
-
 		dir.ListDirBegin();
 		string mapName = dir.GetNext();
 		while (mapName != "")
@@ -56,7 +61,7 @@ public partial class EditorSelection : Control
 			GetTree().Root.AddChild(editor);
 			editor.menu.CloseEditor += CloseEditor;
 		}
-		UpdateLevels();
+		UpdateMaps();
 		Visible = true;
 	}
 
@@ -64,10 +69,11 @@ public partial class EditorSelection : Control
 	{
 		if (save)
 		{
-			GD.Print(editor.map.Save(editor.menu.filename.Text, folder)); //add filename check
+			editor.map.Save(editor.menu.filename.Text, folder); //add filename check
 		}
 		editor.menu.Visible = false;
 		editor.Visible = false;
+		UpdateMaps();
 		((Control)GetParent()).Visible = true;
 	}
 

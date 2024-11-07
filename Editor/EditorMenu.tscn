@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://4qj6bqa78ptx"]
+[gd_scene load_steps=11 format=3 uid="uid://4qj6bqa78ptx"]
 
 [ext_resource type="Script" path="res://Editor/EditorMenu.cs" id="1_580se"]
 [ext_resource type="Theme" uid="uid://c7wnqipmhvxh0" path="res://Menus/Themes/Button.tres" id="2_t7upk"]
@@ -6,6 +6,80 @@
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fsknv"]
 bg_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kavqk"]
+bg_color = Color(0, 0, 0, 1)
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lbta3"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+anti_aliasing_size = 0.5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wo5bw"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r8dvg"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+anti_aliasing_size = 0.5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xncfv"]
+bg_color = Color(1, 1, 1, 1)
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+anti_aliasing_size = 0.5
+
+[sub_resource type="Theme" id="Theme_vuupm"]
+Button/colors/font_color = Color(1, 1, 1, 1)
+Button/colors/font_disabled_color = Color(0, 0, 0, 1)
+Button/colors/font_focus_color = Color(1, 1, 1, 1)
+Button/colors/font_hover_color = Color(1, 1, 1, 1)
+Button/colors/font_hover_pressed_color = Color(0, 0, 0, 1)
+Button/colors/font_outline_color = Color(0, 0, 0, 1)
+Button/colors/font_pressed_color = Color(0, 0, 0, 1)
+Button/colors/icon_disabled_color = Color(0, 0, 0, 1)
+Button/colors/icon_focus_color = Color(0, 0, 0, 1)
+Button/colors/icon_hover_color = Color(0, 0, 0, 1)
+Button/colors/icon_hover_pressed_color = Color(0, 0, 0, 1)
+Button/colors/icon_normal_color = Color(0, 0, 0, 1)
+Button/colors/icon_pressed_color = Color(0, 0, 0, 1)
+Button/constants/h_separation = 0
+Button/constants/icon_max_width = 0
+Button/constants/outline_size = 0
+Button/font_sizes/font_size = 16
+Button/fonts/font = ExtResource("3_2rh8a")
+Button/styles/disabled = SubResource("StyleBoxFlat_lbta3")
+Button/styles/focus = null
+Button/styles/hover = SubResource("StyleBoxFlat_wo5bw")
+Button/styles/normal = SubResource("StyleBoxFlat_r8dvg")
+Button/styles/pressed = SubResource("StyleBoxFlat_xncfv")
 
 [node name="EditorMenu" type="CanvasLayer"]
 script = ExtResource("1_580se")
@@ -58,9 +132,9 @@ text = "Quit"
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 215.0
+offset_left = 217.06
 offset_top = -95.0
-offset_right = 507.0
+offset_right = 509.06
 offset_bottom = -24.0
 grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_fsknv")
@@ -80,5 +154,124 @@ theme_override_colors/background_color = Color(0, 0, 0, 1)
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("3_2rh8a")
 
+[node name="Size" type="Panel" parent="."]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 509.0
+offset_top = -95.0
+offset_right = 819.0
+offset_bottom = -24.0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_kavqk")
+
+[node name="XSub" type="Button" parent="Size"]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 11.0
+offset_right = 35.0
+offset_bottom = 61.0
+theme = SubResource("Theme_vuupm")
+text = "-
+"
+clip_text = true
+
+[node name="X" type="Label" parent="Size"]
+layout_mode = 0
+offset_left = 35.0
+offset_top = 6.0
+offset_right = 70.0
+offset_bottom = 66.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 20
+text = "X
+7"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="XAdd" type="Button" parent="Size"]
+layout_mode = 0
+offset_left = 70.0
+offset_top = 11.0
+offset_right = 100.0
+offset_bottom = 61.0
+theme = SubResource("Theme_vuupm")
+text = "+"
+clip_text = true
+
+[node name="YSub" type="Button" parent="Size"]
+layout_mode = 0
+offset_left = 105.0
+offset_top = 11.0
+offset_right = 135.0
+offset_bottom = 61.0
+theme = SubResource("Theme_vuupm")
+text = "-
+"
+clip_text = true
+
+[node name="Y" type="Label" parent="Size"]
+layout_mode = 0
+offset_left = 135.0
+offset_top = 6.0
+offset_right = 170.0
+offset_bottom = 66.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 20
+text = "Y
+7"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="YAdd" type="Button" parent="Size"]
+layout_mode = 0
+offset_left = 170.0
+offset_top = 11.0
+offset_right = 200.0
+offset_bottom = 61.0
+theme = SubResource("Theme_vuupm")
+text = "+"
+clip_text = true
+
+[node name="ZSub" type="Button" parent="Size"]
+layout_mode = 0
+offset_left = 205.0
+offset_top = 11.0
+offset_right = 235.0
+offset_bottom = 61.0
+theme = SubResource("Theme_vuupm")
+text = "-
+"
+clip_text = true
+
+[node name="Z" type="Label" parent="Size"]
+layout_mode = 0
+offset_left = 235.0
+offset_top = 6.0
+offset_right = 270.0
+offset_bottom = 66.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 20
+text = "Z
+7"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ZAdd" type="Button" parent="Size"]
+layout_mode = 0
+offset_left = 270.0
+offset_top = 11.0
+offset_right = 300.0
+offset_bottom = 61.0
+theme = SubResource("Theme_vuupm")
+text = "+"
+clip_text = true
+
 [connection signal="pressed" from="SaveQuit" to="." method="_on_save_quit_pressed"]
 [connection signal="pressed" from="Quit" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="Size/XSub" to="." method="_on_x_sub_pressed"]
+[connection signal="pressed" from="Size/XAdd" to="." method="_on_x_add_pressed"]
+[connection signal="pressed" from="Size/YSub" to="." method="_on_y_sub_pressed"]
+[connection signal="pressed" from="Size/YAdd" to="." method="_on_y_add_pressed"]
+[connection signal="pressed" from="Size/ZSub" to="." method="_on_z_sub_pressed"]
+[connection signal="pressed" from="Size/ZAdd" to="." method="_on_z_add_pressed"]

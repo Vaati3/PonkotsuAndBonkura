@@ -15,6 +15,11 @@ public partial class EditorMenu : CanvasLayer
 
 	Button modeBtn = null;
 	Button tileBtn = null;
+
+	Label xLabel;
+	Label yLabel;
+	Label zLabel;
+
 	public override void _Ready()
 	{
 		selectedMode = EditMode.Add;
@@ -27,11 +32,24 @@ public partial class EditorMenu : CanvasLayer
 			grid.AddChild(new EditorButton(tiles[i], EditorButtonPressed));
 		}
 		VBoxContainer vBox = GetNode<VBoxContainer>("EditModes");
-		vBox.AddChild(new EditorButton(EditMode.Add, EditorButtonPressed));
+		modeBtn = new EditorButton(EditMode.Add, EditorButtonPressed);
+		modeBtn.Disabled = true;
+		vBox.AddChild(modeBtn);
 		vBox.AddChild(new EditorButton(EditMode.Remove, EditorButtonPressed));
 		vBox.AddChild(new EditorButton(EditMode.Replace, EditorButtonPressed));
 
 		filename = GetNode<TextEdit>("Border/Filename");
+
+		xLabel = GetNode<Label>("Size/X");
+		yLabel = GetNode<Label>("Size/Y");
+		zLabel = GetNode<Label>("Size/Z");
+	}
+
+	public void UpdateSize(Vector3I size)
+	{
+		xLabel.Text = "X\n" + size.X;
+		yLabel.Text = "Y\n" + size.Y;
+		zLabel.Text = "Z\n" + size.Z;
 	}
 
 	public void EditorButtonPressed(EditorButton button)
@@ -42,6 +60,11 @@ public partial class EditorMenu : CanvasLayer
 				modeBtn.Disabled = false;
 			selectedMode = button.editMode;
 			modeBtn = button;
+			if (selectedMode == EditMode.Remove && tileBtn != null)
+			{
+				tileBtn.Disabled = false;
+				selectedTile = Tile.Void;
+			}
 		} else {
 			if (tileBtn != null)
 				tileBtn.Disabled = false;
@@ -62,5 +85,33 @@ public partial class EditorMenu : CanvasLayer
 	{
 		GetNode<SoundManager>("/root/SoundManager").PlaySFX("button", true);
 		EmitSignal(nameof(CloseEditor), false);
+	}
+
+	//resize
+	[Signal] public delegate void ResizeEventHandler(Vector3I dif);
+
+	public void _on_x_sub_pressed()
+	{
+		EmitSignal(nameof(Resize), new Vector3I(-1, 0, 0));
+	}
+	public void _on_x_add_pressed()
+	{
+		EmitSignal(nameof(Resize), new Vector3I(1, 0, 0));
+	}
+	public void _on_y_sub_pressed()
+	{
+		EmitSignal(nameof(Resize), new Vector3I(0, -1, 0));
+	}
+	public void _on_y_add_pressed()
+	{
+		EmitSignal(nameof(Resize), new Vector3I(0, 1, 0));
+	}
+	public void _on_z_sub_pressed()
+	{
+		EmitSignal(nameof(Resize), new Vector3I(0, 0, -1));
+	}
+	public void _on_z_add_pressed()
+	{
+		EmitSignal(nameof(Resize), new Vector3I(0, 0, 1));
 	}
 }

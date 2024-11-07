@@ -99,6 +99,48 @@ public partial class MapGenerator : Node
 		return true;
 	}
 
+	public void New()
+	{
+		size = new Vector3I(3, 3, 3);
+		data = new Tile[size.X, size.Y, size.Z];
+		
+		for (int y = 0; y < size.Y; y++)
+		{
+			for(int z = 0; z < size.Z; z++)
+			{
+				for (int x = 0; x < size.X; x++)
+				{
+					data[x,y,z] = y == size.Y - 1 ? Tile.Block : Tile.Void;
+				}
+			}
+		}
+	}
+
+	//brute force resize
+	public void Resize(Vector3I newSize, Editor.SetMeshAction setMesh)
+	{
+		Tile[,,] newData = new Tile[newSize.X, newSize.Y, newSize.Z];
+		
+		for (int y = 0; y < newSize.Y; y++)
+		{
+			for(int z = 0; z < newSize.Z; z++)
+			{
+				for (int x = 0; x < newSize.X; x++)
+				{
+					if (x >= size.X || y >= size.Y || z >= size.Z) {
+						newData[x,y,z] = y == newSize.Y - 1 ? Tile.Block : Tile.Void;
+						setMesh(newData[x,y,z], new Vector3I(x,y,z));
+					} else {
+						newData[x,y,z] = data[x,y,z];
+					}
+				}
+			}
+		}
+		
+		size = newSize;
+		data = newData;
+	}
+
 	public delegate void Action(Tile tile, Vector3I pos);
 	public void LoopAction(Action action)
 	{
@@ -133,9 +175,21 @@ public partial class MapGenerator : Node
 		return result;
 	}
 
-	public void SetTile(Tile tile, Vector3I pos)
+	public bool IsOutOfBound(Vector3I pos)
 	{
+		return pos.X < 0 || pos.X >= size.X || pos.Y < 0 || pos.Y >= size.Y || pos.Z < 0 || pos.Z >= size.Z;
+	}
+	public bool IsOutOfBound(int x, int y, int z)
+	{
+		return x < 0 || x >= size.X || y < 0 || y >= size.Y || z < 0 || z >= size.Z;
+	}
+
+	public bool SetTile(Tile tile, Vector3I pos)
+	{
+		if (IsOutOfBound(pos))
+			return false;
 		data[pos.X, pos.Y, pos.Z] = tile;
+		return true;
 	}
 
 	public Tile GetTile(Vector3 pos)
@@ -144,7 +198,7 @@ public partial class MapGenerator : Node
 	}
 	public Tile GetTile(Vector3I pos)
 	{
-		if (pos.X < 0 || pos.X >= size.X || pos.Y < 0 || pos.Y >= size.Y || pos.Z < 0 || pos.Z >= size.Z)
+		if (IsOutOfBound(pos))
 			return Tile.Block;
 		return data[pos.X, pos.Y, pos.Z];
 	}
@@ -154,7 +208,7 @@ public partial class MapGenerator : Node
 	}
 	public Tile GetTile(int x, int y, int z)
 	{
-		if (x < 0 || x >= size.X || y < 0 || y >= size.Y || z < 0 || z >= size.Z)
+		if (IsOutOfBound(x, y, z))
 			return Tile.Block;
 		return data[x, y, z];
 	}

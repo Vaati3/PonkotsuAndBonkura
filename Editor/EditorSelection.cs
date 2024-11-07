@@ -73,6 +73,7 @@ public partial class EditorSelection : Control
 		}
 		editor.menu.Visible = false;
 		editor.Visible = false;
+		editor.CloseMap();
 		UpdateMaps();
 		((Control)GetParent()).Visible = true;
 	}
@@ -86,11 +87,13 @@ public partial class EditorSelection : Control
 	public void _on_open_pressed()
 	{
 		soundManager.PlaySFX("button");
-		editor.LoadMap(selectedMap.mapName, folder);
+		editor.OpenMap(selectedMap.mapName, folder);
 		((Control)GetParent()).Visible = false;
 	}
 	public void _on_new_pressed()
 	{
 		soundManager.PlaySFX("button");
+		editor.NewMap();
+		((Control)GetParent()).Visible = false;
 	}
 }

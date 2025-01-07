@@ -92,6 +92,22 @@ public partial class Editor : Node3D
         if (map.size.X + dif.X <= 0 || map.size.Y + dif.Y <= 0 || map.size.Z + dif.Z <= 0)
             return;
         map.Resize(map.size + dif, SetMesh);
+        foreach(Cube cube in mapOrigin.GetChildren())
+        {
+            if (dif.Y != 0)
+            {
+                if (dif.Y < 0) {
+                    cube.pos = new Vector3I(cube.pos.X, cube.pos.Y - 1, cube.pos.Z);
+                } else {
+                    cube.pos = new Vector3I(cube.pos.X, cube.pos.Y + 1, cube.pos.Z);
+                }
+                cube.Position = new Vector3(cube.pos.X,  map.size.Y - cube.pos.Y, cube.pos.Z);
+            }
+            if (map.IsOutOfBound(cube.pos))
+            {
+                cube.QueueFree();
+            }
+        }
         menu.UpdateSize(map.size);
         camera.Center(map.size);
     }

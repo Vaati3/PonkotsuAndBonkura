@@ -4,7 +4,7 @@ using Godot;
 public partial class Cube : MeshInstance3D
 {
     readonly Color hoverColor;
-    public Vector3I pos {get; private set;}
+    public Vector3I pos;
 
     Vector3 mousePos;
 

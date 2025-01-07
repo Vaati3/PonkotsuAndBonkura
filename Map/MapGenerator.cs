@@ -131,7 +131,17 @@ public partial class MapGenerator : Node
 						newData[x,y,z] = y == newSize.Y - 1 ? Tile.Block : Tile.Void;
 						setMesh(newData[x,y,z], new Vector3I(x,y,z));
 					} else {
-						newData[x,y,z] = data[x,y,z];
+						if (newSize.Y != size.Y && y == 0){
+							if (newSize.Y < size.Y) {
+								if (y == 0)
+									continue;
+								newData[x,y,z] = data[x,y-1,z];
+							} else {
+								newData[x,y,z] = data[x,y+1,z];
+							}
+						} else {
+							newData[x,y,z] = data[x,y,z];
+						}
 					}
 				}
 			}

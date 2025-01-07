@@ -76,15 +76,15 @@ public partial class GameManager : Node
 	public Player otherPlayer {get; private set;}
 
 	//steam
-	const uint appId = 480;
+	// const uint appId = 480;
 
 	[Signal]public delegate void UpdateServerEventHandler();
 
-    public override void _EnterTree()
-    {
-        OS.SetEnvironment("SteamAppId", appId.ToString());
-        OS.SetEnvironment("SteamGameId", appId.ToString());
-    }
+    // public override void _EnterTree()
+    // {
+    //     OS.SetEnvironment("SteamAppId", appId.ToString());
+    //     OS.SetEnvironment("SteamGameId", appId.ToString());
+    // }
 
     public override void _Ready()
     {
@@ -99,8 +99,8 @@ public partial class GameManager : Node
 				player.name = "player";
 			return;
         }
-		ulong id = Steam.GetSteamID();
-		player.name = Steam.GetFriendPersonaName(id);
+		// ulong id = Steam.GetSteamID();
+		// player.name = Steam.GetFriendPersonaName(id);
     }
 
     public void PlayerJoined(Player newPlayer, bool isServer)

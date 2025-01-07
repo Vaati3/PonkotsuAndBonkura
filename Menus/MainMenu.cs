@@ -87,7 +87,7 @@ public partial class MainMenu : Panel
 	public void _on_host_steam_pressed()
 	{
 		soundManager.PlaySFX("button");
-		controller.HostSteam();
+		// controller.HostSteam();
 	}
 
 	public void _on_join_pressed()

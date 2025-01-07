@@ -50,7 +50,7 @@ public partial class EditorSelection : Control
 	public override void _Ready()
 	{
 		soundManager = GetNode<SoundManager>("/root/SoundManager");
-		maps = GetNode<VBoxContainer>("Maps");
+		maps = GetNode<VBoxContainer>("Scroll/Maps");
 	}
 
 	public void Open()

@@ -90,15 +90,15 @@ public partial class GameManager : Node
     {
 		Load();
 		//Steam.SteamInit();#uncomment for steam
-        if (!Steam.IsSteamRunning())
-        {
-            GD.Print("Steam is not running");
-			if (OS.HasEnvironment("USERNAME"))
-				player.name = OS.GetEnvironment("USERNAME");
-			else
-				player.name = "player";
-			return;
-        }
+        // if (!Steam.IsSteamRunning())
+        // {
+        //     GD.Print("Steam is not running");
+		if (OS.HasEnvironment("USERNAME"))
+			player.name = OS.GetEnvironment("USERNAME");
+		else
+			player.name = "player";
+		// 	return;
+        // }
 		// ulong id = Steam.GetSteamID();
 		// player.name = Steam.GetFriendPersonaName(id);
     }

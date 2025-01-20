@@ -7,7 +7,7 @@ public partial class Editor : Node3D
     EditorCamera camera;
     Material[] materials;
 
-    public MeshInstance3D previewCube {get; private set;}
+    // public MeshInstance3D previewCube {get; private set;}
     public MapGenerator map {get; private set;} = null;
     Node3D mapOrigin;
 
@@ -37,11 +37,11 @@ public partial class Editor : Node3D
 
         // previewCube = new MeshInstance3D()
         // {
-        //     Position = new Vector3(-1, -1, -1),
+        //     Position = new Vector3(1, 1, 1),
         //     MaterialOverride = materials[1],
         //     Visible = true
         // };
-        //((StandardMaterial3D)previewCube.MaterialOverride).AlbedoColor = new Color(1, 1, 1, 0.3f);
+        // ((StandardMaterial3D)previewCube.MaterialOverride).AlbedoColor = new Color(0, 1, 0, 1);//0.3f);
         // AddChild(previewCube);
 	}
 
